@@ -1,8 +1,8 @@
 === What Template Am I Using ===
 Contributors: webdeveric
-Tags: template
-Requires at least: 3.0.0
-Tested up to: 3.8
+Tags: template, theme development, debug, server information
+Requires at least: 3.8.0
+Tested up to: 3.8.1
 Stable tag: 0.1.4
 
 This very basic plugin will show you which template is currently being used to render the page.
@@ -22,6 +22,8 @@ Information displayed:
 * Any extra info you want displayed. Just use the <code>what_template_am_i_using_data</code> filter.
 
 This plugin uses a cookie to remember if the panel was open and if it was, it will reopen if when the page is reloaded.
+
+**This plugin is intended for use by theme developers and it requires a standards compliant browser. This plugin will not work in IE8 or below.**
 
 == Installation ==
 

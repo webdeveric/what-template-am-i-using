@@ -84,7 +84,7 @@ body.admin-bar #what-template-am-i-using{
 
 #what-template-am-i-using-handle > span{
 	white-space:nowrap;
-    display:block;
+	display:block;
 	-moz-transform:rotate(180deg);
 	-webkit-transform:rotate(180deg);
 	-o-transform:rotate(180deg);
@@ -121,7 +121,7 @@ body.admin-bar #what-template-am-i-using{
 }
 
 #what-template-am-i-using-data{
-	word-wrap: break-word;
+	word-wrap:break-word;
 	position:relative;
 	z-index:100;
 	background-color:#EEE;
@@ -136,10 +136,16 @@ body.admin-bar #what-template-am-i-using{
 	box-shadow:0 0 4px #333;
 }
 
+#what-template-am-i-using-data > dt,
+#what-template-am-i-using-data > dd{
+	line-height:1.4em;
+}
+
 #what-template-am-i-using-data > dt{
-    font-weight:bold;
+	font-weight:bold;
+	margin:0;
 }
 
 #what-template-am-i-using-data > dd{
-    margin:0 0 1em 0;
+	margin:0 0 1em 0;
 }
