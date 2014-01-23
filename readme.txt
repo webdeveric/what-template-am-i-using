@@ -5,11 +5,11 @@ Requires at least: 3.8.0
 Tested up to: 3.8.1
 Stable tag: 0.1.4
 
-This very basic plugin will show you which template is currently being used to render the page.
+This plugin is inteneded for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
 
 == Description ==
 
-This very basic plugin will show you which template is currently being used to render the page.
+This plugin is inteneded for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
 
 The info is only displayed for users that have the edit_theme_options capability.
 
