@@ -7,6 +7,10 @@ Version: 0.1.4
 Author URI: http://webdeveric.com/
 */
 
+// This plugin only needs to run on the front end of the site.
+if( is_admin() )
+	return;
+
 class What_Template_Am_I_Using {
 
 	const VERSION = '0.1.4';
@@ -59,18 +63,15 @@ class What_Template_Am_I_Using {
 	}
 }
 
-if( ! is_admin() ){
-	What_Template_Am_I_Using::init();
+What_Template_Am_I_Using::init();
 
-	/**
-		This is here to show you how to extend what is shown in the panel.
-	*/
-	function what_template_am_i_using_server_data( array $data ){
-		$data['Remote IP'] = $_SERVER['REMOTE_ADDR'];
-		$data['Server Software'] = $_SERVER['SERVER_SOFTWARE'];
-		$data['PHP Version'] = phpversion();
-		return $data;
-	}
-	add_filter('what_template_am_i_using_data', 'what_template_am_i_using_server_data', 10, 1 );
-
+/**
+	This is here to show you how to extend what is shown in the panel.
+*/
+function what_template_am_i_using_server_data( array $data ){
+	$data['Remote IP'] = $_SERVER['REMOTE_ADDR'];
+	$data['Server Software'] = $_SERVER['SERVER_SOFTWARE'];
+	$data['PHP Version'] = phpversion();
+	return $data;
 }
+add_filter('what_template_am_i_using_data', 'what_template_am_i_using_server_data', 10, 1 );
