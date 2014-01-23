@@ -5,15 +5,6 @@ Description: This plugin shows you what template is currently being used to rend
 Author: Eric King
 Version: 0.1.4
 Author URI: http://webdeveric.com/
-
-Add more data example:
-
-function what_template_am_i_using_server_data( array $data ){
-	return $data + $_SERVER;
-}
-add_filter('what_template_am_i_using_data', 'what_template_am_i_using_server_data', 10, 1 );
-
-
 */
 
 class What_Template_Am_I_Using {
@@ -65,12 +56,18 @@ class What_Template_Am_I_Using {
 		</div>
 
 		<?php
-
 	}
 }
 What_Template_Am_I_Using::init();
 
+
+/**
+	This is here to show you how to extend what is shown in the panel.
+*/
 function what_template_am_i_using_server_data( array $data ){
-	return $data + $_SERVER;
+	$data['Remote IP'] = $_SERVER['REMOTE_ADDR'];
+	$data['Server Software'] = $_SERVER['SERVER_SOFTWARE'];
+	$data['PHP Version'] = phpversion();
+	return $data;
 }
 add_filter('what_template_am_i_using_data', 'what_template_am_i_using_server_data', 10, 1 );

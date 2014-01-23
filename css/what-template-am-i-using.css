@@ -45,11 +45,11 @@ body.admin-bar #what-template-am-i-using{
 #what-template-am-i-using-handle{
 	display:block;
 	position:absolute;
-	z-index: 1;
+	z-index:1;
 	top:2%;
 	left:0;
 	padding:0 1.5em;
-	word-spacing: .25em;
+	word-spacing:.25em;
 	text-align:center;
 	line-height:3em;
 	font-weight:bold;
@@ -58,12 +58,12 @@ body.admin-bar #what-template-am-i-using{
 	color:#EEE;
 	cursor:help;
 	text-decoration:none;
-	-moz-border-bottom-right-radius: 2em 5em;
-	-moz-border-bottom-left-radius: 2em 5em;
-	-webkit-border-bottom-right-radius: 2em 5em;
-	-webkit-border-bottom-left-radius: 2em 5em;
-	border-bottom-right-radius: 2em 5em;
-	border-bottom-left-radius: 2em 5em;
+	-moz-border-bottom-right-radius:2em 5em;
+	-moz-border-bottom-left-radius:2em 5em;
+	-webkit-border-bottom-right-radius:2em 5em;
+	-webkit-border-bottom-left-radius:2em 5em;
+	border-bottom-right-radius:2em 5em;
+	border-bottom-left-radius:2em 5em;
 	-moz-transform:rotate(90deg);
 	-webkit-transform:rotate(90deg);
 	-o-transform:rotate(90deg);
@@ -79,10 +79,11 @@ body.admin-bar #what-template-am-i-using{
 	-ms-transition:all 250ms ease-in-out;
 	-o-transition:all 250ms ease-in-out;
 	transition:all 250ms ease-in-out;
-	box-shadow: 0 0 4px #333;
+	box-shadow:0 0 4px #333;
 }
 
 #what-template-am-i-using-handle > span{
+	white-space:nowrap;
     display:block;
 	-moz-transform:rotate(180deg);
 	-webkit-transform:rotate(180deg);
@@ -99,7 +100,7 @@ body.admin-bar #what-template-am-i-using{
 #what-template-am-i-using-close{
 	cursor:pointer;
 	display:block;
-	display: none;
+	display:none;
 	width:1em;
 	height:1em;
 	position:absolute;
@@ -120,9 +121,10 @@ body.admin-bar #what-template-am-i-using{
 }
 
 #what-template-am-i-using-data{
-	position: relative;
-	z-index: 100;
-	background-color: #EEE;
+	word-wrap: break-word;
+	position:relative;
+	z-index:100;
+	background-color:#EEE;
 	margin:0;
 	padding:0;
 	padding:2em;
@@ -131,7 +133,7 @@ body.admin-bar #what-template-am-i-using{
 	-moz-box-sizing:border-box;
 	-webkit-box-sizing:border-box;
 	box-sizing:border-box;
-	box-shadow: 0 0 4px #333;
+	box-shadow:0 0 4px #333;
 }
 
 #what-template-am-i-using-data > dt{
