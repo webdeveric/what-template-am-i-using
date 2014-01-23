@@ -1,10 +1,9 @@
 === What Template Am I Using ===
 Contributors: webdeveric
-Donate link: http://webdeveric.com/donate/
 Tags: template
 Requires at least: 3.0.0
 Tested up to: 3.8
-Stable tag: 0.1.3
+Stable tag: 0.1.4
 
 This very basic plugin will show you which template is currently being used to render the page.
 
@@ -12,20 +11,29 @@ This very basic plugin will show you which template is currently being used to r
 
 This very basic plugin will show you which template is currently being used to render the page.
 
+The info is only displayed for users that have the edit_theme_options capability.
+
 Information displayed:
 
 * Current template
 * Current post type
 * Are you on the "home page" (blog index)
 * Are you on the "front page" (real home page of your site)
+* Any extra info you want displayed. Just use the <code>what_template_am_i_using_data</code> filter.
+
+This plugin uses a cookie to remember if the panel was open and if it was, it will reopen if when the page is reloaded.
 
 == Installation ==
 
 1. Upload `what-template-am-i-using` folder to the `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
-1. Party Hard
+1. Visit front end of your site.
 
 == Changelog ==
+
+= 0.1.4 =
+* This is a complete rewrite to include more functionality and to update the styles.
+* The data displayed is now filterable.
 
 = 0.1.3 =
 * Added server IP address
