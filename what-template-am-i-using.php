@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: What Template Am I Using
-Description: This plugin shows you what template is currently being used to render the current page/post/what ever.
+Description: This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
 Author: Eric King
 Version: 0.1.4
 Author URI: http://webdeveric.com/
@@ -58,16 +58,19 @@ class What_Template_Am_I_Using {
 		<?php
 	}
 }
-What_Template_Am_I_Using::init();
 
+if( ! is_admin() ){
+	What_Template_Am_I_Using::init();
 
-/**
-	This is here to show you how to extend what is shown in the panel.
-*/
-function what_template_am_i_using_server_data( array $data ){
-	$data['Remote IP'] = $_SERVER['REMOTE_ADDR'];
-	$data['Server Software'] = $_SERVER['SERVER_SOFTWARE'];
-	$data['PHP Version'] = phpversion();
-	return $data;
+	/**
+		This is here to show you how to extend what is shown in the panel.
+	*/
+	function what_template_am_i_using_server_data( array $data ){
+		$data['Remote IP'] = $_SERVER['REMOTE_ADDR'];
+		$data['Server Software'] = $_SERVER['SERVER_SOFTWARE'];
+		$data['PHP Version'] = phpversion();
+		return $data;
+	}
+	add_filter('what_template_am_i_using_data', 'what_template_am_i_using_server_data', 10, 1 );
+
 }
-add_filter('what_template_am_i_using_data', 'what_template_am_i_using_server_data', 10, 1 );
