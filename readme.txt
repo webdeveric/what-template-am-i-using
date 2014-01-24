@@ -19,11 +19,7 @@ Information displayed:
 * Current post type
 * Are you on the "home page" (blog index)
 * Are you on the "front page" (real home page of your site)
-<<<<<<< HEAD
-* Any extra info you want displayed. Just use the <code>what_template_am_i_using_data</code> filter.
-=======
 * Any extra info you want displayed. Just use the <code>wtaiu_data</code> filter.
->>>>>>> master
 
 This plugin uses a cookie to remember if the panel was open and if it was, it will reopen if when the page is reloaded.
 
