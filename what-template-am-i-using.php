@@ -6,11 +6,26 @@ Author: Eric King
 Version: 0.1.4
 Author URI: http://webdeveric.com/
 
-@todo
+----------------------------------------------------------------------------------------------------
 
-	Look into get_header / get_footer / get_sidebar to see if they have actions or filters to determine what files is being used.
+This is here to show you how to extend what is shown in the panel.
+Something like this would be put in your theme's function.php file or into a plugin.
 
-	Add @media queries to give the panel a min width on smaller screens and a percentage on larger screens.
+function wtaiu_server_data( SplPriorityQueue $queue ){
+	$queue->insert( array( 'Server IP' => $_SERVER['SERVER_ADDR'] ), 4 );
+	$queue->insert( array( 'Your IP' => $_SERVER['REMOTE_ADDR'] ), 3 );
+	$queue->insert( array( 'Server Software' => $_SERVER['SERVER_SOFTWARE'] ), 2 );
+	$queue->insert( array( 'PHP Version' => phpversion() ), 1 );
+	return $queue;
+}
+add_filter('wtaiu_data', 'wtaiu_server_data', 10, 1 );
+
+
+Here is how you can filter the handle text.
+
+add_filter('wtaiu_handle_text', function( $text ){
+	return 'Your Custom Text Here';
+} );
 
 */
 
@@ -30,19 +45,35 @@ class What_Template_Am_I_Using {
 
 	public static function setup(){
 		if( current_user_can( 'edit_theme_options' ) ){
-			
+
 			self::$queue = new SplPriorityQueue();
-			
+
 			self::enqueue_assets();
 
-			add_filter('wtaiu_data', array( __CLASS__, 'default_data' ), 10, 1 );
-			add_filter('wtaiu_data', array( __CLASS__, 'find_template_parts' ), 10, 1 );
+			add_filter( 'wtaiu_data', array( __CLASS__, 'default_data' ), 10, 1 );
+			add_filter( 'wtaiu_data', array( __CLASS__, 'find_template_parts' ), 10, 1 );
 
-			add_action('wp_print_scripts', array( __CLASS__, 'print_scripts_hook' ) );
-			add_action('wp_print_styles', array( __CLASS__, 'print_styles_hook' ) );
-			
-			add_action('wp_footer', array( __CLASS__, 'output' ) );
+			add_action( 'wp_print_scripts', array( __CLASS__, 'print_scripts_hook' ) );
+			add_action( 'wp_print_styles', array( __CLASS__, 'print_styles_hook' ) );
+
+			add_action( 'get_header', array( __CLASS__, 'record_header' ), 10, 1 );
+			add_action( 'get_footer', array( __CLASS__, 'record_footer' ), 10, 1 );
+			add_action( 'get_sidebar', array( __CLASS__, 'record_sidebar' ), 10, 1 );
+
+			add_action( 'wp_footer', array( __CLASS__, 'output' ) );
 		}
+	}
+
+	public static function record_header( $name ){
+		self::$queue->insert( array( 'Header File Used' => isset( $name ) ? "header-{$name}.php" : 'header.php' ), 98 );
+	}
+
+	public static function record_footer( $name ){
+		self::$queue->insert( array( 'Footer File Used' => isset( $name ) ? "footer-{$name}.php" : 'footer.php' ), 97 );
+	}
+
+	public static function record_sidebar( $name ){
+		self::$queue->insert( array( 'Sidebar File Used' => isset( $name ) ? "sidebar-{$name}.php" : 'sidebar.php' ), 96 );
 	}
 
 	public static function print_scripts_hook(){
@@ -68,7 +99,6 @@ class What_Template_Am_I_Using {
 		$queue->insert( array( 'Post Type' => isset( $post, $post->post_type ) ? $post->post_type : 'not set' ), 90 );
 		$queue->insert( array( 'Front Page' => is_front_page() ? 'Yes' : 'No' ), 80 );
 		$queue->insert( array( 'Home Page' => is_home() ? 'Yes' : 'No' ), 80 );
-		$queue->insert( array( 'Server IP' => $_SERVER['SERVER_ADDR'] ), 70 );
 		return $queue;
 	}
 
@@ -101,12 +131,12 @@ class What_Template_Am_I_Using {
 
 	public static function find_enqueued_scripts( SplPriorityQueue $queue ){
 		global $wp_scripts;
-		return self::process_dependency_obj( $queue, $wp_scripts, 'Enqueued Scripts', 11 );
+		return self::process_dependency_obj( $queue, $wp_scripts, 'Enqueued Scripts', 70 );
 	}
 
 	function find_enqueued_styles( SplPriorityQueue $queue ){
 		global $wp_styles;
-		return self::process_dependency_obj( $queue, $wp_styles, 'Enqueued Styles', 10 );
+		return self::process_dependency_obj( $queue, $wp_styles, 'Enqueued Styles', 69 );
 	}
 
 	public static function output(){
@@ -129,23 +159,3 @@ class What_Template_Am_I_Using {
 }
 
 What_Template_Am_I_Using::init();
-
-/**
-	This is here to show you how to extend what is shown in the panel.
-	Something like this would be put in your theme's function.php file or into a plugin.
-*/
-function wtaiu_server_data( SplPriorityQueue $queue ){
-	$queue->insert( array( 'Your IP' => $_SERVER['REMOTE_ADDR'] ), 70 );
-	$queue->insert( array( 'Server Software' => $_SERVER['SERVER_SOFTWARE'] ), 65 );
-	$queue->insert( array( 'PHP Version' => phpversion() ), 64 );
-	return $queue;
-}
-add_filter('wtaiu_data', 'wtaiu_server_data', 10, 1 );
-
-
-//	Here is how you can filter the handle text.
-/*
-add_filter('wtaiu_handle_text', function( $text ){
-	return 'Your Custom Text Here';
-} );
-*/
