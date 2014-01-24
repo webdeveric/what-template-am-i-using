@@ -5,6 +5,13 @@ Description: This plugin is intended for theme developers to use. It shows the c
 Author: Eric King
 Version: 0.1.4
 Author URI: http://webdeveric.com/
+
+@todo
+
+	Look into get_header / get_footer / get_sidebar to see if they have actions or filters to determine what files is being used.
+
+	Add @media queries to give the panel a min width on smaller screens and a percentage on larger screens.
+
 */
 
 // This plugin only needs to run on the front end of the site.
@@ -28,8 +35,8 @@ class What_Template_Am_I_Using {
 			
 			self::enqueue_assets();
 
-			add_filter('what_template_am_i_using_data', array( __CLASS__, 'default_data' ), 10, 1 );
-			add_filter('what_template_am_i_using_data', array( __CLASS__, 'find_template_parts' ), 10, 1 );
+			add_filter('wtaiu_data', array( __CLASS__, 'default_data' ), 10, 1 );
+			add_filter('wtaiu_data', array( __CLASS__, 'find_template_parts' ), 10, 1 );
 
 			add_action('wp_print_scripts', array( __CLASS__, 'print_scripts_hook' ) );
 			add_action('wp_print_styles', array( __CLASS__, 'print_styles_hook' ) );
@@ -39,16 +46,19 @@ class What_Template_Am_I_Using {
 	}
 
 	public static function print_scripts_hook(){
-		add_filter('what_template_am_i_using_data', array( __CLASS__, 'find_enqueued_scripts' ), 10, 1 );
+		add_filter('wtaiu_data', array( __CLASS__, 'find_enqueued_scripts' ), 10, 1 );
 	}
 
 	public static function print_styles_hook(){
-		add_filter('what_template_am_i_using_data', array( __CLASS__, 'find_enqueued_styles' ), 10, 1 );
+		add_filter('wtaiu_data', array( __CLASS__, 'find_enqueued_styles' ), 10, 1 );
 	}
 
 	public static function enqueue_assets(){
-		wp_enqueue_style('what-template-am-i-using', plugins_url( '/css/what-template-am-i-using.css', __FILE__ ), array(), self::VERSION );
-		wp_enqueue_script('what-template-am-i-using', plugins_url( '/js/what-template-am-i-using.js', __FILE__ ), array('jquery'), self::VERSION, true );
+
+		wp_enqueue_style('wtaiu', plugins_url( '/css/what-template-am-i-using.css', __FILE__ ), array(), self::VERSION );
+		wp_enqueue_script('wtaiu-modernizr', plugins_url( '/js/modernizr.custom.49005.js', __FILE__ ), array(), self::VERSION );
+		wp_enqueue_script('wtaiu', plugins_url( '/js/what-template-am-i-using.js', __FILE__ ), array('jquery'), self::VERSION );
+		
 	}
 
 	public static function default_data( SplPriorityQueue $queue ){
@@ -82,6 +92,9 @@ class What_Template_Am_I_Using {
 			if( isset( $d->src ) && $d->src != '' )
 				$items[] = sprintf('<li><a href="%2$s">%1$s</a></li>', $d->handle, $d->src );
 		}
+
+		$label .= sprintf('<span class="counter">(%d)</span>', count( $items ) );
+
 		$queue->insert( array( $label => '<ul>' . implode('', $items ) . '</ul>' ), $priority );
 		return $queue;
 	}
@@ -98,12 +111,12 @@ class What_Template_Am_I_Using {
 
 	public static function output(){
 		?>
-		<div id="what-template-am-i-using">
-			<a id="what-template-am-i-using-handle" title="Click to toggle"><span>What Template Am I Using?</span></a>
-			<a id="what-template-am-i-using-close" title="Click to remove from page">&times;</a>
-			<dl id="what-template-am-i-using-data">
+		<div id="wtaiu">
+			<a id="wtaiu-handle" title="Click to toggle"><span><?php echo apply_filters('wtaiu_handle_text', 'What Template Am I Using?' ); ?></span></a>
+			<a id="wtaiu-close" title="Click to remove from page">&times;</a>
+			<dl id="wtaiu-data">
 				<?php 
-					apply_filters('what_template_am_i_using_data', self::$queue );
+					apply_filters('wtaiu_data', self::$queue );
 					foreach( self::$queue as $data ){
 						foreach( $data as $label => $value )
 							printf('<dt>%s</dt><dd>%s</dd>', $label, $value );	
@@ -121,10 +134,18 @@ What_Template_Am_I_Using::init();
 	This is here to show you how to extend what is shown in the panel.
 	Something like this would be put in your theme's function.php file or into a plugin.
 */
-function what_template_am_i_using_server_data( SplPriorityQueue $queue ){
+function wtaiu_server_data( SplPriorityQueue $queue ){
 	$queue->insert( array( 'Your IP' => $_SERVER['REMOTE_ADDR'] ), 70 );
 	$queue->insert( array( 'Server Software' => $_SERVER['SERVER_SOFTWARE'] ), 65 );
 	$queue->insert( array( 'PHP Version' => phpversion() ), 64 );
 	return $queue;
 }
-add_filter('what_template_am_i_using_data', 'what_template_am_i_using_server_data', 10, 1 );
+add_filter('wtaiu_data', 'wtaiu_server_data', 10, 1 );
+
+
+//	Here is how you can filter the handle text.
+/*
+add_filter('wtaiu_handle_text', function( $text ){
+	return 'Your Custom Text Here';
+} );
+*/

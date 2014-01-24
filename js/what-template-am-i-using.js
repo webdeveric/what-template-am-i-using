@@ -75,21 +75,29 @@
 		cookies.set('wtaiu', 'closed');
 	}
 
+	function add_wtaiu_transitions(){
+		wtaiu.addClass('transition-right');
+		$('#wpadminbar').addClass('transition-right');
+		$('body').addClass('transition-margin');
+	}
+
 	$( function(){
 
-		wtaiu = $('#what-template-am-i-using');
+		wtaiu = $('#wtaiu');
 
-		$('#what-template-am-i-using-close').click( function(){
+		$('#wtaiu-close').click( function(){
+			close_wtaiu_panel();
 			wtaiu.remove();
 			cookies.remove('wtaiu');
 		} );
 
-		$('#what-template-am-i-using-handle').click( function(){
+		$('#wtaiu-handle').click( function(){
 			wtaiu.hasClass('open') ? close_wtaiu_panel() : open_wtaiu_panel();
 		} );
 
-		if( cookies.get('wtaiu') == 'open' )
-			open_wtaiu_panel();
+		cookies.get('wtaiu') == 'open' ? open_wtaiu_panel() : close_wtaiu_panel();
+
+		setTimeout( add_wtaiu_transitions, 500 );
 
 	} );
 

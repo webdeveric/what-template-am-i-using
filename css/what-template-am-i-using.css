@@ -1,8 +1,13 @@
 @charset "UTF-8";
 
 body.wtaiu-open,
-body.wtaiu-closed{
+body.wtaiu-closed,
+body.wtaiu-open #wpadminbar,
+body.wtaiu-closed #wpadminbar{
 	width:auto;
+}
+
+.transition-margin{
 	-webkit-transition:margin 250ms ease-in-out;
 	-moz-transition:margin 250ms ease-in-out;
 	-ms-transition:margin 250ms ease-in-out;
@@ -10,43 +15,61 @@ body.wtaiu-closed{
 	transition:margin 250ms ease-in-out;
 }
 
-body.wtaiu-open{
-	margin-right:15%;
-}
-
-#what-template-am-i-using{
-	position:fixed;
-	z-index:55555;
-	top:0;
-	right:-15%;
-	bottom:0;
-	width:15%;
-	font:menu;
-	color:#333;
-	background:#EEE;
+.transition-right{
 	-webkit-transition:right 250ms ease-in-out;
 	-moz-transition:right 250ms ease-in-out;
 	-ms-transition:right 250ms ease-in-out;
 	-o-transition:right 250ms ease-in-out;
 	transition:right 250ms ease-in-out;
+}
+
+body.wtaiu-open{
+	margin-right:300px;
+}
+
+body.wtaiu-open #wpadminbar{
+	right:300px;
+}
+
+body.wtaiu-closed #wpadminbar{
+	right:0;
+}
+
+#wtaiu{
+	position:fixed;
+	z-index:99999;
+	top:0;
+	right:-300px;
+	bottom:0;
+	width:300px;
+	font:menu;
+	color:#333;
+	background:#EEE;
 	-moz-box-sizing:border-box;
 	-webkit-box-sizing:border-box;
 	box-sizing:border-box;
 }
 
-body.admin-bar #what-template-am-i-using{
-	top:32px;
-}
-
-#what-template-am-i-using.open{
+#wtaiu.open{
 	right:0;
 }
 
-#what-template-am-i-using-handle{
+#wtaiu a{
+	color:#000;
+}
+
+#wtaiu a:hover,
+#wtaiu a:active,
+#wtaiu a:focus{
+	color: #F00;
+}
+
+a#wtaiu-handle{
 	display:block;
+	min-height:3em;
 	position:absolute;
-	z-index:1;
-	top:2%;
+	z-index:2;
+	top:80px;
 	left:0;
 	padding:0 1.5em;
 	word-spacing:.25em;
@@ -56,7 +79,7 @@ body.admin-bar #what-template-am-i-using{
 	text-transform:uppercase;
 	background:#4E98D6;
 	color:#EEE;
-	cursor:w-resize;
+	cursor:pointer;
 	text-decoration:none;
 	-moz-border-bottom-right-radius:2em 5em;
 	-moz-border-bottom-left-radius:2em 5em;
@@ -82,7 +105,7 @@ body.admin-bar #what-template-am-i-using{
 	box-shadow:0 0 4px #333;
 }
 
-#what-template-am-i-using-handle > span{
+a#wtaiu-handle > span{
 	white-space:nowrap;
 	display:block;
 	-moz-transform:rotate(180deg);
@@ -92,36 +115,48 @@ body.admin-bar #what-template-am-i-using{
 	transform:rotate(180deg);
 }
 
-#what-template-am-i-using.open #what-template-am-i-using-handle{
-	cursor:e-resize;
+a#wtaiu-handle:hover{
+	color:#FFF;
+}
+
+#wtaiu.open #wtaiu-handle{
 	background-color:#00B38A;
 	color:#FFF;
 }
 
-#what-template-am-i-using-close{
-	cursor:pointer;
-	display:block;
-	display:none;
-	width:1em;
-	height:1em;
+a#wtaiu-close{
 	position:absolute;
-	top:0;
-	left:0;
-	background:#222;
-	color:#EEE;
-	z-index:10;
+	z-index:1;
+	top:50px;
+	left:-1.5em;
+
+	display:block;
+	width:1.5em;
+	padding:6px 0 0 0;
+	height:34px;
+
+	cursor:pointer;
+
+	background:#C44;
+	color:#FFF;
+
 	text-decoration:none;
-	font-size:2em;
-	line-height:.75em;
+	font-size:20px;
+	line-height:1;
 	text-align:center;
+	
+	-moz-border-top-left-radius:5em 2em;
+	-webkit-border-top-left-radius:5em 2em;
+	border-top-left-radius:5em 2em;
+	box-shadow:0 0 4px #333;
 }
 
-#what-template-am-i-using-close:hover{
+a#wtaiu-close:hover{
 	background:#C33;
 	color:#FFF;
 }
 
-#what-template-am-i-using-data{
+#wtaiu-data{
 	word-wrap:break-word;
 	position:relative;
 	z-index:100;
@@ -129,7 +164,9 @@ body.admin-bar #what-template-am-i-using{
 	margin:0;
 	padding:0;
 	padding:2em;
+
 	overflow:auto;
+
 	height:100%;
 	-moz-box-sizing:border-box;
 	-webkit-box-sizing:border-box;
@@ -137,8 +174,14 @@ body.admin-bar #what-template-am-i-using{
 	box-shadow:0 0 4px #333;
 }
 
-#what-template-am-i-using-data > dt,
-#what-template-am-i-using-data > dd{
+.touch #wtaiu-data{
+	overflow:scroll;
+	-webkit-overflow-scrolling:touch;
+}
+
+
+#wtaiu-data > dt,
+#wtaiu-data > dd{
 	display:block;
 	float:none;
 	clear:none;
@@ -146,11 +189,36 @@ body.admin-bar #what-template-am-i-using{
 	line-height:1.4em;
 }
 
-#what-template-am-i-using-data > dt{
+#wtaiu-data > dt{
 	font-weight:bold;
 	margin:0 0 .25em 0;
 }
 
-#what-template-am-i-using-data > dd{
+#wtaiu-data > dd{
 	margin:0 0 1em 0;
 }
+
+#wtaiu-data ul{
+	margin:0;
+	padding:0;
+}
+
+#wtaiu-data ul li{
+	list-style:square;
+	margin:0 0 0 2em;
+}
+
+#wtaiu .counter{
+	display: inline-block;
+	margin:0 0 0 .5em;
+}
+
+
+
+
+
+
+
+
+
+
