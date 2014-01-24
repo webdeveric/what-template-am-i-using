@@ -56,7 +56,7 @@ body.admin-bar #what-template-am-i-using{
 	text-transform:uppercase;
 	background:#4E98D6;
 	color:#EEE;
-	cursor:help;
+	cursor:w-resize;
 	text-decoration:none;
 	-moz-border-bottom-right-radius:2em 5em;
 	-moz-border-bottom-left-radius:2em 5em;
@@ -93,6 +93,7 @@ body.admin-bar #what-template-am-i-using{
 }
 
 #what-template-am-i-using.open #what-template-am-i-using-handle{
+	cursor:e-resize;
 	background-color:#00B38A;
 	color:#FFF;
 }
@@ -138,12 +139,16 @@ body.admin-bar #what-template-am-i-using{
 
 #what-template-am-i-using-data > dt,
 #what-template-am-i-using-data > dd{
+	display:block;
+	float:none;
+	clear:none;
+	width:auto;
 	line-height:1.4em;
 }
 
 #what-template-am-i-using-data > dt{
 	font-weight:bold;
-	margin:0;
+	margin:0 0 .25em 0;
 }
 
 #what-template-am-i-using-data > dd{
