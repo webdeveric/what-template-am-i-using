@@ -64,13 +64,13 @@
 	var wtaiu = null;
 
 	function open_wtaiu_panel(){
-		$('body').removeClass('wtaiu-closed').addClass('wtaiu-open');
+		$('html').removeClass('wtaiu-closed').addClass('wtaiu-open');
 		wtaiu.addClass('open');
 		cookies.set('wtaiu', 'open');
 	}
 
 	function close_wtaiu_panel(){
-		$('body').removeClass('wtaiu-open').addClass('wtaiu-closed');
+		$('html').removeClass('wtaiu-open').addClass('wtaiu-closed');
 		wtaiu.removeClass('open');
 		cookies.set('wtaiu', 'closed');
 	}
@@ -78,7 +78,7 @@
 	function add_wtaiu_transitions(){
 		wtaiu.addClass('transition-right');
 		$('#wpadminbar').addClass('transition-right');
-		$('body').addClass('transition-margin');
+		$('html').addClass('transition-padding');
 	}
 
 	$( function(){
@@ -87,8 +87,14 @@
 
 		$('#wtaiu-close').click( function(){
 			close_wtaiu_panel();
-			wtaiu.remove();
-			cookies.remove('wtaiu');
+			setTimeout( function(){
+				// Clean up after X button clicked.
+				wtaiu.remove();
+				wtaiu = null;
+				cookies.remove('wtaiu');
+				$('#wpadminbar').removeClass('transition-right');
+				$('html').removeClass('transition-padding wtaiu-closed');
+			}, 250 ); // Wait until the panel is closed.
 		} );
 
 		$('#wtaiu-handle').click( function(){

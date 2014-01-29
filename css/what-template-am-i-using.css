@@ -1,18 +1,18 @@
 @charset "UTF-8";
 
-body.wtaiu-open,
-body.wtaiu-closed,
-body.wtaiu-open #wpadminbar,
-body.wtaiu-closed #wpadminbar{
+html.wtaiu-open,
+html.wtaiu-closed,
+html.wtaiu-open #wpadminbar,
+html.wtaiu-closed #wpadminbar{
 	width:auto;
 }
 
-.transition-margin{
-	-webkit-transition:margin 250ms ease-in-out;
-	-moz-transition:margin 250ms ease-in-out;
-	-ms-transition:margin 250ms ease-in-out;
-	-o-transition:margin 250ms ease-in-out;
-	transition:margin 250ms ease-in-out;
+.transition-padding{
+	-webkit-transition:padding 250ms ease-in-out;
+	-moz-transition:padding 250ms ease-in-out;
+	-ms-transition:padding 250ms ease-in-out;
+	-o-transition:padding 250ms ease-in-out;
+	transition:padding 250ms ease-in-out;
 }
 
 .transition-right{
@@ -23,15 +23,15 @@ body.wtaiu-closed #wpadminbar{
 	transition:right 250ms ease-in-out;
 }
 
-body.wtaiu-open{
-	margin-right:300px;
+html.wtaiu-open{
+	padding-right:300px;
 }
 
-body.wtaiu-open #wpadminbar{
+html.wtaiu-open #wpadminbar{
 	right:300px;
 }
 
-body.wtaiu-closed #wpadminbar{
+html.wtaiu-closed #wpadminbar{
 	right:0;
 }
 

@@ -3,7 +3,7 @@ Contributors: webdeveric
 Tags: template, theme development, debug, server information
 Requires at least: 3.8.0
 Tested up to: 3.8.1
-Stable tag: 0.1.4
+Stable tag: 0.1.5
 
 This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
 
@@ -32,6 +32,10 @@ This plugin uses a cookie to remember if the panel was open and if it was, it wi
 1. Visit front end of your site.
 
 == Changelog ==
+
+= 0.1.5 =
+* Updated css for the panel opening transition. It adds padding on the html element instead of margin on the  body. I did this to account for people using the body element as a container and giving it a specific width.
+* I updated the behavior of the close button.
 
 = 0.1.4 =
 * This is a complete rewrite to include more functionality and to update the styles.

@@ -3,7 +3,7 @@
 Plugin Name: What Template Am I Using
 Description: This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
 Author: Eric King
-Version: 0.1.4
+Version: 0.1.5
 Author URI: http://webdeveric.com/
 
 ----------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ if( is_admin() )
 
 class What_Template_Am_I_Using {
 
-	const VERSION = '0.1.4';
+	const VERSION = '0.1.5';
 
 	private static $queue;
 
