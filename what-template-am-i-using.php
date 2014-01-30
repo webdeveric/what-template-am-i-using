@@ -134,7 +134,7 @@ class What_Template_Am_I_Using {
 		return self::process_dependency_obj( $queue, $wp_scripts, 'Enqueued Scripts', 70 );
 	}
 
-	function find_enqueued_styles( SplPriorityQueue $queue ){
+	public static function find_enqueued_styles( SplPriorityQueue $queue ){
 		global $wp_styles;
 		return self::process_dependency_obj( $queue, $wp_styles, 'Enqueued Styles', 69 );
 	}

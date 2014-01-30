@@ -36,6 +36,7 @@ This plugin uses a cookie to remember if the panel was open and if it was, it wi
 = 0.1.5 =
 * Updated css for the panel opening transition. It adds padding on the html element instead of margin on the  body. I did this to account for people using the body element as a container and giving it a specific width.
 * I updated the behavior of the close button.
+* Fixed PHP warning when WP_DEBUG is true.
 
 = 0.1.4 =
 * This is a complete rewrite to include more functionality and to update the styles.
