@@ -5,6 +5,7 @@ Description: This plugin is intended for theme developers to use. It shows the c
 Author: Eric King
 Version: 0.1.5
 Author URI: http://webdeveric.com/
+Plugin Group: Utilities
 
 ----------------------------------------------------------------------------------------------------
 
