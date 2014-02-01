@@ -51,17 +51,17 @@ class What_Template_Am_I_Using {
 
 			self::enqueue_assets();
 
-			add_filter( 'wtaiu_data', array( __CLASS__, 'default_data' ), 10, 1 );
-			add_filter( 'wtaiu_data', array( __CLASS__, 'find_template_parts' ), 10, 1 );
+			add_filter( 'wtaiu_data',		array( __CLASS__, 'default_data' ), 10, 1 );
+			add_filter( 'wtaiu_data',		array( __CLASS__, 'find_template_parts' ), 10, 1 );
 
-			add_action( 'wp_print_scripts', array( __CLASS__, 'print_scripts_hook' ) );
-			add_action( 'wp_print_styles', array( __CLASS__, 'print_styles_hook' ) );
+			add_action( 'wp_print_scripts',	array( __CLASS__, 'print_scripts_hook' ) );
+			add_action( 'wp_print_styles',	array( __CLASS__, 'print_styles_hook' ) );
 
-			add_action( 'get_header', array( __CLASS__, 'record_header' ), 10, 1 );
-			add_action( 'get_footer', array( __CLASS__, 'record_footer' ), 10, 1 );
-			add_action( 'get_sidebar', array( __CLASS__, 'record_sidebar' ), 10, 1 );
+			add_action( 'get_header',		array( __CLASS__, 'record_header' ), 10, 1 );
+			add_action( 'get_footer',		array( __CLASS__, 'record_footer' ), 10, 1 );
+			add_action( 'get_sidebar',		array( __CLASS__, 'record_sidebar' ), 10, 1 );
 
-			add_action( 'wp_footer', array( __CLASS__, 'output' ) );
+			add_action( 'wp_footer',		array( __CLASS__, 'output' ) );
 		}
 	}
 
@@ -157,6 +157,7 @@ class What_Template_Am_I_Using {
 		</div>
 		<?php
 	}
+
 }
 
 What_Template_Am_I_Using::init();

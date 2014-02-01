@@ -7,6 +7,14 @@ html.wtaiu-closed #wpadminbar{
 	width:auto;
 }
 
+.transition-all{
+	-webkit-transition:all 250ms ease-in-out;
+	-moz-transition:all 250ms ease-in-out;
+	-ms-transition:all 250ms ease-in-out;
+	-o-transition:all 250ms ease-in-out;
+	transition:all 250ms ease-in-out;
+}
+
 .transition-padding{
 	-webkit-transition:padding 250ms ease-in-out;
 	-moz-transition:padding 250ms ease-in-out;
@@ -37,7 +45,7 @@ html.wtaiu-closed #wpadminbar{
 
 #wtaiu{
 	position:fixed;
-	z-index:99999;
+	z-index:999999;
 	top:0;
 	right:-300px;
 	bottom:0;
@@ -98,11 +106,6 @@ a#wtaiu-handle{
 	-o-transform-origin:left top;
 	-ms-transform-origin:left top;
 	transform-origin:left top;
-	-webkit-transition:all 250ms ease-in-out;
-	-moz-transition:all 250ms ease-in-out;
-	-ms-transition:all 250ms ease-in-out;
-	-o-transition:all 250ms ease-in-out;
-	transition:all 250ms ease-in-out;
 	box-shadow:0 0 4px #333;
 }
 

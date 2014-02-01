@@ -78,6 +78,7 @@
 	function add_wtaiu_transitions(){
 		wtaiu.addClass('transition-right');
 		$('#wpadminbar').addClass('transition-right');
+		$('#wtaiu-handle').addClass('transition-all');
 		$('html').addClass('transition-padding');
 	}
 
