@@ -82,6 +82,26 @@
 		$('html').addClass('transition-padding');
 	}
 
+	function save_sort_order( sort_order ){
+
+		var data = {
+			action: 'wtaiu_save_sort_order',
+			order: sort_order
+		};
+
+		$.post(
+			wtaiu_ajaxurl,
+			data,
+			function( data, textstatus, jqxhr ){
+				if( data.updated ){
+					// Do something to indicate to the user that the sort order has been saved.
+				}
+			},
+			'json'
+		);
+
+	}
+
 	$( function(){
 
 		wtaiu = $('#wtaiu');
@@ -103,6 +123,21 @@
 		} );
 
 		cookies.get('wtaiu') == 'open' ? open_wtaiu_panel() : close_wtaiu_panel();
+
+		var wtaiu_data = $('#wtaiu-data');
+
+		wtaiu_data.sortable( {
+			handle: '.label',
+			helper: 'clone',
+			items: '> .panel',
+			// opacity: .66,
+			containment: 'parent',
+			placeholder: 'panel-placeholder',
+			update: function( event, ui ){
+				var order = wtaiu_data.sortable("toArray");
+				save_sort_order( order );
+			}
+		});
 
 		setTimeout( add_wtaiu_transitions, 500 );
 

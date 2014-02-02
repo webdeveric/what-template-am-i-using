@@ -3,24 +3,18 @@
 Plugin Name: What Template Am I Using
 Description: This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
 Author: Eric King
-Version: 0.1.5
+Version: 0.1.6
 Author URI: http://webdeveric.com/
 Plugin Group: Utilities
 
 ----------------------------------------------------------------------------------------------------
 
-This is here to show you how to extend what is shown in the panel.
-Something like this would be put in your theme's function.php file or into a plugin.
+If you want to add your own information to the sidebar panel, you just need to create a class that
+extends WTAIU_Panel.
 
-function wtaiu_server_data( SplPriorityQueue $queue ){
-	$queue->insert( array( 'Server IP' => $_SERVER['SERVER_ADDR'] ), 4 );
-	$queue->insert( array( 'Your IP' => $_SERVER['REMOTE_ADDR'] ), 3 );
-	$queue->insert( array( 'Server Software' => $_SERVER['SERVER_SOFTWARE'] ), 2 );
-	$queue->insert( array( 'PHP Version' => phpversion() ), 1 );
-	return $queue;
-}
-add_filter('wtaiu_data', 'wtaiu_server_data', 10, 1 );
+Take a look at core-panels.php to see examples.
 
+----------------------------------------------------------------------------------------------------
 
 Here is how you can filter the handle text.
 
@@ -30,114 +24,64 @@ add_filter('wtaiu_handle_text', function( $text ){
 
 */
 
-// This plugin only needs to run on the front end of the site.
-if( is_admin() )
-	return;
+include __DIR__ . '/wtaiu-panel.php';
+
+include __DIR__ . '/core-panels.php';
 
 class What_Template_Am_I_Using {
 
 	const VERSION = '0.1.5';
 
-	private static $queue;
+	private static $panels;
 
 	public static function init(){
-		add_action('init', array( __CLASS__, 'setup' ) );
+
+		self::$panels = new SplPriorityQueue();
+
+		register_deactivation_hook( __FILE__, array( __CLASS__, 'deactivate' ) );
+
+		add_action( 'init', array( __CLASS__, 'setup' ) );
+		add_action( 'wp_ajax_wtaiu_save_sort_order', array( __CLASS__, 'wtaiu_save_sort_order') );
 	}
 
 	public static function setup(){
-		if( current_user_can( 'edit_theme_options' ) ){
 
-			self::$queue = new SplPriorityQueue();
-
+		if( ! is_admin() && current_user_can( 'edit_theme_options' ) ){
 			self::enqueue_assets();
 
-			add_filter( 'wtaiu_data',		array( __CLASS__, 'default_data' ), 10, 1 );
-			add_filter( 'wtaiu_data',		array( __CLASS__, 'find_template_parts' ), 10, 1 );
+			add_action( 'wp_footer', array( __CLASS__, 'output' ), PHP_INT_MAX );
 
-			add_action( 'wp_print_scripts',	array( __CLASS__, 'print_scripts_hook' ) );
-			add_action( 'wp_print_styles',	array( __CLASS__, 'print_styles_hook' ) );
-
-			add_action( 'get_header',		array( __CLASS__, 'record_header' ), 10, 1 );
-			add_action( 'get_footer',		array( __CLASS__, 'record_footer' ), 10, 1 );
-			add_action( 'get_sidebar',		array( __CLASS__, 'record_sidebar' ), 10, 1 );
-
-			add_action( 'wp_footer',		array( __CLASS__, 'output' ) );
 		}
 	}
 
-	public static function record_header( $name ){
-		self::$queue->insert( array( 'Header File Used' => isset( $name ) ? "header-{$name}.php" : 'header.php' ), 98 );
+	public static function deactivate(){
+		delete_metadata( 'user', 0, 'wtaiu-sort-order', '', true );
 	}
 
-	public static function record_footer( $name ){
-		self::$queue->insert( array( 'Footer File Used' => isset( $name ) ? "footer-{$name}.php" : 'footer.php' ), 97 );
+	public static function wtaiu_save_sort_order() {
+
+		$order = filter_has_var( INPUT_POST, 'order') && is_array( $_POST['order'] ) ? $_POST['order'] : array();
+
+		$user_id = get_current_user_id();
+		
+		if( $user_id > 0 ){
+			update_user_meta( $user_id, 'wtaiu-sort-order', $order );
+		}
+
+		wp_send_json( array('updated' => true ) ) ;
+
+		die();
 	}
 
-	public static function record_sidebar( $name ){
-		self::$queue->insert( array( 'Sidebar File Used' => isset( $name ) ? "sidebar-{$name}.php" : 'sidebar.php' ), 96 );
-	}
-
-	public static function print_scripts_hook(){
-		add_filter('wtaiu_data', array( __CLASS__, 'find_enqueued_scripts' ), 10, 1 );
-	}
-
-	public static function print_styles_hook(){
-		add_filter('wtaiu_data', array( __CLASS__, 'find_enqueued_styles' ), 10, 1 );
+	public static function addPanel( WTAIU_Panel $panel, $priority = 1 ){
+		self::$panels->insert( $panel, $priority );
 	}
 
 	public static function enqueue_assets(){
-
-		wp_enqueue_style('wtaiu', plugins_url( '/css/what-template-am-i-using.css', __FILE__ ), array(), self::VERSION );
+		wp_enqueue_style('wtaiu', plugins_url( '/css/what-template-am-i-using.css', __FILE__ ), array('dashicons'), self::VERSION );
 		wp_enqueue_script('wtaiu-modernizr', plugins_url( '/js/modernizr.custom.49005.js', __FILE__ ), array(), self::VERSION );
-		wp_enqueue_script('wtaiu', plugins_url( '/js/what-template-am-i-using.js', __FILE__ ), array('jquery'), self::VERSION );
-		
-	}
-
-	public static function default_data( SplPriorityQueue $queue ){
-		global $template, $post;
-		// A SplPriorityQueue is basically a max heap so the higher values are the first to be retreived.
-		$queue->insert( array( 'Template' => str_replace( get_theme_root(), '', $template ) ), 100 );
-		$queue->insert( array( 'Post Type' => isset( $post, $post->post_type ) ? $post->post_type : 'not set' ), 90 );
-		$queue->insert( array( 'Front Page' => is_front_page() ? 'Yes' : 'No' ), 80 );
-		$queue->insert( array( 'Home Page' => is_home() ? 'Yes' : 'No' ), 80 );
-		return $queue;
-	}
-
-	public static function find_template_parts( SplPriorityQueue $queue ){
-		global $wp_actions;
-		$template_parts = array();
-		foreach( $wp_actions as $action_name => $num ){
-			$matches = array();
-			if( preg_match('#get_template_part_(?<slug>.+)#', $action_name, $matches ) )
-				$template_parts[] = $matches['slug'];
-		}
-		if( ! empty( $template_parts ) )
-			$queue->insert( array( 'Template Parts Used' => implode(', ', $template_parts ) ), 99 );
-		return $queue;
-	}
-
-	public static function process_dependency_obj( SplPriorityQueue $queue, WP_Dependencies $dep, $label, $priority = 10 ){
-		$deps = array_intersect_key( $dep->registered, $dep->groups );
-		$items = array();
-		foreach( $deps as $d ){
-			if( isset( $d->src ) && $d->src != '' )
-				$items[] = sprintf('<li><a href="%2$s">%1$s</a></li>', $d->handle, $d->src );
-		}
-
-		$label .= sprintf('<span class="counter">(%d)</span>', count( $items ) );
-
-		$queue->insert( array( $label => '<ul>' . implode('', $items ) . '</ul>' ), $priority );
-		return $queue;
-	}
-
-	public static function find_enqueued_scripts( SplPriorityQueue $queue ){
-		global $wp_scripts;
-		return self::process_dependency_obj( $queue, $wp_scripts, 'Enqueued Scripts', 70 );
-	}
-
-	public static function find_enqueued_styles( SplPriorityQueue $queue ){
-		global $wp_styles;
-		return self::process_dependency_obj( $queue, $wp_styles, 'Enqueued Styles', 69 );
+		wp_enqueue_script('wtaiu', plugins_url( '/js/what-template-am-i-using.js', __FILE__ ), array('jquery', 'jquery-ui-sortable' ), self::VERSION );
+		wp_localize_script('wtaiu', 'wtaiu_ajaxurl', admin_url( 'admin-ajax.php' ) );
 	}
 
 	public static function output(){
@@ -145,15 +89,45 @@ class What_Template_Am_I_Using {
 		<div id="wtaiu">
 			<a id="wtaiu-handle" title="Click to toggle"><span><?php echo apply_filters('wtaiu_handle_text', 'What Template Am I Using?' ); ?></span></a>
 			<a id="wtaiu-close" title="Click to remove from page">&times;</a>
-			<dl id="wtaiu-data">
-				<?php 
-					apply_filters('wtaiu_data', self::$queue );
-					foreach( self::$queue as $data ){
-						foreach( $data as $label => $value )
-							printf('<dt>%s</dt><dd>%s</dd>', $label, $value );	
+			<ul id="wtaiu-data">
+				<?php
+
+					$user_id = get_current_user_id();
+
+					$order = array();
+
+					if( $user_id > 0 ){
+						$order = get_user_meta( $user_id, 'wtaiu-sort-order', true );
+
+						if( isset( $order ) && ! is_array( $order ) )
+							$order = array( $order );
+
+						$order = array_filter( $order );
 					}
+
+					$items = array();
+
+					foreach( self::$panels as $panel ){
+						$label = $panel->get_label();
+						$content = $panel->get_content();
+						$id = $panel->get_id();
+						$items[ $id ] = sprintf('<li class="panel" id="%3$s"><div class="label">%1$s</div><div class="content">%2$s</div></li>', $label, $content, $id );
+					}
+
+					$sorted_items = array();
+
+					foreach( $order as $index => $id ){
+						if( isset( $items[ $id ] ) ){
+							$sorted_items[ $id ] = $items[ $id ];
+							unset( $items[ $id ] );
+						}
+					}
+
+					echo implode('', $sorted_items );
+					echo implode('', $items );
+
 				?>
-			</dl>
+			</ul>
 		</div>
 		<?php
 	}
@@ -161,3 +135,13 @@ class What_Template_Am_I_Using {
 }
 
 What_Template_Am_I_Using::init();
+
+new WTAIU_Template_Panel();
+
+new WTAIU_General_Info_Panel();
+
+new WTAIU_Additional_Files_Panel();
+
+new WTAIU_Scripts_Panel();
+
+new WTAIU_Styles_Panel();

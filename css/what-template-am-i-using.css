@@ -52,7 +52,7 @@ html.wtaiu-closed #wpadminbar{
 	width:300px;
 	font:menu;
 	color:#333;
-	background:#EEE;
+	background:#F6F6F6;
 	text-align:left;
 	-moz-box-sizing:border-box;
 	-webkit-box-sizing:border-box;
@@ -159,10 +159,9 @@ a#wtaiu-close:hover{
 	word-wrap:break-word;
 	position:relative;
 	z-index:100;
-	background-color:#EEE;
+	background:#F6F6F6;
 	margin:0;
 	padding:0;
-	padding:2em;
 	overflow:auto;
 	height:100%;
 	-moz-box-sizing:border-box;
@@ -176,22 +175,85 @@ a#wtaiu-close:hover{
 	-webkit-overflow-scrolling:touch;
 }
 
-#wtaiu-data > dt,
-#wtaiu-data > dd{
+#wtaiu-data .panel,
+#wtaiu-data .panel-placeholder{
+	position:relative;
 	display:block;
 	float:none;
 	clear:none;
 	width:auto;
-	line-height:1.4em;
+	margin:0;
+	padding:10px 20px;
+	list-style:none;
 }
 
-#wtaiu-data > dt{
+#wtaiu-data .panel-placeholder{
+	background:#C44;
+	height:66px;
+}
+
+#wtaiu-data > .panel > .label,
+#wtaiu-data > .panel > .content{
+	position: relative;
+	display:block;
+	float:none;
+	clear:none;
+	width:auto;
+	margin:0;
+	padding:0;
+}
+
+#wtaiu-data > .panel:hover{
+	background:#FFF;
+}
+
+#wtaiu-data > .panel > .label{
+	line-height:1;
 	font-weight:bold;
-	margin:0 0 .25em 0;
+	line-height:1.5em;
+	margin-bottom:.25em;
+	cursor:move;
+	cursor:-moz-grab;
+	cursor:grab;
 }
 
-#wtaiu-data > dd{
-	margin:0 0 1em 0;
+#wtaiu-data > .panel.ui-sortable-helper > .label{
+	cursor:move;
+	cursor:-moz-grabbing;
+	cursor:grabbing;
+}
+
+#wtaiu-data > .panel > .content{
+	line-height:1.5em;
+}
+
+#wtaiu-data > .panel.ui-sortable-helper{
+	background:#FFF;
+	opacity:.8;
+}
+
+#wtaiu-data .panel > .label:hover{
+	background-image:url(../imgs/dots-15.png);
+	border-radius:2px;
+}
+
+#wtaiu-data .panel > .label:before{
+	display: none;
+	position: absolute;
+	right:100%;
+	font-family: 'dashicons';
+	content: "\f229";
+	font-size:1.5em;
+	color:#333;
+	-moz-transform:rotate(90deg);
+	-webkit-transform:rotate(90deg);
+	-o-transform:rotate(90deg);
+	-ms-transform:rotate(90deg);
+	transform:rotate(90deg);
+}
+
+#wtaiu-data .panel > .label:hover:before{
+	display:block;
 }
 
 #wtaiu-data ul{
@@ -207,4 +269,26 @@ a#wtaiu-close:hover{
 #wtaiu .counter{
 	display: inline-block;
 	margin:0 0 0 .5em;
+}
+
+#wtaiu-data .info-table{
+	table-layout: fixed;
+	width:100%;
+	border:0;
+	margin:0;
+	padding:0;
+}
+
+#wtaiu-data .info-table th,
+#wtaiu-data .info-table td{
+	text-align: left;
+	text-transform:none;
+	margin:0;
+	padding:0;
+	border:0;
+}
+
+#wtaiu-data .info-table thead th{
+	font-weight: bold;
+	font-size:smaller;
 }
