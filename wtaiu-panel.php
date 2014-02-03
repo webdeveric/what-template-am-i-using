@@ -1,6 +1,6 @@
 <?php
 
-class WTAIU_Panel {
+abstract class WTAIU_Panel {
 	
 	protected $label;
 	protected $id;
@@ -31,10 +31,7 @@ class WTAIU_Panel {
 		// do stuff here with actions
 	}
 
-	public function get_content(){
-		// This is the content that you want to show in the panel.
-		return '';
-	}
+	abstract public function get_content();
 
 	public function get_label(){
 		return $this->label;

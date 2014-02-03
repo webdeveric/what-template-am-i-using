@@ -22,26 +22,17 @@ add_filter('wtaiu_handle_text', function( $text ){
 	return 'Your Custom Text Here';
 } );
 
+----------------------------------------------------------------------------------------------------
+
+@todo Add a little arrow in the drag handle so that the user can collapse the panel.
+
 */
 
+include __DIR__ . '/PriorityQueueInsertionOrder.php';
 include __DIR__ . '/wtaiu-panel.php';
-
 include __DIR__ . '/core-panels.php';
 
-class PriorityQueueInsertionOrder extends SplPriorityQueue {
 
-	protected $counter;
-
-	public function __construct(){
-		// parent::__construct(); // WTF fatal error.
-		$this->counter = PHP_INT_MAX;
-	}
-
-	public function insert( $value, $priority ){
-		parent::insert($value, array( $priority, --$this->counter ) );
-	}
-
-}
 
 class What_Template_Am_I_Using {
 
@@ -60,12 +51,9 @@ class What_Template_Am_I_Using {
 	}
 
 	public static function setup(){
-
 		if( ! is_admin() && current_user_can( 'edit_theme_options' ) ){
 			self::enqueue_assets();
-
 			add_action( 'wp_footer', array( __CLASS__, 'output' ), PHP_INT_MAX );
-
 		}
 	}
 
@@ -88,8 +76,16 @@ class What_Template_Am_I_Using {
 		die();
 	}
 
+	public static function getPanels(){
+		return self::$panels;
+	}
+
 	public static function addPanel( WTAIU_Panel $panel, $priority = 1 ){
 		self::$panels->insert( $panel, $priority );
+	}
+
+	public static function removePanel( WTAIU_Panel $panel ){
+		self::$panels->remove( $panel );
 	}
 
 	public static function enqueue_assets(){
@@ -100,47 +96,46 @@ class What_Template_Am_I_Using {
 	}
 
 	public static function output(){
+		
+		self::$panels->setExtractFlags( SplPriorityQueue ::EXTR_DATA );
+
+		$user_id = get_current_user_id();
+
+		$order = array();
+		$items = array();
+		$sorted_items = array();
+
+		if( $user_id > 0 ){
+			$order = get_user_meta( $user_id, 'wtaiu-sort-order', true );
+			if( isset( $order ) && ! is_array( $order ) )
+				$order = array( $order );
+			$order = array_filter( $order );
+		}
+
+		foreach( self::$panels as $panel ){
+			$label = $panel->get_label();
+			$content = $panel->get_content();
+			$id	= $panel->get_id();
+			$items[ $id ] = sprintf('<li class="panel" id="%3$s"><div class="label">%1$s</div><div class="content">%2$s</div></li>', $label, $content, $id );
+		}
+
+		foreach( $order as $index => $id ){
+			if( isset( $items[ $id ] ) ){
+				$sorted_items[ $id ] = $items[ $id ];
+				unset( $items[ $id ] );
+			}
+		}
+
 		?>
 		<div id="wtaiu">
 			<a id="wtaiu-handle" title="Click to toggle"><span><?php echo apply_filters('wtaiu_handle_text', 'What Template Am I Using?' ); ?></span></a>
 			<a id="wtaiu-close" title="Click to remove from page">&times;</a>
 			<ul id="wtaiu-data">
 				<?php
-
-					$user_id = get_current_user_id();
-
-					$order = array();
-
-					if( $user_id > 0 ){
-						$order = get_user_meta( $user_id, 'wtaiu-sort-order', true );
-
-						if( isset( $order ) && ! is_array( $order ) )
-							$order = array( $order );
-
-						$order = array_filter( $order );
-					}
-
-					$items = array();
-
-					foreach( self::$panels as $panel ){
-						$label = $panel->get_label();
-						$content = $panel->get_content();
-						$id = $panel->get_id();
-						$items[ $id ] = sprintf('<li class="panel" id="%3$s"><div class="label">%1$s</div><div class="content">%2$s</div></li>', $label, $content, $id );
-					}
-
-					$sorted_items = array();
-
-					foreach( $order as $index => $id ){
-						if( isset( $items[ $id ] ) ){
-							$sorted_items[ $id ] = $items[ $id ];
-							unset( $items[ $id ] );
-						}
-					}
-
+					// Print out the sorted items.
 					echo implode('', $sorted_items );
+					// Print out any remaining items that may have been added to the sidebar after the user had saved their sort preference.
 					echo implode('', $items );
-
 				?>
 			</ul>
 		</div>
@@ -150,13 +145,14 @@ class What_Template_Am_I_Using {
 }
 
 What_Template_Am_I_Using::init();
+What_Template_Am_I_Using::addPanel( new WTAIU_Template_Panel(), 100 );
+What_Template_Am_I_Using::addPanel( new WTAIU_General_Info_Panel(), 100 );
+What_Template_Am_I_Using::addPanel( new WTAIU_Additional_Files_Panel(), 100 );
+What_Template_Am_I_Using::addPanel( new WTAIU_Scripts_Panel(), 100 );
+What_Template_Am_I_Using::addPanel( new WTAIU_Styles_Panel(), 100 );
+What_Template_Am_I_Using::addPanel( new WTAIU_IP_Addresses_Panel(), 100 );
 
-new WTAIU_Template_Panel();
-
-new WTAIU_General_Info_Panel();
-
-new WTAIU_Additional_Files_Panel();
-
-new WTAIU_Scripts_Panel();
-
-new WTAIU_Styles_Panel();
+/*
+if( WP_DEBUG )
+	What_Template_Am_I_Using::addPanel( new WTAIU_Server_Info_Panel(), 100 );
+*/

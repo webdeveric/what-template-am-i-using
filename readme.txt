@@ -3,7 +3,7 @@ Contributors: webdeveric
 Tags: template, theme development, debug, server information
 Requires at least: 3.8.0
 Tested up to: 3.8.1
-Stable tag: 0.1.5
+Stable tag: 0.1.6
 
 This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
 
@@ -36,7 +36,8 @@ This plugin uses a cookie to remember if the panel was open and if it was, it wi
 = 0.1.6 =
 * Added drag and drop re-ordering of items displayed in the sidebar panel.
 * I rewrote how information is displayed in the sidebar panel (removed wtaiu_data filter).
-* Various CSS updates
+* Various CSS updates.
+* Tested with default WordPress themes.
 
 = 0.1.5 =
 * Updated CSS: text alignment, panel opening transition.
