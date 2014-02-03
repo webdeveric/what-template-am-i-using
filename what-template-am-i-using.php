@@ -12,7 +12,7 @@ Plugin Group: Utilities
 If you want to add your own information to the sidebar panel, you just need to create a class that
 extends WTAIU_Panel.
 
-Take a look at core-panels.php to see examples.
+Take a look at core-panels.php for examples.
 
 ----------------------------------------------------------------------------------------------------
 
@@ -28,6 +28,21 @@ include __DIR__ . '/wtaiu-panel.php';
 
 include __DIR__ . '/core-panels.php';
 
+class PriorityQueueInsertionOrder extends SplPriorityQueue {
+
+	protected $counter;
+
+	public function __construct(){
+		// parent::__construct(); // WTF fatal error.
+		$this->counter = PHP_INT_MAX;
+	}
+
+	public function insert( $value, $priority ){
+		parent::insert($value, array( $priority, --$this->counter ) );
+	}
+
+}
+
 class What_Template_Am_I_Using {
 
 	const VERSION = '0.1.5';
@@ -36,7 +51,7 @@ class What_Template_Am_I_Using {
 
 	public static function init(){
 
-		self::$panels = new SplPriorityQueue();
+		self::$panels = new PriorityQueueInsertionOrder();
 
 		register_deactivation_hook( __FILE__, array( __CLASS__, 'deactivate' ) );
 
