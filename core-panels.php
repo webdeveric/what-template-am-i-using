@@ -169,21 +169,24 @@ class WTAIU_IP_Addresses_Panel extends WTAIU_Panel {
 	}
 
 	public function get_content(){
-		$your_ip = $_SERVER['REMOTE_ADDR'];
-		$server_ip = $_SERVER['SERVER_ADDR'];
+		$your_ip	= esc_html( $_SERVER['REMOTE_ADDR'] );
+		$server_ip	= esc_html( $_SERVER['SERVER_ADDR'] );
+		$dns_ip		= gethostbyname( $_SERVER['HTTP_HOST'] );
 
 $info=<<<INFO
 	<table class="info-table">
 		<thead>
 			<tr>
-				<th>Your IP</th>
-				<th>Server IP</th>
+				<th title="This is \$_SERVER['REMOTE_ADDR']">Your IP</th>
+				<th title="Server LAN IP">Server IP</th>
+				<th title="DNS lookup for {$_SERVER['HTTP_HOST']}">Domain IP (DNS)</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
 				<td>{$your_ip}</td>
 				<td>{$server_ip}</td>
+				<td>{$dns_ip}</td>
 			</tr>
 		</tbody>
 	</table>

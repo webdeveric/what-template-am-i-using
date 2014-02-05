@@ -102,6 +102,28 @@
 
 	}
 
+	function save_open_status( id, is_open ){
+
+
+		var data = {
+			action: 'wtaiu_save_panel_open_status',
+			panel_id: id,
+			panel_status: is_open ? 'open' : 'closed' 
+		};
+
+		$.post(
+			wtaiu_ajaxurl,
+			data,
+			function( data, textstatus, jqxhr ){
+				if( data.updated ){
+					// Do something to indicate to the user that the sort order has been saved.
+				}
+			},
+			'json'
+		);
+
+	}
+
 	$( function(){
 
 		wtaiu = $('#wtaiu');
@@ -140,6 +162,14 @@
 		});
 
 		setTimeout( add_wtaiu_transitions, 500 );
+
+
+		$('#wtaiu-data > .panel').openToggle( {
+			callback: function( $item ){// "this" refers to the .panel html element; "$item" is the jQuery object that represents .panel
+				save_open_status( this.id, ! $item.hasClass('closed') );
+			}
+		} );
+
 
 	} );
 

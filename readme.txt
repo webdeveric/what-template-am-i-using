@@ -35,6 +35,7 @@ This plugin uses a cookie to remember if the panel was open and if it was, it wi
 
 = 0.1.6 =
 * Added drag and drop re-ordering of items displayed in the sidebar panel.
+* Added an open/close button to the drag handle.
 * I rewrote how information is displayed in the sidebar panel (removed wtaiu_data filter).
 * Various CSS updates.
 * Tested with default WordPress themes.

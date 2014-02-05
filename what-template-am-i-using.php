@@ -22,10 +22,6 @@ add_filter('wtaiu_handle_text', function( $text ){
 	return 'Your Custom Text Here';
 } );
 
-----------------------------------------------------------------------------------------------------
-
-@todo Add a little arrow in the drag handle so that the user can collapse the panel.
-
 */
 
 include __DIR__ . '/PriorityQueueInsertionOrder.php';
@@ -48,6 +44,7 @@ class What_Template_Am_I_Using {
 
 		add_action( 'init', array( __CLASS__, 'setup' ) );
 		add_action( 'wp_ajax_wtaiu_save_sort_order', array( __CLASS__, 'wtaiu_save_sort_order') );
+		add_action( 'wp_ajax_wtaiu_save_panel_open_status', array( __CLASS__, 'wtaiu_save_panel_open_status') );
 	}
 
 	public static function setup(){
@@ -58,7 +55,14 @@ class What_Template_Am_I_Using {
 	}
 
 	public static function deactivate(){
-		delete_metadata( 'user', 0, 'wtaiu-sort-order', '', true );
+		$meta_keys = array(
+			'wtaiu-sort-order',
+			'wtaiu-panel-open-status'
+		);
+		foreach( $meta_keys as $key ){
+			delete_metadata( 'user', 0, $key, '', true );
+		}
+		
 	}
 
 	public static function wtaiu_save_sort_order() {
@@ -73,6 +77,27 @@ class What_Template_Am_I_Using {
 
 		wp_send_json( array('updated' => true ) ) ;
 
+		die();
+	}
+
+	public static function wtaiu_save_panel_open_status(){
+		$panel_id = filter_has_var( INPUT_POST, 'panel_id') ? $_POST['panel_id'] : null;
+		$user_id = get_current_user_id();
+		
+		if( $user_id > 0 && isset( $panel_id ) ){
+
+			$panel_status = filter_has_var( INPUT_POST, 'panel_status') && in_array( $_POST['panel_status'], array('open','closed') ) ? $_POST['panel_status'] : 'open';
+
+			$panel_open_status = get_user_meta( $user_id, 'wtaiu-panel-open-status', true );
+			if( empty( $panel_open_status ) )
+				$panel_open_status = array();
+
+			$panel_open_status[ $panel_id ] = $panel_status;
+
+			update_user_meta( $user_id, 'wtaiu-panel-open-status', $panel_open_status );
+		}
+
+		wp_send_json( array('updated' => true ) ) ;
 		die();
 	}
 
@@ -91,6 +116,7 @@ class What_Template_Am_I_Using {
 	public static function enqueue_assets(){
 		wp_enqueue_style('wtaiu', plugins_url( '/css/what-template-am-i-using.css', __FILE__ ), array('dashicons'), self::VERSION );
 		wp_enqueue_script('wtaiu-modernizr', plugins_url( '/js/modernizr.custom.49005.js', __FILE__ ), array(), self::VERSION );
+		wp_enqueue_script('opentoggle', plugins_url( '/js/jquery.opentoggle.js', __FILE__ ), array('jquery'), self::VERSION );
 		wp_enqueue_script('wtaiu', plugins_url( '/js/what-template-am-i-using.js', __FILE__ ), array('jquery', 'jquery-ui-sortable' ), self::VERSION );
 		wp_localize_script('wtaiu', 'wtaiu_ajaxurl', admin_url( 'admin-ajax.php' ) );
 	}
@@ -104,19 +130,34 @@ class What_Template_Am_I_Using {
 		$order = array();
 		$items = array();
 		$sorted_items = array();
+		$panel_open_status = array();
 
 		if( $user_id > 0 ){
 			$order = get_user_meta( $user_id, 'wtaiu-sort-order', true );
 			if( isset( $order ) && ! is_array( $order ) )
 				$order = array( $order );
 			$order = array_filter( $order );
+
+			$panel_open_status = get_user_meta( $user_id, 'wtaiu-panel-open-status', true );
 		}
+
+		if( empty( $panel_open_status ) )
+			$panel_open_status = array();
 
 		foreach( self::$panels as $panel ){
 			$label = $panel->get_label();
 			$content = $panel->get_content();
 			$id	= $panel->get_id();
-			$items[ $id ] = sprintf('<li class="panel" id="%3$s"><div class="label">%1$s</div><div class="content">%2$s</div></li>', $label, $content, $id );
+			$extra_class = '';
+			if( isset( $panel_open_status[ $id ] ) )
+				$extra_class = $panel_open_status[ $id ];
+
+			$items[ $id ] = sprintf('<li class="panel %4$s" id="%3$s">
+				<div class="panel-header">
+					<div class="label">%1$s</div><div class="open-toggle-handle"></div>
+				</div>
+				<div class="content">%2$s</div>
+			</li>', $label, $content, $id, $extra_class );
 		}
 
 		foreach( $order as $index => $id ){
