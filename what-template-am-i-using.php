@@ -271,8 +271,8 @@ What_Template_Am_I_Using::addPanel( new WTAIU_General_Info_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Additional_Files_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Scripts_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Styles_Panel(), 100 );
-What_Template_Am_I_Using::addPanel( new WTAIU_IP_Addresses_Panel(), 100 );
 
 if( WP_DEBUG ){
+	What_Template_Am_I_Using::addPanel( new WTAIU_IP_Addresses_Panel(), 100 );
 	What_Template_Am_I_Using::addPanel( new WTAIU_Server_Info_Panel(), 100 );
 }

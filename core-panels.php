@@ -166,6 +166,7 @@ class WTAIU_IP_Addresses_Panel extends WTAIU_Panel {
 
 	public function __construct(){
 		parent::__construct( 'IP Addresses', 'wtaiu-ip-addresses-panel' );
+		$this->default_open_state = 'closed';
 	}
 
 	public function activate(){
