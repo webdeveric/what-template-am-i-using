@@ -93,11 +93,7 @@
 		$.post(
 			wtaiu_ajaxurl,
 			data,
-			function( data, textstatus, jqxhr ){
-				if( data.updated ){
-					// Do something to indicate to the user that the sort order has been saved.
-				}
-			},
+			function( data, textstatus, jqxhr ){},
 			'json'
 		);
 
@@ -113,10 +109,35 @@
 		$.post(
 			wtaiu_ajaxurl,
 			data,
+			function( data, textstatus, jqxhr ){},
+			'json'
+		);
+
+	}
+
+
+	function wtaiu_save_close_sidebar(){
+
+		if( ! confirm("Are you sure you want to remove the sidebar?\n\nThe sidebar can be enabled again from your user profile page.") )
+			return;
+
+		var data = {
+			action: 'wtaiu_save_close_sidebar',
+		};
+
+		$.post(
+			wtaiu_ajaxurl,
+			data,
 			function( data, textstatus, jqxhr ){
-				if( data.updated ){
-					// Do something to indicate to the user that the sort order has been saved.
-				}
+				close_wtaiu_panel();
+				setTimeout( function(){
+					// Clean up after X button clicked.
+					wtaiu.remove();
+					wtaiu = null;
+					cookies.remove('wtaiu');
+					$('#wpadminbar').removeClass('transition-right');
+					$('html').removeClass('transition-padding wtaiu-closed');
+				}, 250 );
 			},
 			'json'
 		);
@@ -128,17 +149,7 @@
 		wtaiu = $('#wtaiu');
 		wtaiu_data = $('#wtaiu-data');
 
-		$('#wtaiu-close').click( function(){
-			close_wtaiu_panel();
-			setTimeout( function(){
-				// Clean up after X button clicked.
-				wtaiu.remove();
-				wtaiu = null;
-				cookies.remove('wtaiu');
-				$('#wpadminbar').removeClass('transition-right');
-				$('html').removeClass('transition-padding wtaiu-closed');
-			}, 250 ); // Wait until the panel is closed.
-		} );
+		$('#wtaiu-close').click( wtaiu_save_close_sidebar );
 
 		$('#wtaiu-handle').click( function(){
 			wtaiu.hasClass('open') ? close_wtaiu_panel() : open_wtaiu_panel();

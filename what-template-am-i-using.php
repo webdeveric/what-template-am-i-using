@@ -40,29 +40,68 @@ class What_Template_Am_I_Using {
 
 		self::$panels = new PriorityQueueInsertionOrder();
 
+		register_activation_hook( __FILE__, array( __CLASS__, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( __CLASS__, 'deactivate' ) );
 
-		add_action( 'init', array( __CLASS__, 'setup' ) );
-		add_action( 'wp_ajax_wtaiu_save_sort_order', array( __CLASS__, 'wtaiu_save_sort_order') );
-		add_action( 'wp_ajax_wtaiu_save_panel_open_status', array( __CLASS__, 'wtaiu_save_panel_open_status') );
+		add_action( 'init',									array( __CLASS__, 'setup' ) );
+		add_action( 'wp_ajax_wtaiu_save_close_sidebar',		array( __CLASS__, 'wtaiu_save_close_sidebar') );
+		add_action( 'wp_ajax_wtaiu_save_sort_order',		array( __CLASS__, 'wtaiu_save_sort_order') );
+		add_action( 'wp_ajax_wtaiu_save_panel_open_status',	array( __CLASS__, 'wtaiu_save_panel_open_status') );
+		add_action( 'personal_options',						array( __CLASS__, 'profile_options'), 10, 1 );
+		add_action( 'personal_options_update',				array( __CLASS__, 'update_profile_options'), 10, 1 );
 	}
 
 	public static function setup(){
 		if( ! is_admin() && current_user_can( 'edit_theme_options' ) ){
-			self::enqueue_assets();
-			add_action( 'wp_footer', array( __CLASS__, 'output' ), PHP_INT_MAX );
+			$user = wp_get_current_user();
+			if( $user->wtaiu_show_sidebar == '1' ){
+				self::enqueue_assets();
+				add_action( 'wp_footer', array( __CLASS__, 'output' ), PHP_INT_MAX );
+			}
+		}
+	}
+
+	public static function activate(){
+		// Make the sidebar shown for the person that activated the plugin.
+		// Everyone else has to visit their profile page to enable the sidebar if they want to see it.
+		$user_id = get_current_user_id();
+		if( $user_id > 0 ){
+			update_user_meta( $user_id, 'wtaiu_show_sidebar', '1' );
 		}
 	}
 
 	public static function deactivate(){
 		$meta_keys = array(
 			'wtaiu-sort-order',
-			'wtaiu-panel-open-status'
+			'wtaiu-panel-open-status',
+			'wtaiu_show_sidebar'
 		);
 		foreach( $meta_keys as $key ){
 			delete_metadata( 'user', 0, $key, '', true );
 		}
-		
+	}
+
+	public static function update_profile_options( $user_id ){
+		if( current_user_can( 'edit_user', $user_id ) && user_can( $user_id, 'edit_theme_options' ) )
+			update_user_meta( $user_id, 'wtaiu_show_sidebar', filter_has_var( INPUT_POST, 'wtaiu_show_sidebar' ) ? '1' : '0' );
+	}
+
+	public static function profile_options( $user ){
+		if( ! user_can( $user, 'edit_theme_options' ) )
+			return;
+	?>
+		<tr>
+			<th scope="row"><?php _e('<abbr title="What Template Am I Using?">WTAIU</abbr> Sidebar')?></th>
+			<td><label for="wtaiu_show_sidebar"><input type="checkbox" name="wtaiu_show_sidebar" id="wtaiu_show_sidebar" value="1" <?php checked('1', $user->wtaiu_show_sidebar ); ?> /> <?php _e('Show the sidebar when viewing site'); ?></label></td>
+		</tr>
+	<?php
+	}
+
+	public function wtaiu_save_close_sidebar(){
+		$user_id = get_current_user_id();
+		delete_user_meta( $user_id, 'wtaiu_show_sidebar' );
+		wp_send_json_success();
+		die();
 	}
 
 	public static function wtaiu_save_sort_order() {
@@ -75,8 +114,7 @@ class What_Template_Am_I_Using {
 			update_user_meta( $user_id, 'wtaiu-sort-order', $order );
 		}
 
-		wp_send_json( array('updated' => true ) ) ;
-
+		wp_send_json_success();
 		die();
 	}
 
