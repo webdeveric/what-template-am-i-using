@@ -62,6 +62,7 @@
 	}
 
 	var wtaiu = null;
+	var wtaiu_data = null;
 
 	function open_wtaiu_panel(){
 		$('html').removeClass('wtaiu-closed').addClass('wtaiu-open');
@@ -102,13 +103,11 @@
 
 	}
 
-	function save_open_status( id, is_open ){
-
+	function save_open_status( open_statuses ){
 
 		var data = {
 			action: 'wtaiu_save_panel_open_status',
-			panel_id: id,
-			panel_status: is_open ? 'open' : 'closed' 
+			panel_statuses: open_statuses
 		};
 
 		$.post(
@@ -127,6 +126,7 @@
 	$( function(){
 
 		wtaiu = $('#wtaiu');
+		wtaiu_data = $('#wtaiu-data');
 
 		$('#wtaiu-close').click( function(){
 			close_wtaiu_panel();
@@ -146,7 +146,25 @@
 
 		cookies.get('wtaiu') == 'open' ? open_wtaiu_panel() : close_wtaiu_panel();
 
-		var wtaiu_data = $('#wtaiu-data');
+		wtaiu_data.attr( 'contextmenu', 'wtaiu-context-menu' );
+
+		$('#wtaiu-context-menu .open-all').click( function(){
+			var status = {};
+			$('#wtaiu-data > .panel').each( function(){
+				$(this).removeClass('closed').addClass('open');
+				status[ this.id ] = true;
+			} );
+			save_open_status( status );
+		} );
+
+		$('#wtaiu-context-menu .close-all').click( function(){
+			var status = {};
+			$('#wtaiu-data > .panel').each( function(){
+				$(this).removeClass('open').addClass('closed');
+				status[ this.id ] = false;
+			} );
+			save_open_status( status );
+		} );
 
 		wtaiu_data.sortable( {
 			handle: '.label',
@@ -166,7 +184,9 @@
 
 		$('#wtaiu-data > .panel').openToggle( {
 			callback: function( $item ){// "this" refers to the .panel html element; "$item" is the jQuery object that represents .panel
-				save_open_status( this.id, ! $item.hasClass('closed') );
+				var status = {};
+				status[ this.id ] = ! $item.hasClass('closed')
+				save_open_status( status );
 			}
 		} );
 

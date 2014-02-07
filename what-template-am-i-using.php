@@ -81,23 +81,36 @@ class What_Template_Am_I_Using {
 	}
 
 	public static function wtaiu_save_panel_open_status(){
-		$panel_id = filter_has_var( INPUT_POST, 'panel_id') ? $_POST['panel_id'] : null;
-		$user_id = get_current_user_id();
-		
-		if( $user_id > 0 && isset( $panel_id ) ){
+		$panel_statuses = filter_has_var( INPUT_POST, 'panel_statuses') ? $_POST['panel_statuses'] : null;
 
-			$panel_status = filter_has_var( INPUT_POST, 'panel_status') && in_array( $_POST['panel_status'], array('open','closed') ) ? $_POST['panel_status'] : 'open';
-
-			$panel_open_status = get_user_meta( $user_id, 'wtaiu-panel-open-status', true );
-			if( empty( $panel_open_status ) )
-				$panel_open_status = array();
-
-			$panel_open_status[ $panel_id ] = $panel_status;
-
-			update_user_meta( $user_id, 'wtaiu-panel-open-status', $panel_open_status );
+		if( ! isset( $panel_statuses ) || ! is_array( $panel_statuses ) ){
+			wp_send_json_error( array( 'panel_statuses' => 'not set or is not an array' ) );
+			die();
 		}
 
-		wp_send_json( array('updated' => true ) ) ;
+		$user_id = get_current_user_id();
+		
+		if( $user_id > 0 ){
+
+			$panel_open_status = get_user_meta( $user_id, 'wtaiu-panel-open-status', true );
+
+			if( empty( $panel_open_status ) || ! is_array( $panel_open_status ) )
+				$panel_open_status = array();
+
+			foreach( $panel_statuses as $id => $status ){
+				$panel_open_status[ $id ] = ( $status === true || $status == 'true' || $status == 'open' ) ? 'open' : 'closed';
+			}
+
+			update_user_meta( $user_id, 'wtaiu-panel-open-status', $panel_open_status );
+
+		}
+
+		$data = array(
+			'panel_statuses' => $panel_statuses,
+			'wtaiu-panel-open-status' => get_user_meta( $user_id, 'wtaiu-panel-open-status', true )
+		);
+
+		wp_send_json_success( $data );
 		die();
 	}
 
@@ -148,10 +161,7 @@ class What_Template_Am_I_Using {
 			$label = $panel->get_label();
 			$content = $panel->get_content();
 			$id	= $panel->get_id();
-			$extra_class = '';
-			if( isset( $panel_open_status[ $id ] ) )
-				$extra_class = $panel_open_status[ $id ];
-
+			$extra_class = isset( $panel_open_status[ $id ] ) ? $panel_open_status[ $id ] : $panel->getDefaultOpenState();
 			$items[ $id ] = sprintf('<li class="panel %4$s" id="%3$s">
 				<div class="panel-header">
 					<div class="label">%1$s</div><div class="open-toggle-handle"></div>
@@ -171,6 +181,22 @@ class What_Template_Am_I_Using {
 		<div id="wtaiu">
 			<a id="wtaiu-handle" title="Click to toggle"><span><?php echo apply_filters('wtaiu_handle_text', 'What Template Am I Using?' ); ?></span></a>
 			<a id="wtaiu-close" title="Click to remove from page"></a>
+
+			<menu type="context" id="wtaiu-context-menu">
+				<menuitem
+					type="command"
+					icon="<?php echo plugins_url( '/imgs/up-arrow.png', __FILE__ ); ?>"
+					label="Close all panels"
+					class="close-all"
+				></menuitem>
+				<menuitem
+					type="command"
+					icon="<?php echo plugins_url( '/imgs/down-arrow.png', __FILE__ ); ?>"
+					label="Open all panels"
+					class="open-all"
+				></menuitem>
+			</menu>
+
 			<ul id="wtaiu-data">
 				<?php
 					// Print out the sorted items.
@@ -191,7 +217,8 @@ What_Template_Am_I_Using::addPanel( new WTAIU_General_Info_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Additional_Files_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Scripts_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Styles_Panel(), 100 );
-What_Template_Am_I_Using::addPanel( new WTAIU_IP_Addresses_Panel(), 100 );
 
-if( WP_DEBUG )
+if( WP_DEBUG ){
+	What_Template_Am_I_Using::addPanel( new WTAIU_IP_Addresses_Panel(), 100 );
 	What_Template_Am_I_Using::addPanel( new WTAIU_Server_Info_Panel(), 100 );
+}

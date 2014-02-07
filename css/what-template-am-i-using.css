@@ -50,9 +50,8 @@ html.wtaiu-closed #wpadminbar{
 	right:-300px;
 	bottom:0;
 	width:300px;
-	font:400 13px "Open Sans", sans-serif;
+	font:400 12px "Open Sans", sans-serif;
 	color:#333;
-	background:#EDEDED;
 	text-align:left;
 	-moz-box-sizing:border-box;
 	-webkit-box-sizing:border-box;
@@ -143,6 +142,7 @@ a#wtaiu-close{
 	text-decoration:none;
 	text-align:center;
 	font:20px/1 dashicons;
+	-webkit-font-smoothing:antialiased;
 	-moz-border-top-left-radius:5em 2em;
 	-webkit-border-top-left-radius:5em 2em;
 	border-top-left-radius:5em 2em;
@@ -196,6 +196,7 @@ a#wtaiu-close:hover{
 }
 
 #wtaiu-data > .panel{
+
 }
 
 #wtaiu-data > .panel .label,
@@ -207,7 +208,7 @@ a#wtaiu-close:hover{
 	width:auto;
 	height:auto;
 	margin:0;
-	padding:10px 20px;
+	padding:10px;
 	overflow:hidden;
 }
 
@@ -242,9 +243,11 @@ a#wtaiu-close:hover{
 #wtaiu-data .panel > .panel-header{
 	position:relative;
 	line-height:1;
-	color:#222;
 	border-top:1px solid #FFF;
 	border-bottom:1px solid #CCC;
+	background:#eaeaea;
+	color:#888;
+	text-shadow:1px 1px 0 #FFF;
 }
 
 #wtaiu-data .panel:first-child > .panel-header{
@@ -252,15 +255,18 @@ a#wtaiu-close:hover{
 }
 
 #wtaiu-data .panel > .panel-header:hover{
-	background:#4E98D6;
-	border-color:#4E98D6;
-	color:#FFF;
+	color:#000;
 }
+
+#wtaiu-data .panel.open > .panel-header{
+	color:#000;
+}
+
 
 #wtaiu-data .panel > .panel-header > .open-toggle-handle{
 	font-family:dashicons;
-	cursor:pointer;
 	font-size:1em;
+	cursor:pointer;
 	padding:10px;
 	line-height:1;
 	position:absolute;
@@ -274,6 +280,7 @@ a#wtaiu-close:hover{
 
 #wtaiu-data .panel > .panel-header:hover > .open-toggle-handle{
 	display:block;
+	-webkit-font-smoothing:antialiased;
 }
 
 #wtaiu-data > .panel > .panel-header > .open-toggle-handle:before{

@@ -9,6 +9,8 @@ abstract class WTAIU_Panel {
 	protected $author_url;
 	protected $version;
 
+	protected $default_open_state;
+
 	public function __construct( $label = '', $id = '' ){
 
 		$this->author		= '';
@@ -16,6 +18,8 @@ abstract class WTAIU_Panel {
 		$this->version		= '';
 
 		$this->label = $label;
+
+		$this->default_open_state = 'open';
 
 		if( $id != '' ){
 			$this->id = $id;
@@ -25,6 +29,10 @@ abstract class WTAIU_Panel {
 
 		add_action('init', array( &$this, 'setup' ), 11 );
 
+	}
+
+	public function getDefaultOpenState(){
+		return $this->default_open_state;
 	}
 
 	public function setup(){
