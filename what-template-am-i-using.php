@@ -49,6 +49,7 @@ class What_Template_Am_I_Using {
 		add_action( 'wp_ajax_wtaiu_save_panel_open_status',	array( __CLASS__, 'wtaiu_save_panel_open_status') );
 		add_action( 'personal_options',						array( __CLASS__, 'profile_options'), 10, 1 );
 		add_action( 'personal_options_update',				array( __CLASS__, 'update_profile_options'), 10, 1 );
+		add_action( 'edit_user_profile_update',				array( __CLASS__, 'update_profile_options'), 10, 1 );
 	}
 
 	public static function setup(){
@@ -92,7 +93,12 @@ class What_Template_Am_I_Using {
 	?>
 		<tr>
 			<th scope="row"><?php _e('<abbr title="What Template Am I Using?">WTAIU</abbr> Sidebar')?></th>
-			<td><label for="wtaiu_show_sidebar"><input type="checkbox" name="wtaiu_show_sidebar" id="wtaiu_show_sidebar" value="1" <?php checked('1', $user->wtaiu_show_sidebar ); ?> /> <?php _e('Show the sidebar when viewing site'); ?></label></td>
+			<td>
+				<fieldset>
+					<legend class="screen-reader-text">Sidebar</legend>
+					<label for="wtaiu_show_sidebar"><input type="checkbox" name="wtaiu_show_sidebar" id="wtaiu_show_sidebar" value="1" <?php checked('1', $user->wtaiu_show_sidebar ); ?> /> <?php _e('Show the sidebar when viewing site'); ?></label>
+				</fieldset>
+			</td>
 		</tr>
 	<?php
 	}
