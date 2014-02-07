@@ -31,6 +31,26 @@ html.wtaiu-closed #wpadminbar{
 	transition:right 250ms ease-in-out;
 }
 
+.info-list,
+.info-list dt,
+.info-list dd{
+	margin:0;
+	padding:0;
+	border:0;
+}
+
+.info-list dt{
+	font-weight:600;
+	line-height:1;
+	border-bottom:1px solid #E5E5E5;
+	padding:0 0 1px 0;
+	margin:0 0 4px 0;
+}
+
+.info-list dd{
+	margin:0 0 20px 0;
+}
+
 html.wtaiu-open{
 	padding-right:300px;
 }
@@ -263,7 +283,7 @@ a#wtaiu-close:hover{
 }
 
 
-#wtaiu-data .panel > .panel-header > .open-toggle-handle{
+#wtaiu-data .panel > .panel-header > .open-toggle-button{
 	font-family:dashicons;
 	font-size:1em;
 	cursor:pointer;
@@ -278,16 +298,16 @@ a#wtaiu-close:hover{
 	text-align:center;
 }
 
-#wtaiu-data .panel > .panel-header:hover > .open-toggle-handle{
+#wtaiu-data .panel > .panel-header:hover > .open-toggle-button{
 	display:block;
 	-webkit-font-smoothing:antialiased;
 }
 
-#wtaiu-data > .panel > .panel-header > .open-toggle-handle:before{
+#wtaiu-data > .panel > .panel-header > .open-toggle-button:before{
 	content:"\f343"; /* up arrow */
 }
 
-#wtaiu-data > .panel.closed > .panel-header > .open-toggle-handle:before{
+#wtaiu-data > .panel.closed > .panel-header > .open-toggle-button:before{
 	content:"\f347"; /* down arrow */
 }
 
@@ -319,11 +339,20 @@ a#wtaiu-close:hover{
 	text-align:left;
 	text-transform:none;
 	margin:0;
-	padding:0;
+	padding:2px 0;
 	border:0;
+}
+
+#wtaiu-data .info-table tr:hover th,
+#wtaiu-data .info-table tr:hover td{
+	background:rgba(0,0,0,.03);
 }
 
 #wtaiu-data .info-table thead th{
 	font-weight:bold;
 	font-size:smaller;
+}
+
+#wtaiu-data .info-table tbody th{
+	font-weight:bold;
 }

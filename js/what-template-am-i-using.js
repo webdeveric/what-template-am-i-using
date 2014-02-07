@@ -194,6 +194,8 @@
 
 
 		$('#wtaiu-data > .panel').openToggle( {
+			button: '.open-toggle-button',
+			handle: '.panel-header',
 			callback: function( $item ){// "this" refers to the .panel html element; "$item" is the jQuery object that represents .panel
 				var status = {};
 				status[ this.id ] = ! $item.hasClass('closed')

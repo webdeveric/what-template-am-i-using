@@ -7,6 +7,7 @@ jQuery.fn.openToggle = function( settings ){
 
 	settings = jQuery.extend( {
 		handle: '.open-toggle-handle',
+		button: '.open-toggle-button',
 		callback: function(){}
 	}, settings );
 
@@ -18,19 +19,25 @@ jQuery.fn.openToggle = function( settings ){
 	}
 
 	return this.each( function(){
+
 		var self = this;
 		var item = jQuery(this);
+		var button = item.find( settings.button );		
 		var handle = item.find( settings.handle );
-		if( handle.length > 0 ){
-			handle.click( function(e){
+
+		if( button.length > 0 ){
+			button.click( function(e){
 				_toggle_open( item );
 				settings.callback.call( self, item );
 			} );
 		}
-		item.dblclick( function(e){
-			_toggle_open( item );
-			settings.callback.call( self, item );
-		} );
+
+		if( handle.length > 0 ){
+			handle.dblclick( function(e){
+				_toggle_open( item );
+				settings.callback.call( self, item );
+			} );
+		}
 
 	} );
 

@@ -69,6 +69,11 @@ class What_Template_Am_I_Using {
 		if( $user_id > 0 ){
 			update_user_meta( $user_id, 'wtaiu_show_sidebar', '1' );
 		}
+
+		foreach( self::$panels as $panel ){
+			$panel->activate();
+		}
+
 	}
 
 	public static function deactivate(){
@@ -80,6 +85,11 @@ class What_Template_Am_I_Using {
 		foreach( $meta_keys as $key ){
 			delete_metadata( 'user', 0, $key, '', true );
 		}
+
+		foreach( self::$panels as $panel ){
+			$panel->deactivate();
+		}
+
 	}
 
 	public static function update_profile_options( $user_id ){
@@ -208,7 +218,7 @@ class What_Template_Am_I_Using {
 			$extra_class = isset( $panel_open_status[ $id ] ) ? $panel_open_status[ $id ] : $panel->getDefaultOpenState();
 			$items[ $id ] = sprintf('<li class="panel %4$s" id="%3$s">
 				<div class="panel-header">
-					<div class="label">%1$s</div><div class="open-toggle-handle"></div>
+					<div class="label">%1$s</div><div class="open-toggle-button"></div>
 				</div>
 				<div class="content">%2$s</div>
 			</li>', $label, $content, $id, $extra_class );
@@ -261,8 +271,8 @@ What_Template_Am_I_Using::addPanel( new WTAIU_General_Info_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Additional_Files_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Scripts_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Styles_Panel(), 100 );
+What_Template_Am_I_Using::addPanel( new WTAIU_IP_Addresses_Panel(), 100 );
 
 if( WP_DEBUG ){
-	What_Template_Am_I_Using::addPanel( new WTAIU_IP_Addresses_Panel(), 100 );
 	What_Template_Am_I_Using::addPanel( new WTAIU_Server_Info_Panel(), 100 );
 }

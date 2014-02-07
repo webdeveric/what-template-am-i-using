@@ -31,6 +31,12 @@ abstract class WTAIU_Panel {
 
 	}
 
+	public function activate(){
+	}
+
+	public function deactivate(){
+	}
+
 	public function getDefaultOpenState(){
 		return $this->default_open_state;
 	}

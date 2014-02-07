@@ -168,28 +168,54 @@ class WTAIU_IP_Addresses_Panel extends WTAIU_Panel {
 		parent::__construct( 'IP Addresses', 'wtaiu-ip-addresses-panel' );
 	}
 
+	public function activate(){
+		$this->findPublicIP();
+	}
+
+	public function findPublicIP(){
+		$ip_url = plugins_url( '/what-is-my-ip.php', __FILE__ );
+		$response = wp_remote_get( $ip_url );
+		if( ! is_wp_error( $response ) ){
+			$ip = wp_remote_retrieve_body( $response );
+			update_option( 'wtaiu-server-ip', $ip );
+			return $ip;
+		}
+		return $response;
+	}
+
+	public function deactivate(){
+		delete_option( 'wtaiu-server-ip' );
+	}
+
 	public function get_content(){
 		$your_ip	= esc_html( $_SERVER['REMOTE_ADDR'] );
 		$server_ip	= esc_html( $_SERVER['SERVER_ADDR'] );
 		$dns_ip		= gethostbyname( $_SERVER['HTTP_HOST'] );
+		$public_server_ip = get_option( 'wtaiu-server-ip', 'unknown' );
 
 $info=<<<INFO
+
 	<table class="info-table">
-		<thead>
-			<tr>
-				<th title="This is \$_SERVER['REMOTE_ADDR']">Your IP</th>
-				<th title="Server LAN IP">Server IP</th>
-				<th title="DNS lookup for {$_SERVER['HTTP_HOST']}">Domain IP (DNS)</th>
-			</tr>
-		</thead>
 		<tbody>
 			<tr>
+				<th scope="row" title="This is \$_SERVER['REMOTE_ADDR']">Your IP</th>
 				<td>{$your_ip}</td>
+			</tr>
+			<tr>
+				<th scope="row" title="This is \$_SERVER['SERVER_ADDR']">Server IP</th>
 				<td>{$server_ip}</td>
+			</tr>
+			<tr>
+				<th scope="row" title="This is the IP that you connect to when visiting {$_SERVER['HTTP_HOST']}">Server Public IP</th>
+				<td>{$public_server_ip}</td>
+			</tr>
+			<tr>
+				<th scope="row" title="DNS lookup for {$_SERVER['HTTP_HOST']}">Domain IP (DNS)</th>
 				<td>{$dns_ip}</td>
 			</tr>
 		</tbody>
 	</table>
+
 INFO;
 
 		return $info;
@@ -207,13 +233,15 @@ class WTAIU_Server_Info_Panel extends WTAIU_Panel {
 		$this->default_open_state = 'closed';
 	}
 
+	/*
 	public function setup(){
 		wp_enqueue_style('server-info-panel', plugins_url( '/css/server-info-panel.css', __FILE__ ), array('wtaiu'), self::VERSION );
 	}
+	*/
 
 	public function get_content(){
 		$info = array();
-		$info[] = '<dl id="server-info-list">';
+		$info[] = '<dl class="info-list">';
 		foreach( $_SERVER as $key => $value )
 			$info[] = sprintf('<dt>%1$s</dt><dd>%2$s</dd>', $key, $value );
 		$info[] = '</dl>';
