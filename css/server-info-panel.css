@@ -9,7 +9,7 @@
 }
 
 #server-info-list dt{
-	font-weight: bold;
+	font-weight:600;
 	font-size:smaller;
 	line-height:1;
 	border-bottom:1px solid #E5E5E5;

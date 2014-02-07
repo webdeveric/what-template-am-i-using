@@ -150,7 +150,7 @@ a#wtaiu-close{
 }
 
 a#wtaiu-close:before{
-	content: "\f335";
+	content:"\f335";
 }
 
 a#wtaiu-close:hover{
@@ -196,11 +196,6 @@ a#wtaiu-close:hover{
 }
 
 #wtaiu-data > .panel{
-	/*
-	border-width:1px 0;
-	border-style:solid;
-	border-color:#FFF #FFF #CCC #FFF;
-	*/
 }
 
 #wtaiu-data > .panel .label,
@@ -217,18 +212,8 @@ a#wtaiu-close:hover{
 }
 
 #wtaiu-data > .panel.closed > .content{
-	display: none;
+	display:none;
 }
-
-/*
-#wtaiu-data > .panel:hover{
-	background:#FFF;
-}
-
-#wtaiu-data > .panel:hover > .panel-header{
-	background:#C44;
-}
-*/
 
 #wtaiu-data > .panel .label{
 	font-weight:600;
@@ -268,7 +253,7 @@ a#wtaiu-close:hover{
 
 #wtaiu-data .panel > .panel-header:hover{
 	background:#4E98D6;
-	border-color: #4E98D6;
+	border-color:#4E98D6;
 	color:#FFF;
 }
 
