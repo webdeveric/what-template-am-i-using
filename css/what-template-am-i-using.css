@@ -50,9 +50,9 @@ html.wtaiu-closed #wpadminbar{
 	right:-300px;
 	bottom:0;
 	width:300px;
-	font:menu;
+	font:400 13px "Open Sans", sans-serif;
 	color:#333;
-	background:#F6F6F6;
+	background:#EDEDED;
 	text-align:left;
 	-moz-box-sizing:border-box;
 	-webkit-box-sizing:border-box;
@@ -81,10 +81,10 @@ a#wtaiu-handle{
 	top:80px;
 	left:0;
 	padding:0 1.5em;
-	word-spacing:.25em;
+	word-spacing:.2em;
 	text-align:center;
 	line-height:3em;
-	font-weight:bold;
+	font-weight:600;
 	text-transform:uppercase;
 	background:#4E98D6;
 	color:#EEE;
@@ -141,13 +141,16 @@ a#wtaiu-close{
 	background:#C44;
 	color:#FFF;
 	text-decoration:none;
-	font-size:20px;
-	line-height:1;
 	text-align:center;
+	font:20px/1 dashicons;
 	-moz-border-top-left-radius:5em 2em;
 	-webkit-border-top-left-radius:5em 2em;
 	border-top-left-radius:5em 2em;
 	box-shadow:0 0 4px #333;
+}
+
+a#wtaiu-close:before{
+	content: "\f335";
 }
 
 a#wtaiu-close:hover{
@@ -159,7 +162,7 @@ a#wtaiu-close:hover{
 	word-wrap:break-word;
 	position:relative;
 	z-index:100;
-	background:#F6F6F6;
+	background:#EDEDED;
 	margin:0;
 	padding:0;
 	overflow:auto;
@@ -183,7 +186,7 @@ a#wtaiu-close:hover{
 	clear:none;
 	width:auto;
 	margin:0;
-	padding:10px 20px;
+	padding:0;
 	list-style:none;
 }
 
@@ -192,33 +195,43 @@ a#wtaiu-close:hover{
 	height:66px;
 }
 
-#wtaiu-data > .panel > .label,
+#wtaiu-data > .panel{
+	/*
+	border-width:1px 0;
+	border-style:solid;
+	border-color:#FFF #FFF #CCC #FFF;
+	*/
+}
+
+#wtaiu-data > .panel .label,
 #wtaiu-data > .panel > .content{
 	position:relative;
 	display:block;
 	float:none;
 	clear:none;
-	height:100%;
 	width:auto;
+	height:auto;
 	margin:0;
-	padding:0;
+	padding:10px 20px;
 	overflow:hidden;
 }
 
 #wtaiu-data > .panel.closed > .content{
-	height:0;
+	display: none;
 }
 
-
+/*
 #wtaiu-data > .panel:hover{
 	background:#FFF;
 }
 
+#wtaiu-data > .panel:hover > .panel-header{
+	background:#C44;
+}
+*/
+
 #wtaiu-data > .panel .label{
-	line-height:1;
-	font-weight:bold;
-	line-height:1.5em;
-	margin-bottom:.25em;
+	font-weight:600;
 	cursor:move;
 	cursor:-moz-grab;
 	cursor:grab;
@@ -231,7 +244,9 @@ a#wtaiu-close:hover{
 }
 
 #wtaiu-data > .panel > .content{
+	background:#FFF;
 	line-height:1.5em;
+	border-bottom:1px solid #CCC;
 }
 
 #wtaiu-data > .panel.ui-sortable-helper{
@@ -241,54 +256,35 @@ a#wtaiu-close:hover{
 
 #wtaiu-data .panel > .panel-header{
 	position:relative;
+	line-height:1;
+	color:#222;
+	border-top:1px solid #FFF;
+	border-bottom:1px solid #CCC;
+}
+
+#wtaiu-data .panel:first-child > .panel-header{
+	border-top:0;
 }
 
 #wtaiu-data .panel > .panel-header:hover{
-	background-image:url(../imgs/dots-15.png);
-	border-radius:2px;
-}
-
-#wtaiu-data .panel .panel-header:before{
-	display:none;
-	position:absolute;
-	right:100%;
-	font-family:'dashicons';
-	content:"\f229";
-	font-size:1.5em;
-	color:#333;
-	-moz-transform:rotate(90deg);
-	-webkit-transform:rotate(90deg);
-	-o-transform:rotate(90deg);
-	-ms-transform:rotate(90deg);
-	transform:rotate(90deg);
-}
-
-#wtaiu-data .panel .panel-header:hover:before{
-	display:block;
+	background:#4E98D6;
+	border-color: #4E98D6;
+	color:#FFF;
 }
 
 #wtaiu-data .panel > .panel-header > .open-toggle-handle{
 	font-family:dashicons;
-	display:none;
 	cursor:pointer;
 	font-size:1em;
-	line-height:1.5em;
+	padding:10px;
+	line-height:1;
 	position:absolute;
-	top:0;
+	top:-1px;
 	right:0;
 	bottom:0;
-	width:2em;
 	height:auto;
 	z-index:100;
 	text-align:center;
-	background:#C44;
-	color:#FFF;
-	border-radius:0 2px 2px 0;
-	-webkit-transition:all 250ms ease-in-out;
-	-moz-transition:all 250ms ease-in-out;
-	-ms-transition:all 250ms ease-in-out;
-	-o-transition:all 250ms ease-in-out;
-	transition:all 250ms ease-in-out;
 }
 
 #wtaiu-data .panel > .panel-header:hover > .open-toggle-handle{

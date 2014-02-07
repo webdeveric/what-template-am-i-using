@@ -21,15 +21,17 @@ jQuery.fn.openToggle = function( settings ){
 		var self = this;
 		var item = jQuery(this);
 		var handle = item.find( settings.handle );
-		var evt = 'click';
-		if( handle.length == 0 ){
-			handle = item;
-			evt = 'dblclick';
+		if( handle.length > 0 ){
+			handle.click( function(e){
+				_toggle_open( item );
+				settings.callback.call( self, item );
+			} );
 		}
-		handle.on( evt, function(e){
+		item.dblclick( function(e){
 			_toggle_open( item );
 			settings.callback.call( self, item );
 		} );
+
 	} );
 
 };

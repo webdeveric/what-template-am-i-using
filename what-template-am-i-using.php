@@ -114,7 +114,7 @@ class What_Template_Am_I_Using {
 	}
 
 	public static function enqueue_assets(){
-		wp_enqueue_style('wtaiu', plugins_url( '/css/what-template-am-i-using.css', __FILE__ ), array('dashicons'), self::VERSION );
+		wp_enqueue_style('wtaiu', plugins_url( '/css/what-template-am-i-using.css', __FILE__ ), array('dashicons', 'open-sans'), self::VERSION );
 		wp_enqueue_script('wtaiu-modernizr', plugins_url( '/js/modernizr.custom.49005.js', __FILE__ ), array(), self::VERSION );
 		wp_enqueue_script('opentoggle', plugins_url( '/js/jquery.opentoggle.js', __FILE__ ), array('jquery'), self::VERSION );
 		wp_enqueue_script('wtaiu', plugins_url( '/js/what-template-am-i-using.js', __FILE__ ), array('jquery', 'jquery-ui-sortable' ), self::VERSION );
@@ -170,7 +170,7 @@ class What_Template_Am_I_Using {
 		?>
 		<div id="wtaiu">
 			<a id="wtaiu-handle" title="Click to toggle"><span><?php echo apply_filters('wtaiu_handle_text', 'What Template Am I Using?' ); ?></span></a>
-			<a id="wtaiu-close" title="Click to remove from page">&times;</a>
+			<a id="wtaiu-close" title="Click to remove from page"></a>
 			<ul id="wtaiu-data">
 				<?php
 					// Print out the sorted items.
