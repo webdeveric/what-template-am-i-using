@@ -181,10 +181,8 @@ class What_Template_Am_I_Using {
 	}
 
 	public static function enqueue_assets(){
-		wp_enqueue_style('wtaiu', plugins_url( '/css/what-template-am-i-using.css', __FILE__ ), array('dashicons', 'open-sans'), self::VERSION );
-		wp_enqueue_script('wtaiu-modernizr', plugins_url( '/js/modernizr.custom.49005.js', __FILE__ ), array(), self::VERSION );
-		wp_enqueue_script('opentoggle', plugins_url( '/js/jquery.opentoggle.js', __FILE__ ), array('jquery'), self::VERSION );
-		wp_enqueue_script('wtaiu', plugins_url( '/js/what-template-am-i-using.js', __FILE__ ), array('jquery', 'jquery-ui-sortable' ), self::VERSION );
+		wp_enqueue_style('wtaiu', plugins_url( '/css/dist/what-template-am-i-using.css', __FILE__ ), array('dashicons', 'open-sans'), self::VERSION );
+		wp_enqueue_script('wtaiu', plugins_url( '/js/dist/what-template-am-i-using.js', __FILE__ ), array('jquery', 'jquery-ui-sortable' ), self::VERSION );
 		wp_localize_script('wtaiu', 'wtaiu_ajaxurl', admin_url( 'admin-ajax.php' ) );
 	}
 
@@ -239,13 +237,13 @@ class What_Template_Am_I_Using {
 			<menu type="context" id="wtaiu-context-menu">
 				<menuitem
 					type="command"
-					icon="<?php echo plugins_url( '/imgs/up-arrow.png', __FILE__ ); ?>"
+					icon="<?php echo plugins_url( '/imgs/dist/up-arrow.png', __FILE__ ); ?>"
 					label="Close all panels"
 					class="close-all"
 				></menuitem>
 				<menuitem
 					type="command"
-					icon="<?php echo plugins_url( '/imgs/down-arrow.png', __FILE__ ); ?>"
+					icon="<?php echo plugins_url( '/imgs/dist/down-arrow.png', __FILE__ ); ?>"
 					label="Open all panels"
 					class="open-all"
 				></menuitem>
@@ -269,6 +267,7 @@ What_Template_Am_I_Using::init();
 What_Template_Am_I_Using::addPanel( new WTAIU_Template_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_General_Info_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Additional_Files_Panel(), 100 );
+What_Template_Am_I_Using::addPanel( new WTAIU_Dynamic_Sidebar_Info_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Scripts_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Styles_Panel(), 100 );
 

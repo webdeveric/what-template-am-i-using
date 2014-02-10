@@ -1,8 +1,6 @@
-/**
-	Open Toggle
+/*!	Open Toggle
 	@author WebDevEric
-	@date 2014-02-04
-*/
+	@date 2014-02-04 */
 jQuery.fn.openToggle = function( settings ){
 
 	settings = jQuery.extend( {

@@ -44,7 +44,7 @@
 			@return boolean - true if cookie deleted and false if not.
 		*/
 		remove:function(name){
-			if(cookies.get(name)!=null){
+			if(cookies.get(name)!==null){
 				cookies.set(name,'',-1);
 				return true;
 			} else {
@@ -59,7 +59,7 @@
 			return document.cookie.toString();
 		}
 
-	}
+	};
 
 	var wtaiu = null;
 	var wtaiu_data = null;
@@ -115,7 +115,6 @@
 
 	}
 
-
 	function wtaiu_save_close_sidebar(){
 
 		if( ! confirm("Are you sure you want to remove the sidebar?\n\nThe sidebar can be enabled again from your user profile page.") )
@@ -152,10 +151,16 @@
 		$('#wtaiu-close').click( wtaiu_save_close_sidebar );
 
 		$('#wtaiu-handle').click( function(){
-			wtaiu.hasClass('open') ? close_wtaiu_panel() : open_wtaiu_panel();
+			if( wtaiu.hasClass('open') )
+				close_wtaiu_panel();
+			else
+				open_wtaiu_panel();
 		} );
 
-		cookies.get('wtaiu') == 'open' ? open_wtaiu_panel() : close_wtaiu_panel();
+		if( cookies.get('wtaiu') == 'open' )
+			open_wtaiu_panel();
+		else
+			close_wtaiu_panel();
 
 		wtaiu_data.attr( 'contextmenu', 'wtaiu-context-menu' );
 
@@ -198,7 +203,7 @@
 			handle: '.panel-header',
 			callback: function( $item ){// "this" refers to the .panel html element; "$item" is the jQuery object that represents .panel
 				var status = {};
-				status[ this.id ] = ! $item.hasClass('closed')
+				status[ this.id ] = ! $item.hasClass('closed');
 				save_open_status( status );
 			}
 		} );

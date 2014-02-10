@@ -28,21 +28,31 @@ class WTAIU_General_Info_Panel extends WTAIU_Panel {
 		$post_type = isset( $post, $post->post_type ) ? $post->post_type : 'not set';
 		$front_page = is_front_page() ? 'Yes' : 'No';
 		$home_page = is_home() ? 'Yes' : 'No';
+		$is_404 = is_404() ? 'Yes' : 'No';
+		$is_search = is_search() ? 'Yes' : 'No';
 
 $info=<<<INFO
 	<table class="info-table">
-		<thead>
-			<tr>
-				<th>Post Type</th>
-				<th>Front</th>
-				<th>Home</th>
-			</tr>
-		</thead>
 		<tbody>
 			<tr>
+				<th scope="row">Post Type</th>
 				<td>{$post_type}</td>
+			</tr>
+			<tr>
+				<th scope="row">Front</th>
 				<td>{$front_page}</td>
+			</tr>
+			<tr>
+				<th scope="row">Home</th>
 				<td>{$home_page}</td>
+			</tr>
+			<tr>
+				<th scope="row">404</th>
+				<td>{$is_404}</td>
+			</tr>
+			<tr>
+				<th scope="row">Search</th>
+				<td>{$is_search}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -57,7 +67,7 @@ INFO;
 
 class WTAIU_Additional_Files_Panel extends WTAIU_Panel {
 
-	private $files;
+	protected $files;
 
 	public function __construct(){
 		parent::__construct( 'Additional Files Used', 'wtaiu-additional-files-panel' );
@@ -93,6 +103,55 @@ class WTAIU_Additional_Files_Panel extends WTAIU_Panel {
 
 		if( ! empty( $this->files ) )
 			return implode(', ', $this->files );
+	}
+
+}
+
+
+
+
+class WTAIU_Dynamic_Sidebar_Info_Panel extends WTAIU_Panel {
+
+	protected $sidebars;
+
+	public function __construct(){
+		parent::__construct( 'Sidebar Information', 'wtaiu-dynamic-sidebar-info-panel' );
+		$this->sidebars = array();
+	}
+
+	public function setup(){
+		add_action( 'dynamic_sidebar_params',	array( $this, 'record_dynamic_sidebar_params' ), 10, 1 );
+	}
+
+	public function record_dynamic_sidebar_params( $params ){
+		$sidebar_name = $params[0]['name'];
+		if( ! array_key_exists( $sidebar_name, $this->sidebars ) )
+			$this->sidebars[ $sidebar_name ] = array();
+		$this->sidebars[ $sidebar_name ][] = $params[0]['widget_name'];
+		return $params;
+	}
+
+	public function get_content(){
+
+		if( empty( $this->sidebars ) )
+			return 'No sidebar widgets found';
+
+		$info = array();
+		$info[] = '<dl class="info-list">';
+		foreach( $this->sidebars as $sidebar_name => $widget_names ){
+			$widgets = array();
+			$widgets[] = sprintf( '<ul title="Widgets used in %s">', $sidebar_name );
+			foreach( $widget_names as $widget_name ){
+				$widgets[] = sprintf('<li>%1$s</li>', $widget_name );
+
+			}
+			$widgets[] = '</ul>';
+
+			$this->label .= sprintf('', count( $this->dependencies ) );
+			$info[] = sprintf('<dt>%1$s<span class="counter">(%2$d)</span></dt><dd>%3$s</dd>', $sidebar_name, count( $widget_names ), implode('', $widgets ) );
+		}
+		$info[] = '</dl>';
+		return implode('', $info );
 	}
 
 }
@@ -235,6 +294,7 @@ class WTAIU_Server_Info_Panel extends WTAIU_Panel {
 	}
 
 	/*
+	// If you need to add your own assets, do it here.
 	public function setup(){
 		wp_enqueue_style('server-info-panel', plugins_url( '/css/server-info-panel.css', __FILE__ ), array('wtaiu'), self::VERSION );
 	}

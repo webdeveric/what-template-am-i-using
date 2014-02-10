@@ -34,10 +34,13 @@ This plugin uses a cookie to remember if the panel was open and if it was, it wi
 == Changelog ==
 
 = 0.1.6 =
-* Added drag and drop re-ordering of items displayed in the sidebar panel.
-* Added an open/close button to the drag handle.
-* Added checkbox to user profile page so user can toggle showing the sidebar (if allowed).
+* Started using Grunt and SASS.
 * I rewrote how information is displayed in the sidebar panel (removed wtaiu_data filter).
+* Added drag and drop re-ordering of panels.
+* Added an open/close button to the panel header.
+* Added context menu options to open or close all panels. (Only works in Firefox currently)
+* Added Sidebar Information panel that shows you what sidebars and widgets are being used on the current URL.
+* Added checkbox to user profile page so user can toggle showing the sidebar (if allowed).
 * Various CSS updates.
 * Tested with default WordPress themes.
 
