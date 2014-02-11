@@ -32,7 +32,7 @@ include __DIR__ . '/core-panels.php';
 
 class What_Template_Am_I_Using {
 
-	const VERSION = '0.1.5';
+	const VERSION = '0.1.6';
 
 	private static $panels;
 
@@ -181,8 +181,8 @@ class What_Template_Am_I_Using {
 	}
 
 	public static function enqueue_assets(){
-		wp_enqueue_style('wtaiu', plugins_url( '/css/dist/what-template-am-i-using.css', __FILE__ ), array('dashicons', 'open-sans'), self::VERSION );
-		wp_enqueue_script('wtaiu', plugins_url( '/js/dist/what-template-am-i-using.js', __FILE__ ), array('jquery', 'jquery-ui-sortable' ), self::VERSION );
+		wp_enqueue_style('wtaiu', plugins_url( '/css/dist/what-template-am-i-using.min.css', __FILE__ ), array('dashicons', 'open-sans'), self::VERSION );
+		wp_enqueue_script('wtaiu', plugins_url( '/js/dist/what-template-am-i-using.min.js', __FILE__ ), array('jquery', 'jquery-ui-sortable' ), self::VERSION );
 		wp_localize_script('wtaiu', 'wtaiu_ajaxurl', admin_url( 'admin-ajax.php' ) );
 	}
 
@@ -237,13 +237,13 @@ class What_Template_Am_I_Using {
 			<menu type="context" id="wtaiu-context-menu">
 				<menuitem
 					type="command"
-					icon="<?php echo plugins_url( '/imgs/dist/up-arrow.png', __FILE__ ); ?>"
+					icon="<?php echo plugins_url( '/imgs/up-arrow.png', __FILE__ ); ?>"
 					label="Close all panels"
 					class="close-all"
 				></menuitem>
 				<menuitem
 					type="command"
-					icon="<?php echo plugins_url( '/imgs/dist/down-arrow.png', __FILE__ ); ?>"
+					icon="<?php echo plugins_url( '/imgs/down-arrow.png', __FILE__ ); ?>"
 					label="Open all panels"
 					class="open-all"
 				></menuitem>

@@ -3,7 +3,7 @@ module.exports = function(grunt){
 	grunt.initConfig( {
 		pkg: grunt.file.readJSON('package.json'),
 		jshint: {
-			files: ['Gruntfile.js', 'js/src/*.js', '!js/src/*.min.js'],
+			files: ['Gruntfile.js', 'js/src/**/*.js', '!js/src/**/*.min.js'],
 			options: {
 				globals: {
 					jQuery: true,
@@ -13,30 +13,30 @@ module.exports = function(grunt){
 				}
 			}
 		},
-		uglify: {
-			options: {
-				banner: '/*! <%= pkg.name %> v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
-				sourceMap: true,
-				mangle: false,
-				preserveComments: 'some'
-			},
-			build: {
-				files: [ {
-					expand: true,
-					cwd: 'js/src',
-					src: '**/*.js',
-					dest: 'js/min',
-					ext: '.min.js'
-				} ]
-			}
-		},
 		concat: {
 			js: {
 				options: {
 					separator: ';'
 				},
-				src: ['js/min/*.js'],
+				src: ['js/src/**/*.js'],
 				dest: 'js/dist/<%= pkg.name %>.js'
+			},
+			css: {
+				src: ['css/src/**/*.css'],
+				dest: 'css/dist/<%= pkg.name %>.css'
+			}
+		},
+		uglify: {
+			build: {
+				options: {
+					banner: '/* <%= pkg.name %> <%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> */',
+					sourceMap: 'js/dist/<%= pkg.name %>.js',
+					// mangle: false,
+					preserveComments: 'some'
+				},
+				files: {
+					'js/dist/<%= pkg.name %>.min.js' : 'js/dist/<%= pkg.name %>.js'
+				}
 			}
 		},
 		compass: {
@@ -49,15 +49,11 @@ module.exports = function(grunt){
 		},
 		cssmin: {
 			minify: {
-				expand: true,
-				cwd: 'css/src',
-				src: ['*.css', '!*.min.css'],
-				dest: 'css/min',
-				ext: '.min.css'
-			},
-			combine: {
+				options: {
+					banner: '/* <%= pkg.name %> <%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %> */',
+				},
 				files: {
-					'css/dist/<%= pkg.name %>.css': ['css/min/*.css']
+					'css/dist/<%= pkg.name %>.min.css' : 'css/dist/<%= pkg.name %>.css'
 				}
 			}
 		},
@@ -77,12 +73,37 @@ module.exports = function(grunt){
 				compare: '==',
 			}
 		},
+		imagemin: {
+			dist: {
+				options: {
+					optimizationLevel: 7,
+					progressive: true
+				},
+				files: [{
+					expand: true,
+					cwd: 'imgs/',
+					src: '**/*',
+					dest: 'imgs/'
+				}]
+			}
+		},
 		watch: {
-			files: ['scss/*', 'css/src/*', 'js/src/*'],
-			tasks: ['default']
-		}
+			compass: {
+				files: ['scss/**/*.{scss,sass}'],
+				tasks: ['compass', 'concat:css', 'cssmin']
+			},
+			css: {
+				files: '<%= concat.css.src %>',
+				tasks: ['concat:css', 'cssmin']
+			},
+			js: {
+				files: '<%= jshint.files %>',
+				tasks: ['jshint', 'concat:js', 'uglify']
+			}
+		},
 	} );
 
+	grunt.loadNpmTasks( 'grunt-contrib-imagemin' );
 	grunt.loadNpmTasks( 'grunt-contrib-compass' );
 	grunt.loadNpmTasks( 'grunt-contrib-uglify' );
 	grunt.loadNpmTasks( 'grunt-contrib-jshint' );
@@ -92,6 +113,5 @@ module.exports = function(grunt){
 	grunt.loadNpmTasks( 'grunt-contrib-watch' );
 
 	grunt.registerTask( 'test', [ 'checkwpversion', 'jshint' ] );
-
-	grunt.registerTask( 'default', [ 'checkwpversion', 'jshint', 'uglify', 'compass', 'concat', 'cssmin' ] );
+	grunt.registerTask( 'default', [ 'checkwpversion', 'compass', 'jshint', 'concat', 'uglify', 'cssmin' ] );
 };
