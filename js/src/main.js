@@ -1,214 +1,198 @@
 (function($){
 	'use strict';
 
-	var cookies = {
-		/**
-			@return string "; expires {GMT_Date}" or "";
-			@param days - int days to keep cookie
-		*/
-		getExpires:function(days){
-			var expires="";
-			if(days){
-				var d=new Date();
-				d.setTime(d.getTime()+(days*86400000));
-				expires="; expires="+d.toGMTString();
-			}
-			return expires;
+	window.wtaiu_sidebar = {
+
+		root:null,
+		sidebar:null,
+		handle:null,
+		closebutton:null,
+		panelcontainer:null,
+		timer:null,
+		data:{},
+
+		init:function(){
+			this.root			= $('html');
+			this.sidebar		= $('#wtaiu');
+			this.handle			= $('#wtaiu-handle');
+			this.closebutton	= $('#wtaiu-close');
+			this.panelcontainer	= $('#wtaiu-data');
+
+			if( wtaiu.data )
+				this.data = wtaiu.data;
+
+			this.setupContextMenu();
+			this.setupSortable();
+			this.setupOpenToggle();
+
+			this.handle.click( function(){
+				if( wtaiu_sidebar.isOpen() )
+					wtaiu_sidebar.close();
+				else
+					wtaiu_sidebar.open();
+
+				wtaiu_sidebar.saveData();
+			} );
+
+			this.closebutton.click( function(){
+				wtaiu_sidebar.killSidebar();
+			} );
+
+			$(window).on('beforeunload', function(){
+				wtaiu_sidebar.sendAjax( false );
+			} );
+
+			if( this.data.open )
+				this.open();
+			else
+				this.close();
+
+			setTimeout( function(){
+				wtaiu_sidebar.addTransitions();
+			}, 500 );
+
 		},
 
-		/**
-			@return boolean - true if set and false if not.
-			@param name - string name of cookie
-			@param value - string value of cookie
-			@param days - int days to keep cookie
-		*/
-		set:function(name,value,days){
-			document.cookie = name+"="+ value + cookies.getExpires(days) +"; path=/";
-			return (document.cookie.indexOf(name)>-1);
+		setupSortable:function(){
+			this.panelcontainer.sortable( {
+				handle: '.label',
+				helper: 'clone',
+				items: '> .panel',
+				// opacity: .66,
+				containment: 'parent',
+				placeholder: 'panel-placeholder',
+				update: function( event, ui ){
+					wtaiu_sidebar.saveData();
+				}
+			} );
 		},
-		
-		/**
-			@return string cookie data or null if cookie not found.
-			@param name - string name of cookie
-		*/
-		get:function( name ){
-			var cookie = document.cookie.split(/;\s+/), data = {}, i = 0, limit = cookie.length;
-			for( ; i < limit ; ++i ){
-				var pair = cookie[ i ].split('=');
-				data[ pair[ 0 ] ] = pair[ 1 ];
-			}
-			return ("undefined"!=typeof data[name])?data[name]:null;
+
+		setupOpenToggle:function(){
+			this.panelcontainer.find('> .panel').openToggle( {
+				button: '.open-toggle-button',
+				handle: '.panel-header',
+				callback: function(){
+					wtaiu_sidebar.saveData();
+				}
+			} );
+
 		},
-		
-		/**
-			@return boolean - true if cookie deleted and false if not.
-		*/
-		remove:function(name){
-			if(cookies.get(name)!==null){
-				cookies.set(name,'',-1);
-				return true;
-			} else {
-				return false;
-			}
+
+		setupContextMenu:function(){
+
+			this.panelcontainer.attr( 'contextmenu', 'wtaiu-context-menu' );
+
+			$('#wtaiu-context-menu .open-all').click( function(){
+				wtaiu_sidebar.panelcontainer.find('> .panel').each( function(){
+					$(this).removeClass('closed').addClass('open');
+				} );
+				wtaiu_sidebar.saveData();
+			} );
+
+			$('#wtaiu-context-menu .close-all').click( function(){
+				wtaiu_sidebar.panelcontainer.find('> .panel').each( function(){
+					$(this).removeClass('open').addClass('closed');
+				} );
+				wtaiu_sidebar.saveData();
+			} );
+
 		},
-		
-		/**
-			@return string - all cookies.
-		*/
-		toString:function(){
-			return document.cookie.toString();
+
+		getData:function(){
+			return this.data;
+		},
+
+		saveData:function(){
+
+			clearTimeout( this.timer );
+			this.timer = setTimeout( this.sendAjax.bind(this), 10000 );
+
+			var panel_status = {};
+			this.panelcontainer.find('>.panel').each( function(){
+				var panel = $(this);
+				var id = panel.attr('id');
+				var is_open = panel.hasClass('open');
+				panel_status[ id ] = is_open ? 1 : 0;
+			} );
+			this.data.panels = panel_status;
+		},
+
+		sendAjax:function( use_async ){
+
+			if( typeof use_async == 'undefined' )
+				use_async = false;
+
+			var data = {
+				action: 'wtaiu_save_data',
+				open: this.data.open ? 1 : 0,
+				panels : this.data.panels
+			};
+
+			$.ajax( {
+				type: "POST",
+				async: use_async,
+				cache: false,
+				url: wtaiu.ajaxurl,
+				data: data,
+				dataType: 'json',
+				success: function( data, textstatus, jqxhr ){},
+			} );
+		},
+
+		open:function(){
+			this.root.removeClass('wtaiu-closed').addClass('wtaiu-open');
+			this.sidebar.addClass('open');
+			this.data.open = true;
+		},
+
+		close:function(){
+			this.root.removeClass('wtaiu-open').addClass('wtaiu-closed');
+			this.sidebar.removeClass('open');
+			this.data.open = false;
+		},
+
+		killSidebar:function(){
+
+			if( ! confirm("Are you sure you want to remove the sidebar?\n\nThe sidebar can be enabled again from your user profile page.") )
+				return;
+
+			var data = {
+				action: 'wtaiu_save_close_sidebar',
+			};
+
+			$.post(
+				wtaiu.ajaxurl,
+				data,
+				function( data, textstatus, jqxhr ){
+					wtaiu_sidebar.close();
+					setTimeout( function(){
+						// Clean up after X button clicked.
+						wtaiu_sidebar.sidebar.remove();
+						wtaiu_sidebar.root.removeClass('transition-padding wtaiu-closed');
+						$('#wpadminbar').removeClass('transition-right');
+						wtaiu_sidebar = null;
+					}, 250 );
+				},
+				'json'
+			);
+
+		},
+
+		isOpen:function(){
+			return this.sidebar.hasClass('open');
+		},
+
+		addTransitions:function(){
+			this.sidebar.addClass('transition-right');
+			this.handle.addClass('transition-all');
+			$('#wpadminbar').addClass('transition-right');
+			$('html').addClass('transition-padding');
 		}
 
 	};
 
-	var wtaiu = null;
-	var wtaiu_data = null;
-
-	function open_wtaiu_panel(){
-		$('html').removeClass('wtaiu-closed').addClass('wtaiu-open');
-		wtaiu.addClass('open');
-		cookies.set('wtaiu', 'open');
-	}
-
-	function close_wtaiu_panel(){
-		$('html').removeClass('wtaiu-open').addClass('wtaiu-closed');
-		wtaiu.removeClass('open');
-		cookies.set('wtaiu', 'closed');
-	}
-
-	function add_wtaiu_transitions(){
-		wtaiu.addClass('transition-right');
-		$('#wpadminbar').addClass('transition-right');
-		$('#wtaiu-handle').addClass('transition-all');
-		$('html').addClass('transition-padding');
-	}
-
-	function save_sort_order( sort_order ){
-
-		var data = {
-			action: 'wtaiu_save_sort_order',
-			order: sort_order
-		};
-
-		$.post(
-			wtaiu_ajaxurl,
-			data,
-			function( data, textstatus, jqxhr ){},
-			'json'
-		);
-
-	}
-
-	function save_open_status( open_statuses ){
-
-		var data = {
-			action: 'wtaiu_save_panel_open_status',
-			panel_statuses: open_statuses
-		};
-
-		$.post(
-			wtaiu_ajaxurl,
-			data,
-			function( data, textstatus, jqxhr ){},
-			'json'
-		);
-
-	}
-
-	function wtaiu_save_close_sidebar(){
-
-		if( ! confirm("Are you sure you want to remove the sidebar?\n\nThe sidebar can be enabled again from your user profile page.") )
-			return;
-
-		var data = {
-			action: 'wtaiu_save_close_sidebar',
-		};
-
-		$.post(
-			wtaiu_ajaxurl,
-			data,
-			function( data, textstatus, jqxhr ){
-				close_wtaiu_panel();
-				setTimeout( function(){
-					// Clean up after X button clicked.
-					wtaiu.remove();
-					wtaiu = null;
-					cookies.remove('wtaiu');
-					$('#wpadminbar').removeClass('transition-right');
-					$('html').removeClass('transition-padding wtaiu-closed');
-				}, 250 );
-			},
-			'json'
-		);
-
-	}
-
 	$( function(){
-
-		wtaiu = $('#wtaiu');
-		wtaiu_data = $('#wtaiu-data');
-
-		$('#wtaiu-close').click( wtaiu_save_close_sidebar );
-
-		$('#wtaiu-handle').click( function(){
-			if( wtaiu.hasClass('open') )
-				close_wtaiu_panel();
-			else
-				open_wtaiu_panel();
-		} );
-
-		if( cookies.get('wtaiu') == 'open' )
-			open_wtaiu_panel();
-		else
-			close_wtaiu_panel();
-
-		wtaiu_data.attr( 'contextmenu', 'wtaiu-context-menu' );
-
-		$('#wtaiu-context-menu .open-all').click( function(){
-			var status = {};
-			$('#wtaiu-data > .panel').each( function(){
-				$(this).removeClass('closed').addClass('open');
-				status[ this.id ] = true;
-			} );
-			save_open_status( status );
-		} );
-
-		$('#wtaiu-context-menu .close-all').click( function(){
-			var status = {};
-			$('#wtaiu-data > .panel').each( function(){
-				$(this).removeClass('open').addClass('closed');
-				status[ this.id ] = false;
-			} );
-			save_open_status( status );
-		} );
-
-		wtaiu_data.sortable( {
-			handle: '.label',
-			helper: 'clone',
-			items: '> .panel',
-			// opacity: .66,
-			containment: 'parent',
-			placeholder: 'panel-placeholder',
-			update: function( event, ui ){
-				var order = wtaiu_data.sortable("toArray");
-				save_sort_order( order );
-			}
-		});
-
-		setTimeout( add_wtaiu_transitions, 500 );
-
-
-		$('#wtaiu-data > .panel').openToggle( {
-			button: '.open-toggle-button',
-			handle: '.panel-header',
-			callback: function( $item ){// "this" refers to the .panel html element; "$item" is the jQuery object that represents .panel
-				var status = {};
-				status[ this.id ] = ! $item.hasClass('closed');
-				save_open_status( status );
-			}
-		} );
-
-
+		wtaiu_sidebar.init();
 	} );
 
 })(jQuery);

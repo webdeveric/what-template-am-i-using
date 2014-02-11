@@ -16,10 +16,10 @@ The info is only displayed for users that have the edit_theme_options capability
 Information displayed:
 
 * Current template
-* Current post type
-* Are you on the "home page" (blog index)
-* Are you on the "front page" (real home page of your site)
-* Any extra info you want displayed. Just extend the WTAIU_Panel class.
+* General Information (post type, are you on the front page, etc.)
+* Additional files used. For example, header.php or footer.php
+* What sidebars are being used and what widgets are in them.
+* List of enqueued scripts and styles.
 
 This plugin uses a cookie to remember if the panel was open and if it was, it will reopen if when the page is reloaded.
 
@@ -34,14 +34,14 @@ This plugin uses a cookie to remember if the panel was open and if it was, it wi
 == Changelog ==
 
 = 0.1.6 =
-* Started using Grunt and SASS.
+* Started using Grunt and SASS/Compass.
 * I rewrote how information is displayed in the sidebar panel (removed wtaiu_data filter).
 * Added drag and drop re-ordering of panels.
 * Added an open/close button to the panel header.
 * Added context menu options to open or close all panels. (Only works in Firefox currently)
 * Added Sidebar Information panel that shows you what sidebars and widgets are being used on the current URL.
 * Added checkbox to user profile page so user can toggle showing the sidebar (if allowed).
-* Various CSS updates.
+* Various style updates.
 * Tested with default WordPress themes.
 
 = 0.1.5 =

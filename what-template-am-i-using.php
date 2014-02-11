@@ -1,18 +1,19 @@
 <?php
 /*
 Plugin Name: What Template Am I Using
-Description: This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
-Author: Eric King
-Version: 0.1.6
-Author URI: http://webdeveric.com/
+Plugin URI: http://phplug.in/
 Plugin Group: Utilities
+Author: Eric King
+Author URI: http://webdeveric.com/
+Description: This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
+Version: 0.1.6
 
 ----------------------------------------------------------------------------------------------------
 
 If you want to add your own information to the sidebar panel, you just need to create a class that
 extends WTAIU_Panel.
 
-Take a look at core-panels.php for examples.
+Take a look at inc/core-panels.php for examples.
 
 ----------------------------------------------------------------------------------------------------
 
@@ -24,17 +25,17 @@ add_filter('wtaiu_handle_text', function( $text ){
 
 */
 
-include __DIR__ . '/PriorityQueueInsertionOrder.php';
-include __DIR__ . '/wtaiu-panel.php';
-include __DIR__ . '/core-panels.php';
-
+include __DIR__ . '/inc/PriorityQueueInsertionOrder.php';
+include __DIR__ . '/inc/wtaiu-panel.php';
+include __DIR__ . '/inc/core-panels.php';
 
 
 class What_Template_Am_I_Using {
 
 	const VERSION = '0.1.6';
 
-	private static $panels;
+	protected static $panels;
+	protected static $user_data;
 
 	public static function init(){
 
@@ -44,12 +45,41 @@ class What_Template_Am_I_Using {
 		register_deactivation_hook( __FILE__, array( __CLASS__, 'deactivate' ) );
 
 		add_action( 'init',									array( __CLASS__, 'setup' ) );
+		add_action( 'admin_init',							array( __CLASS__, 'check_for_upgrade' ) );
+
+		add_action( 'wp_ajax_wtaiu_save_data',				array( __CLASS__, 'wtaiu_save_data') );
 		add_action( 'wp_ajax_wtaiu_save_close_sidebar',		array( __CLASS__, 'wtaiu_save_close_sidebar') );
-		add_action( 'wp_ajax_wtaiu_save_sort_order',		array( __CLASS__, 'wtaiu_save_sort_order') );
-		add_action( 'wp_ajax_wtaiu_save_panel_open_status',	array( __CLASS__, 'wtaiu_save_panel_open_status') );
+
 		add_action( 'personal_options',						array( __CLASS__, 'profile_options'), 10, 1 );
 		add_action( 'personal_options_update',				array( __CLASS__, 'update_profile_options'), 10, 1 );
 		add_action( 'edit_user_profile_update',				array( __CLASS__, 'update_profile_options'), 10, 1 );
+	}
+
+	public function check_for_upgrade(){
+
+		$wtaiu_db_version = get_option('wtaiu-version', '0.1.4' );
+
+		if( version_compare( $wtaiu_db_version, self::VERSION, '<' ) ){
+
+			switch( $wtaiu_db_version ){
+				case '0.1.4':
+				case '0.1.5':
+
+					$users = get_users( array(
+						'role' => 'administrator',
+						'fields' => 'ID'
+					) );
+
+					foreach( $users as $user_id )
+						update_user_meta( $user_id, 'wtaiu_show_sidebar', '1' );
+
+				break;
+			}
+
+			update_site_option('wtaiu-version', self::VERSION );
+
+		}
+
 	}
 
 	public static function setup(){
@@ -77,9 +107,11 @@ class What_Template_Am_I_Using {
 	}
 
 	public static function deactivate(){
+
+		delete_site_option( 'wtaiu-version' );
+
 		$meta_keys = array(
-			'wtaiu-sort-order',
-			'wtaiu-panel-open-status',
+			'wtaiu_sidebar_data',
 			'wtaiu_show_sidebar'
 		);
 		foreach( $meta_keys as $key ){
@@ -113,58 +145,25 @@ class What_Template_Am_I_Using {
 	<?php
 	}
 
-	public function wtaiu_save_close_sidebar(){
+	public static function wtaiu_save_data(){
+		$user_id = get_current_user_id();
+
+		$data = array();
+		if( filter_has_var( INPUT_POST, 'open' ) && $_POST['open'] == 1 || $_POST['open'] == 0 )
+			$data['open'] = (int)$_POST['open'];
+
+		if( filter_has_var( INPUT_POST, 'panels' ) && is_array( $_POST['panels'] ) )
+			$data['panels'] = $_POST['panels'];
+
+		update_user_meta( $user_id, 'wtaiu_sidebar_data', $data );
+		wp_send_json_success();
+		die();
+	}
+
+	public static function wtaiu_save_close_sidebar(){
 		$user_id = get_current_user_id();
 		delete_user_meta( $user_id, 'wtaiu_show_sidebar' );
 		wp_send_json_success();
-		die();
-	}
-
-	public static function wtaiu_save_sort_order() {
-
-		$order = filter_has_var( INPUT_POST, 'order') && is_array( $_POST['order'] ) ? $_POST['order'] : array();
-
-		$user_id = get_current_user_id();
-		
-		if( $user_id > 0 ){
-			update_user_meta( $user_id, 'wtaiu-sort-order', $order );
-		}
-
-		wp_send_json_success();
-		die();
-	}
-
-	public static function wtaiu_save_panel_open_status(){
-		$panel_statuses = filter_has_var( INPUT_POST, 'panel_statuses') ? $_POST['panel_statuses'] : null;
-
-		if( ! isset( $panel_statuses ) || ! is_array( $panel_statuses ) ){
-			wp_send_json_error( array( 'panel_statuses' => 'not set or is not an array' ) );
-			die();
-		}
-
-		$user_id = get_current_user_id();
-		
-		if( $user_id > 0 ){
-
-			$panel_open_status = get_user_meta( $user_id, 'wtaiu-panel-open-status', true );
-
-			if( empty( $panel_open_status ) || ! is_array( $panel_open_status ) )
-				$panel_open_status = array();
-
-			foreach( $panel_statuses as $id => $status ){
-				$panel_open_status[ $id ] = ( $status === true || $status == 'true' || $status == 'open' ) ? 'open' : 'closed';
-			}
-
-			update_user_meta( $user_id, 'wtaiu-panel-open-status', $panel_open_status );
-
-		}
-
-		$data = array(
-			'panel_statuses' => $panel_statuses,
-			'wtaiu-panel-open-status' => get_user_meta( $user_id, 'wtaiu-panel-open-status', true )
-		);
-
-		wp_send_json_success( $data );
 		die();
 	}
 
@@ -183,37 +182,42 @@ class What_Template_Am_I_Using {
 	public static function enqueue_assets(){
 		wp_enqueue_style('wtaiu', plugins_url( '/css/dist/what-template-am-i-using.min.css', __FILE__ ), array('dashicons', 'open-sans'), self::VERSION );
 		wp_enqueue_script('wtaiu', plugins_url( '/js/dist/what-template-am-i-using.min.js', __FILE__ ), array('jquery', 'jquery-ui-sortable' ), self::VERSION );
-		wp_localize_script('wtaiu', 'wtaiu_ajaxurl', admin_url( 'admin-ajax.php' ) );
+
+		self::$user_data = get_user_meta( get_current_user_id(), 'wtaiu_sidebar_data', true );
+
+		wp_localize_script('wtaiu', 'wtaiu', array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+			'data' => self::$user_data
+		) );
 	}
 
 	public static function output(){
 		
 		self::$panels->setExtractFlags( SplPriorityQueue ::EXTR_DATA );
 
-		$user_id = get_current_user_id();
 
-		$order = array();
+		$sidebar_open = isset( self::$user_data, self::$user_data['open'] ) && self::$user_data['open'] == 1;
+
+		$user_panels = isset( self::$user_data, self::$user_data['panels'] ) ? self::$user_data['panels'] : array();
+
+		// var_dump( self::$user_data );
+
 		$items = array();
 		$sorted_items = array();
-		$panel_open_status = array();
-
-		if( $user_id > 0 ){
-			$order = get_user_meta( $user_id, 'wtaiu-sort-order', true );
-			if( isset( $order ) && ! is_array( $order ) )
-				$order = array( $order );
-			$order = array_filter( $order );
-
-			$panel_open_status = get_user_meta( $user_id, 'wtaiu-panel-open-status', true );
-		}
-
-		if( empty( $panel_open_status ) )
-			$panel_open_status = array();
 
 		foreach( self::$panels as $panel ){
 			$label = $panel->get_label();
 			$content = $panel->get_content();
 			$id	= $panel->get_id();
-			$extra_class = isset( $panel_open_status[ $id ] ) ? $panel_open_status[ $id ] : $panel->getDefaultOpenState();
+			
+			$extra_class = '';
+
+			if( isset( $user_panels[ $id ] ) ){
+				$extra_class = $user_panels[ $id ] == 1 ? 'open' : 'closed';
+			} else {
+				$extra_class = $panel->getDefaultOpenState();
+			}
+
 			$items[ $id ] = sprintf('<li class="panel %4$s" id="%3$s">
 				<div class="panel-header">
 					<div class="label">%1$s</div><div class="open-toggle-button"></div>
@@ -222,7 +226,7 @@ class What_Template_Am_I_Using {
 			</li>', $label, $content, $id, $extra_class );
 		}
 
-		foreach( $order as $index => $id ){
+		foreach( $user_panels as $id => $open ){
 			if( isset( $items[ $id ] ) ){
 				$sorted_items[ $id ] = $items[ $id ];
 				unset( $items[ $id ] );
@@ -230,7 +234,7 @@ class What_Template_Am_I_Using {
 		}
 
 		?>
-		<div id="wtaiu">
+		<div id="wtaiu" <?php if( $sidebar_open ) echo 'class="open"'; ?>>
 			<a id="wtaiu-handle" title="Click to toggle"><span><?php echo apply_filters('wtaiu_handle_text', 'What Template Am I Using?' ); ?></span></a>
 			<a id="wtaiu-close" title="Click to remove from page"></a>
 
