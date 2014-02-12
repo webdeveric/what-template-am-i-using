@@ -38,9 +38,7 @@
 				wtaiu_sidebar.killSidebar();
 			} );
 
-			$(window).on('beforeunload', function(){
-				wtaiu_sidebar.sendAjax( false );
-			} );
+			// $(window).on('beforeunload', function(){wtaiu_sidebar.sendAjax( false );} );
 
 			if( this.data.open )
 				this.open();
@@ -105,7 +103,7 @@
 		saveData:function(){
 
 			clearTimeout( this.timer );
-			this.timer = setTimeout( this.sendAjax.bind(this), 10000 );
+			this.timer = setTimeout( this.sendAjax.bind(this), 1000 );
 
 			var panel_status = {};
 			this.panelcontainer.find('>.panel').each( function(){
