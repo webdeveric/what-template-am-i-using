@@ -85,8 +85,11 @@ html.wtaiu-closed #wpadminbar {
   margin: 0;
   padding: 0;
   border: 0;
+  float: none;
+  clear: both;
+  width: 100%;
 }
-/* line 83, ../../scss/main.scss */
+/* line 86, ../../scss/main.scss */
 #wtaiu .info-list dt {
   font-weight: 600;
   line-height: 1;
@@ -94,22 +97,22 @@ html.wtaiu-closed #wpadminbar {
   padding: 0 0 1px 0;
   margin: 0 0 4px 0;
 }
-/* line 91, ../../scss/main.scss */
+/* line 94, ../../scss/main.scss */
 #wtaiu .info-list dd {
   margin: 0 0 20px 0;
 }
 
-/* line 97, ../../scss/main.scss */
+/* line 100, ../../scss/main.scss */
 #wtaiu.open {
   right: 0;
 }
-/* line 101, ../../scss/main.scss */
+/* line 104, ../../scss/main.scss */
 #wtaiu.open #wtaiu-handle {
   background-color: #00B38A;
   color: #FFF;
 }
 
-/* line 108, ../../scss/main.scss */
+/* line 111, ../../scss/main.scss */
 a#wtaiu-handle {
   display: block;
   min-height: 3em;
@@ -147,7 +150,7 @@ a#wtaiu-handle {
   -moz-box-shadow: 0 0 4px #333333;
   box-shadow: 0 0 4px #333333;
 }
-/* line 132, ../../scss/main.scss */
+/* line 135, ../../scss/main.scss */
 a#wtaiu-handle > span {
   white-space: nowrap;
   display: block;
@@ -157,12 +160,12 @@ a#wtaiu-handle > span {
   -o-transform: rotate(180deg);
   transform: rotate(180deg);
 }
-/* line 138, ../../scss/main.scss */
+/* line 141, ../../scss/main.scss */
 a#wtaiu-handle:hover {
   color: #FFF;
 }
 
-/* line 144, ../../scss/main.scss */
+/* line 147, ../../scss/main.scss */
 a#wtaiu-close {
   position: absolute;
   z-index: 1;
@@ -187,18 +190,18 @@ a#wtaiu-close {
   box-shadow: 0 0 4px #333333;
 }
 
-/* line 166, ../../scss/main.scss */
+/* line 169, ../../scss/main.scss */
 a#wtaiu-close:before {
   content: "\f335";
 }
 
-/* line 170, ../../scss/main.scss */
+/* line 173, ../../scss/main.scss */
 a#wtaiu-close:hover {
   background: #C33;
   color: #FFF;
 }
 
-/* line 175, ../../scss/main.scss */
+/* line 178, ../../scss/main.scss */
 #wtaiu-data {
   word-wrap: break-word;
   position: relative;
@@ -215,7 +218,7 @@ a#wtaiu-close:hover {
   -moz-box-shadow: 0 0 4px #333333;
   box-shadow: 0 0 4px #333333;
 }
-/* line 189, ../../scss/main.scss */
+/* line 192, ../../scss/main.scss */
 #wtaiu-data .panel,
 #wtaiu-data .panel-placeholder {
   position: relative;
@@ -227,12 +230,12 @@ a#wtaiu-close:hover {
   padding: 0;
   list-style: none;
 }
-/* line 200, ../../scss/main.scss */
+/* line 203, ../../scss/main.scss */
 #wtaiu-data .panel-placeholder {
   background: #C44;
   height: 66px;
 }
-/* line 208, ../../scss/main.scss */
+/* line 211, ../../scss/main.scss */
 #wtaiu-data .panel .panel-header > .label,
 #wtaiu-data .panel .content {
   position: relative;
@@ -245,13 +248,13 @@ a#wtaiu-close:hover {
   padding: 10px;
   overflow: hidden;
 }
-/* line 220, ../../scss/main.scss */
+/* line 223, ../../scss/main.scss */
 #wtaiu-data .panel .content {
   background: #FFF;
   line-height: 1.5em;
   border-bottom: 1px solid #cccccc;
 }
-/* line 226, ../../scss/main.scss */
+/* line 229, ../../scss/main.scss */
 #wtaiu-data .panel .panel-header {
   position: relative;
   line-height: 1;
@@ -261,18 +264,18 @@ a#wtaiu-close:hover {
   color: #888;
   text-shadow: 1px 1px 0 white;
 }
-/* line 236, ../../scss/main.scss */
+/* line 239, ../../scss/main.scss */
 #wtaiu-data .panel .panel-header:hover {
   color: #000;
 }
-/* line 240, ../../scss/main.scss */
+/* line 243, ../../scss/main.scss */
 #wtaiu-data .panel .panel-header .label {
   font-weight: 600;
   cursor: move;
   cursor: -moz-grab;
   cursor: grab;
 }
-/* line 247, ../../scss/main.scss */
+/* line 250, ../../scss/main.scss */
 #wtaiu-data .panel .panel-header .open-toggle-button {
   font-family: dashicons;
   font-size: 1em;
@@ -287,50 +290,50 @@ a#wtaiu-close:hover {
   z-index: 100;
   text-align: center;
 }
-/* line 262, ../../scss/main.scss */
+/* line 265, ../../scss/main.scss */
 #wtaiu-data .panel .panel-header .open-toggle-button:before {
   content: "\f343";
   /* up arrow */
 }
-/* line 270, ../../scss/main.scss */
+/* line 273, ../../scss/main.scss */
 #wtaiu-data .panel.ui-sortable-helper {
   background: #FFF;
   opacity: .8;
 }
-/* line 274, ../../scss/main.scss */
+/* line 277, ../../scss/main.scss */
 #wtaiu-data .panel.ui-sortable-helper .label {
   cursor: move;
   cursor: -moz-grabbing;
   cursor: grabbing;
 }
-/* line 282, ../../scss/main.scss */
+/* line 285, ../../scss/main.scss */
 #wtaiu-data .panel:first-child > .panel-header {
   border-top: 0;
 }
-/* line 286, ../../scss/main.scss */
+/* line 289, ../../scss/main.scss */
 #wtaiu-data .panel.open > .panel-header {
   color: #000;
 }
-/* line 292, ../../scss/main.scss */
+/* line 295, ../../scss/main.scss */
 #wtaiu-data .panel.closed .content {
   display: none;
 }
-/* line 296, ../../scss/main.scss */
+/* line 299, ../../scss/main.scss */
 #wtaiu-data .panel.closed .open-toggle-button:before {
   content: "\f347";
   /* down arrow */
 }
-/* line 301, ../../scss/main.scss */
+/* line 304, ../../scss/main.scss */
 #wtaiu-data ul {
   margin: 0;
   padding: 0;
 }
-/* line 305, ../../scss/main.scss */
+/* line 308, ../../scss/main.scss */
 #wtaiu-data ul li {
   list-style: square;
   margin: 0 0 0 2em;
 }
-/* line 311, ../../scss/main.scss */
+/* line 314, ../../scss/main.scss */
 #wtaiu-data .info-table {
   table-layout: fixed;
   width: 100%;
@@ -338,7 +341,7 @@ a#wtaiu-close:hover {
   margin: 0;
   padding: 0;
 }
-/* line 320, ../../scss/main.scss */
+/* line 323, ../../scss/main.scss */
 #wtaiu-data .info-table th,
 #wtaiu-data .info-table td {
   text-align: left;
@@ -347,22 +350,22 @@ a#wtaiu-close:hover {
   padding: 2px 0;
   border: 0;
 }
-/* line 329, ../../scss/main.scss */
+/* line 332, ../../scss/main.scss */
 #wtaiu-data .info-table tr:hover th,
 #wtaiu-data .info-table tr:hover td {
   background: rgba(0, 0, 0, 0.03);
 }
-/* line 333, ../../scss/main.scss */
+/* line 336, ../../scss/main.scss */
 #wtaiu-data .info-table thead th {
   font-weight: bold;
   font-size: smaller;
 }
-/* line 338, ../../scss/main.scss */
+/* line 341, ../../scss/main.scss */
 #wtaiu-data .info-table tbody th {
   font-weight: bold;
 }
 
-/* line 346, ../../scss/main.scss */
+/* line 349, ../../scss/main.scss */
 .touch #wtaiu-data {
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
