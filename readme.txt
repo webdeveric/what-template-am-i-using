@@ -21,8 +21,6 @@ Information displayed:
 * What sidebars are being used and what widgets are in them.
 * List of enqueued scripts and styles.
 
-This plugin uses a cookie to remember if the panel was open and if it was, it will reopen if when the page is reloaded.
-
 **This plugin is intended for use by theme developers and it requires a standards compliant browser. This plugin will not work in IE8 or below.**
 
 == Installation ==
