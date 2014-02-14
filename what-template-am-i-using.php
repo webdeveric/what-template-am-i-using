@@ -6,7 +6,7 @@ Plugin Group: Utilities
 Author: Eric King
 Author URI: http://webdeveric.com/
 Description: This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
-Version: 0.1.6
+Version: 0.1.7
 
 ----------------------------------------------------------------------------------------------------
 
