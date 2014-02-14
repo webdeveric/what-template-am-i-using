@@ -1,4 +1,5 @@
 @import "compass/css3";
+@import "compass/utilities/general/clearfix";
 @import "variables";
 
 .transition-all{
@@ -51,7 +52,7 @@ html.wtaiu-closed{
 	bottom:0;
 	width:300px;
 	font:400 12px "Open Sans", sans-serif;
-	color:#333;
+	color:$main-color;
 	text-align:left;
 	-webkit-font-smoothing:antialiased;
 
@@ -216,14 +217,14 @@ a#wtaiu-close:hover{
 			width:auto;
 			height:auto;
 			margin:0;
-			padding:10px;
+			padding:$main-padding;
 			overflow:hidden;
 		}
 
 		.content{
 			background:#FFF;
 			line-height:1.5em;
-			border-bottom:1px solid #CCC;
+			border-bottom:1px solid $main-border-color;
 		}
 
 		.panel-header{
@@ -231,7 +232,7 @@ a#wtaiu-close:hover{
 			position:relative;
 			line-height:1;
 			border-top:1px solid #FFF;
-			border-bottom:1px solid #CCC;
+			border-bottom:1px solid $main-border-color;
 			background:#eaeaea;
 			color:#888;
 			text-shadow:1px 1px 0 #FFF;
@@ -251,7 +252,7 @@ a#wtaiu-close:hover{
 				font-family:dashicons;
 				font-size:1em;
 				cursor:pointer;
-				padding:10px;
+				padding:$main-padding;
 				line-height:1;
 				position:absolute;
 				top:-1px;
@@ -342,6 +343,59 @@ a#wtaiu-close:hover{
 			font-weight:bold;
 		}
 
+	}
+
+	.theme-info{
+
+		.theme-screenshot{
+			display:block;
+			float:left;
+			width:65px;
+			height:65px;
+			background-color:#C44;
+			background-size:cover;
+			background-position: center top;
+			background-repeat: no-repeat;
+			margin:0 $main-padding 0 0;
+			@include box-shadow(0 0 0 1px rgba(0,0,0,.5) );
+		}
+
+		.theme-info-wrap{
+			overflow:hidden;
+			
+			.theme-name{
+				color:$main-color;
+				font:inherit;
+				font-weight:bold;
+				font-size:1.5em;
+				line-height:1;
+				text-transform:none;
+				margin:0 0 2px 0;
+
+				.theme-version{
+					font-size:60%;
+					font-weight:normal;
+				}
+
+			}
+
+			p{
+				margin:0;
+				font-size:.9em;
+			}
+
+			p + p{
+				margin-top:5px;
+			}
+
+		}
+
+	}
+
+	.theme-info + .theme-info{
+		border-top:1px solid lighten( $main-border-color, 10% );
+		margin-top:$main-padding;
+		padding-top:$main-padding;
 	}
 
 }

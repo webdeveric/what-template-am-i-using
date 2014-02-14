@@ -268,6 +268,7 @@ class What_Template_Am_I_Using {
 }
 
 What_Template_Am_I_Using::init();
+What_Template_Am_I_Using::addPanel( new WTAIU_Theme_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Template_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_General_Info_Panel(), 100 );
 What_Template_Am_I_Using::addPanel( new WTAIU_Additional_Files_Panel(), 100 );
