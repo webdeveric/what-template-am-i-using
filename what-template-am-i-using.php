@@ -55,7 +55,7 @@ class What_Template_Am_I_Using {
 		add_action( 'edit_user_profile_update',				array( __CLASS__, 'update_profile_options'), 10, 1 );
 	}
 
-	public function check_for_upgrade(){
+	public static function check_for_upgrade(){
 
 		$wtaiu_db_version = get_option('wtaiu-version', '0.1.4' );
 
