@@ -108,7 +108,7 @@ html.wtaiu-closed #wpadminbar {
 }
 /* line 105, ../../scss/main.scss */
 #wtaiu.open #wtaiu-handle {
-  background-color: #00B38A;
+  background-color: #00b38a;
   color: #FFF;
 }
 
@@ -126,7 +126,7 @@ a#wtaiu-handle {
   line-height: 3em;
   font-weight: 600;
   text-transform: uppercase;
-  background: #4E98D6;
+  background-color: #4e98d6;
   color: #EEE;
   cursor: pointer;
   text-decoration: none;
@@ -176,7 +176,7 @@ a#wtaiu-close {
   padding: 6px 0 0 0;
   height: 34px;
   cursor: pointer;
-  background: #C44;
+  background-color: #cc4444;
   color: #FFF;
   text-decoration: none;
   text-align: center;
@@ -364,57 +364,105 @@ a#wtaiu-close:hover {
 #wtaiu-data .info-table tbody th {
   font-weight: bold;
 }
-/* line 350, ../../scss/main.scss */
+/* line 348, ../../scss/main.scss */
+#wtaiu-data .theme-info {
+  position: relative;
+  z-index: 1;
+}
+/* line 352, ../../scss/main.scss */
+#wtaiu-data .theme-info::after {
+  content: "";
+  clear: both;
+  display: block;
+}
+/* line 358, ../../scss/main.scss */
+#wtaiu-data .theme-info a {
+  text-decoration: none;
+  color: #000;
+  font-weight: bold;
+}
+/* line 364, ../../scss/main.scss */
 #wtaiu-data .theme-info .theme-screenshot {
+  position: relative;
   display: block;
   float: left;
   width: 65px;
   height: 65px;
-  background-color: #C44;
+  background-color: #4e98d6;
   background-size: cover;
-  background-position: center top;
+  background-position: center center;
   background-repeat: no-repeat;
   margin: 0 10px 0 0;
-  -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
 }
-/* line 363, ../../scss/main.scss */
+/* line 385, ../../scss/main.scss */
+#wtaiu-data .theme-info .theme-screenshot::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  bottom: 0;
+  left: 10px;
+  right: 10px;
+  z-index: -200;
+  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  -webkit-border-radius: 100px 10px;
+  -moz-border-radius: 100px / 10px;
+  border-radius: 100px / 10px;
+}
+/* line 398, ../../scss/main.scss */
 #wtaiu-data .theme-info .theme-info-wrap {
   overflow: hidden;
+  line-height: 1.25;
 }
-/* line 366, ../../scss/main.scss */
-#wtaiu-data .theme-info .theme-info-wrap .theme-name {
+/* line 402, ../../scss/main.scss */
+#wtaiu-data .theme-info .theme-info-wrap .theme-info-header {
+  text-shadow: none;
   color: #333333;
   font: inherit;
   font-weight: bold;
   font-size: 1.5em;
-  line-height: 1;
+  letter-spacing: normal;
   text-transform: none;
-  margin: 0 0 2px 0;
-}
-/* line 375, ../../scss/main.scss */
-#wtaiu-data .theme-info .theme-info-wrap .theme-name .theme-version {
-  font-size: 60%;
-  font-weight: normal;
-}
-/* line 382, ../../scss/main.scss */
-#wtaiu-data .theme-info .theme-info-wrap p {
   margin: 0;
-  font-size: .9em;
 }
-/* line 387, ../../scss/main.scss */
-#wtaiu-data .theme-info .theme-info-wrap p + p {
-  margin-top: 5px;
+/* line 412, ../../scss/main.scss */
+#wtaiu-data .theme-info .theme-info-wrap .theme-info-header .theme-name {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-/* line 395, ../../scss/main.scss */
+/* line 421, ../../scss/main.scss */
+#wtaiu-data .theme-info .theme-info-wrap p {
+  margin: 5px 0 0 0;
+}
+/* line 425, ../../scss/main.scss */
+#wtaiu-data .theme-info .theme-info-wrap .theme-version {
+  margin-top: 0;
+  font-size: .95em;
+}
+/* line 434, ../../scss/main.scss */
 #wtaiu-data .theme-info + .theme-info {
   border-top: 1px solid #e6e6e6;
   margin-top: 10px;
   padding-top: 10px;
 }
 
-/* line 403, ../../scss/main.scss */
+/* line 442, ../../scss/main.scss */
 .touch #wtaiu-data {
   overflow: scroll;
   -webkit-overflow-scrolling: touch;

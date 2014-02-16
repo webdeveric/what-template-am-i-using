@@ -3,6 +3,7 @@ class WTAIU_Theme_Panel extends WTAIU_Panel {
 
 	public function __construct(){
 		parent::__construct( 'Theme', 'wtaiu-theme-panel' );
+		$this->default_open_state = 'closed';
 	}
 
 	public function get_content(){
@@ -12,6 +13,7 @@ class WTAIU_Theme_Panel extends WTAIU_Panel {
 			$info[] = $this->get_theme_info_html( $theme );
 			$theme = $theme->parent();
 		} while( $theme !== false );
+		// WP currently only supports child themes, not grandchild themes. This loop should run at most two times.
 		return implode( '', $info );
 	}
 
@@ -20,25 +22,22 @@ class WTAIU_Theme_Panel extends WTAIU_Panel {
 		$name			= $theme->display('Name');
 		$version		= $theme->display('Version');
 		$description	= $theme->display('Description');
+		$desc_title		= esc_attr( $theme->get('Description') );
 		$author			= $theme->display('Author');
 		$screenshot		= $theme->get_screenshot();
 		$thumbnail_style= $screenshot !== false ? sprintf('style="background-image:url(%s);"', $screenshot ) : '';
-		$theme_url 		= network_admin_url( add_query_arg('theme', $theme->get_template(), 'themes.php') );
+		$theme_url 		= network_admin_url( add_query_arg('theme', $theme->get_stylesheet(), 'themes.php') );
 
 $output=<<<OUTPUT
 
-<div class="theme-info">
+<div class="theme-info" title="{$desc_title}">
 	<a href="{$theme_url}" class="theme-screenshot" {$thumbnail_style}></a>
 	<div class="theme-info-wrap">
-		<h3 class="theme-name">
-		    <a href="{$theme_url}">{$name}</a>
-		    <span class="theme-version">
-		    	Version: {$version}
-		    </span>
+		<h3 class="theme-info-header" title="{$name}">
+		    <a href="{$theme_url}" class="theme-name">{$name}</a>
 		</h3>
-		{$parent_themes}
+		<p class="theme-version">Version: {$version}</p>
 		<p class="theme-author">By {$author}</p>
-		<p class="theme-description">{$description}</p>
 	</div>
 </div>
 
@@ -339,7 +338,7 @@ INFO;
 
 class WTAIU_Server_Info_Panel extends WTAIU_Panel {
 
-	const VERSION = '0.1';
+	// const VERSION = '0.1';
 
 	public function __construct(){
 		parent::__construct( 'Server Information', 'wtaiu-server-info-panel' );

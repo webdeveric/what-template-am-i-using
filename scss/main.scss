@@ -103,7 +103,7 @@ html.wtaiu-closed{
 	right:0;
 
 	#wtaiu-handle{
-		background-color:#00B38A;
+		background-color:$main-green;
 		color:#FFF;
 	}
 
@@ -122,7 +122,7 @@ a#wtaiu-handle{
 	line-height:3em;
 	font-weight:600;
 	text-transform:uppercase;
-	background:#4E98D6;
+	background-color:$main-blue;
 	color:#EEE;
 	cursor:pointer;
 	text-decoration:none;
@@ -155,7 +155,7 @@ a#wtaiu-close{
 	padding:6px 0 0 0;
 	height:34px;
 	cursor:pointer;
-	background:#C44;
+	background-color:$main-red;
 	color:#FFF;
 	text-decoration:none;
 	text-align:center;
@@ -346,46 +346,85 @@ a#wtaiu-close:hover{
 	}
 
 	.theme-info{
+		position:relative;
+		z-index:1;
+
+		&::after{
+			content: "";
+			clear:both;
+			display: block;
+		}
+
+		a{
+			text-decoration: none;
+			color:#000;
+			font-weight:bold;
+		}
 
 		.theme-screenshot{
+			position: relative;
 			display:block;
 			float:left;
 			width:65px;
 			height:65px;
-			background-color:#C44;
+			background-color:$main-blue;
 			background-size:cover;
-			background-position: center top;
+			background-position: center center;
 			background-repeat: no-repeat;
 			margin:0 $main-padding 0 0;
-			@include box-shadow(0 0 0 1px rgba(0,0,0,.5) );
+			@include box-shadow( 0 0 2px rgba(0,0,0,.4) );
+			@include border-radius( 2px );
+
+			image-rendering: -moz-crisp-edges;
+			image-rendering:   -o-crisp-edges;
+			image-rendering: -webkit-optimize-contrast;
+			image-rendering: crisp-edges;
+			-ms-interpolation-mode: nearest-neighbor;
+		}
+
+		.theme-screenshot::before{
+			content:"";
+			position:absolute; 
+			top:50%;
+			bottom:0;
+			left:10px;
+			right:10px;
+			z-index:-200;
+			@include box-shadow( 0 0 8px rgba(0,0,0,.4) );
+			@include border-radius( 100px, 10px );
+
 		}
 
 		.theme-info-wrap{
 			overflow:hidden;
-			
-			.theme-name{
+			line-height:1.25;
+
+			.theme-info-header{
+				text-shadow:none;
 				color:$main-color;
 				font:inherit;
 				font-weight:bold;
 				font-size:1.5em;
-				line-height:1;
+				letter-spacing:normal;
 				text-transform:none;
-				margin:0 0 2px 0;
+				margin:0;
 
-				.theme-version{
-					font-size:60%;
-					font-weight:normal;
+				.theme-name{
+					display: block;
+					white-space:nowrap;
+					overflow:hidden;
+					text-overflow:ellipsis;
 				}
 
 			}
 
 			p{
-				margin:0;
-				font-size:.9em;
+				margin:5px 0 0 0;
 			}
 
-			p + p{
-				margin-top:5px;
+			.theme-version{
+				margin-top:0;
+				font-size:.95em;
 			}
 
 		}
