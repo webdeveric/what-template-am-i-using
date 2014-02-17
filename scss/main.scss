@@ -319,6 +319,7 @@ a#wtaiu-close:hover{
 		border:0;
 		margin:0;
 		padding:0;
+		color:inherit;
 
 		th,
 		td{
@@ -372,11 +373,11 @@ a#wtaiu-close:hover{
 			background-position: center center;
 			background-repeat: no-repeat;
 			margin:0 $main-padding 0 0;
-			@include box-shadow( 0 0 2px rgba(0,0,0,.4) );
-			@include border-radius( 2px );
 
+			@include border-radius( 2px );
+			@include box-shadow( 0 1px 1px rgba(0,0,0,.1) );
 			image-rendering: -moz-crisp-edges;
-			image-rendering:   -o-crisp-edges;
+			image-rendering: -o-crisp-edges;
 			image-rendering: -webkit-optimize-contrast;
 			image-rendering: crisp-edges;
 			-ms-interpolation-mode: nearest-neighbor;
@@ -387,12 +388,11 @@ a#wtaiu-close:hover{
 			position:absolute; 
 			top:50%;
 			bottom:0;
-			left:10px;
-			right:10px;
+			left:4px;
+			right:4px;
 			z-index:-200;
-			@include box-shadow( 0 0 8px rgba(0,0,0,.4) );
-			@include border-radius( 100px, 10px );
-
+			@include box-shadow( 0 0 4px rgba(0,0,0,.66) );
+			@include border-radius( 150px, 10px );
 		}
 
 		.theme-info-wrap{

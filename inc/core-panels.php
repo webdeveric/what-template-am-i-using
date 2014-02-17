@@ -309,7 +309,7 @@ class WTAIU_IP_Addresses_Panel extends WTAIU_Debug_Panel {
 		if( ! is_wp_error( $response ) ){
 			$ip = wp_remote_retrieve_body( $response );
 			// The response body is expected to be a plain text IP address only.
-			update_option( 'wtaiu-server-ip', $ip );
+			update_site_option( 'wtaiu-server-ip', $ip );
 			return $ip;
 		}
 		return $response;
@@ -323,7 +323,7 @@ class WTAIU_IP_Addresses_Panel extends WTAIU_Debug_Panel {
 		$your_ip	= esc_html( $_SERVER['REMOTE_ADDR'] );
 		$server_ip	= esc_html( $_SERVER['SERVER_ADDR'] );
 		$dns_ip		= gethostbyname( $_SERVER['HTTP_HOST'] );
-		$public_server_ip = get_option( 'wtaiu-server-ip', 'unknown' );
+		$public_server_ip = get_site_option( 'wtaiu-server-ip', 'unknown' );
 
 $info=<<<INFO
 

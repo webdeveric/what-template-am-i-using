@@ -340,8 +340,9 @@ a#wtaiu-close:hover {
   border: 0;
   margin: 0;
   padding: 0;
+  color: inherit;
 }
-/* line 324, ../../scss/main.scss */
+/* line 325, ../../scss/main.scss */
 #wtaiu-data .info-table th,
 #wtaiu-data .info-table td {
   text-align: left;
@@ -350,38 +351,38 @@ a#wtaiu-close:hover {
   padding: 2px 0;
   border: 0;
 }
-/* line 333, ../../scss/main.scss */
+/* line 334, ../../scss/main.scss */
 #wtaiu-data .info-table tr:hover th,
 #wtaiu-data .info-table tr:hover td {
   background: rgba(0, 0, 0, 0.03);
 }
-/* line 337, ../../scss/main.scss */
+/* line 338, ../../scss/main.scss */
 #wtaiu-data .info-table thead th {
   font-weight: bold;
   font-size: smaller;
 }
-/* line 342, ../../scss/main.scss */
+/* line 343, ../../scss/main.scss */
 #wtaiu-data .info-table tbody th {
   font-weight: bold;
 }
-/* line 348, ../../scss/main.scss */
+/* line 349, ../../scss/main.scss */
 #wtaiu-data .theme-info {
   position: relative;
   z-index: 1;
 }
-/* line 352, ../../scss/main.scss */
+/* line 353, ../../scss/main.scss */
 #wtaiu-data .theme-info::after {
   content: "";
   clear: both;
   display: block;
 }
-/* line 358, ../../scss/main.scss */
+/* line 359, ../../scss/main.scss */
 #wtaiu-data .theme-info a {
   text-decoration: none;
   color: #000;
   font-weight: bold;
 }
-/* line 364, ../../scss/main.scss */
+/* line 365, ../../scss/main.scss */
 #wtaiu-data .theme-info .theme-screenshot {
   position: relative;
   display: block;
@@ -393,35 +394,35 @@ a#wtaiu-close:hover {
   background-position: center center;
   background-repeat: no-repeat;
   margin: 0 10px 0 0;
-  -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   -ms-border-radius: 2px;
   -o-border-radius: 2px;
   border-radius: 2px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   image-rendering: -moz-crisp-edges;
   image-rendering: -o-crisp-edges;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
   -ms-interpolation-mode: nearest-neighbor;
 }
-/* line 385, ../../scss/main.scss */
+/* line 386, ../../scss/main.scss */
 #wtaiu-data .theme-info .theme-screenshot::before {
   content: "";
   position: absolute;
   top: 50%;
   bottom: 0;
-  left: 10px;
-  right: 10px;
+  left: 4px;
+  right: 4px;
   z-index: -200;
-  -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
-  -webkit-border-radius: 100px 10px;
-  -moz-border-radius: 100px / 10px;
-  border-radius: 100px / 10px;
+  -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.66);
+  -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.66);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.66);
+  -webkit-border-radius: 150px 10px;
+  -moz-border-radius: 150px / 10px;
+  border-radius: 150px / 10px;
 }
 /* line 398, ../../scss/main.scss */
 #wtaiu-data .theme-info .theme-info-wrap {

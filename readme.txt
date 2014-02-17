@@ -3,7 +3,7 @@ Contributors: webdeveric
 Tags: template, theme development, debug, server information
 Requires at least: 3.8.0
 Tested up to: 3.8.1
-Stable tag: 0.1.7
+Stable tag: 0.1.8
 
 This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
 
@@ -30,6 +30,12 @@ Information displayed:
 1. Visit front end of your site.
 
 == Changelog ==
+
+= 0.1.8 =
+* Added Theme panel
+* Updated IP Addresses panel and Server Information panel to show if WP_DEBUG is true.
+* Updated Panel activation/deactivation hooks
+* Added filter: wtaiu_panel_can_show
 
 = 0.1.7 =
 * Fixed PHP warning when WP_DEBUG is true.
