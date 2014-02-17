@@ -100,9 +100,11 @@ class What_Template_Am_I_Using {
 			update_user_meta( $user_id, 'wtaiu_show_sidebar', '1' );
 		}
 
+		/*
 		foreach( self::$panels as $panel ){
 			$panel->activate();
 		}
+		*/
 
 	}
 
@@ -167,15 +169,15 @@ class What_Template_Am_I_Using {
 		die();
 	}
 
-	public static function getPanels(){
+	public static function get_panels(){
 		return self::$panels;
 	}
 
-	public static function addPanel( WTAIU_Panel $panel, $priority = 1 ){
+	public static function add_panel( WTAIU_Panel $panel, $priority = 1 ){
 		self::$panels->insert( $panel, $priority );
 	}
 
-	public static function removePanel( WTAIU_Panel $panel ){
+	public static function remove_panel( WTAIU_Panel $panel ){
 		self::$panels->remove( $panel );
 	}
 
@@ -206,6 +208,11 @@ class What_Template_Am_I_Using {
 		$sorted_items = array();
 
 		foreach( self::$panels as $panel ){
+
+			$can_show = apply_filters('wtaiu_panel_can_show', $panel->can_show(), $panel );
+			if( ! $can_show )
+				continue;
+
 			$label = $panel->get_label();
 			$content = $panel->get_content();
 			$id	= $panel->get_id();
@@ -215,7 +222,7 @@ class What_Template_Am_I_Using {
 			if( isset( $user_panels[ $id ] ) ){
 				$extra_class = $user_panels[ $id ] == 1 ? 'open' : 'closed';
 			} else {
-				$extra_class = $panel->getDefaultOpenState();
+				$extra_class = $panel->get_default_open_state();
 			}
 
 			$items[ $id ] = sprintf('<li class="panel %4$s" id="%3$s">
@@ -268,15 +275,12 @@ class What_Template_Am_I_Using {
 }
 
 What_Template_Am_I_Using::init();
-What_Template_Am_I_Using::addPanel( new WTAIU_Theme_Panel(), 100 );
-What_Template_Am_I_Using::addPanel( new WTAIU_Template_Panel(), 100 );
-What_Template_Am_I_Using::addPanel( new WTAIU_General_Info_Panel(), 100 );
-What_Template_Am_I_Using::addPanel( new WTAIU_Additional_Files_Panel(), 100 );
-What_Template_Am_I_Using::addPanel( new WTAIU_Dynamic_Sidebar_Info_Panel(), 100 );
-What_Template_Am_I_Using::addPanel( new WTAIU_Scripts_Panel(), 100 );
-What_Template_Am_I_Using::addPanel( new WTAIU_Styles_Panel(), 100 );
-
-if( WP_DEBUG ){
-	What_Template_Am_I_Using::addPanel( new WTAIU_IP_Addresses_Panel(), 100 );
-	What_Template_Am_I_Using::addPanel( new WTAIU_Server_Info_Panel(), 100 );
-}
+What_Template_Am_I_Using::add_panel( new WTAIU_Theme_Panel( __FILE__ ), 100 );
+What_Template_Am_I_Using::add_panel( new WTAIU_Template_Panel( __FILE__ ), 100 );
+What_Template_Am_I_Using::add_panel( new WTAIU_General_Info_Panel( __FILE__ ), 100 );
+What_Template_Am_I_Using::add_panel( new WTAIU_Additional_Files_Panel( __FILE__ ), 100 );
+What_Template_Am_I_Using::add_panel( new WTAIU_Dynamic_Sidebar_Info_Panel( __FILE__ ), 100 );
+What_Template_Am_I_Using::add_panel( new WTAIU_Scripts_Panel( __FILE__ ), 100 );
+What_Template_Am_I_Using::add_panel( new WTAIU_Styles_Panel( __FILE__ ), 100 );
+What_Template_Am_I_Using::add_panel( new WTAIU_IP_Addresses_Panel( __FILE__ ), 100 );
+What_Template_Am_I_Using::add_panel( new WTAIU_Server_Info_Panel( __FILE__ ), 100 );

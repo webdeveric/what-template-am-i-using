@@ -4,6 +4,7 @@ abstract class WTAIU_Panel {
 	
 	protected $label;
 	protected $id;
+	protected $plugin_file;
 
 	protected $author;
 	protected $author_url;
@@ -11,13 +12,14 @@ abstract class WTAIU_Panel {
 
 	protected $default_open_state;
 
-	public function __construct( $label = '', $id = '' ){
+	public function __construct( $label = '', $id = '', $plugin_file = '' ){
 
 		$this->author		= '';
 		$this->author_url	= '';
 		$this->version		= '';
 
-		$this->label = $label;
+		$this->label		= $label;
+		$this->plugin_file	= $plugin_file;
 
 		$this->default_open_state = 'open';
 
@@ -27,25 +29,34 @@ abstract class WTAIU_Panel {
 			$this->id = $label != '' ? sanitize_title( 'panel-' . $label ) : uniqid('panel');
 		}
 
+		if( $this->plugin_file != '' ){
+			register_activation_hook( $this->plugin_file, array( $this, 'activate') );
+			register_deactivation_hook( $this->plugin_file, array( $this, 'deactivate') );
+		}
+
 		add_action('init', array( &$this, 'setup' ), 11 );
 
 	}
 
 	public function activate(){
+		// save initial options here.
 	}
 
 	public function deactivate(){
+		// remove options here.
 	}
 
-	public function getDefaultOpenState(){
+	public function can_show(){
+		return true;
+	}
+
+	public function get_default_open_state(){
 		return $this->default_open_state;
 	}
 
 	public function setup(){
 		// do stuff here with actions
 	}
-
-	abstract public function get_content();
 
 	public function get_label(){
 		return $this->label;
@@ -70,5 +81,14 @@ abstract class WTAIU_Panel {
 	public function __toString(){
 		return $this->get_content();
 	}
+	
+	abstract public function get_content();
 
+}
+
+
+abstract class WTAIU_Debug_Panel extends WTAIU_Panel {
+	public function can_show(){
+		return defined('WP_DEBUG') && constant('WP_DEBUG') == true;
+	}
 }
