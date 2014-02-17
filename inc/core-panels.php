@@ -281,17 +281,16 @@ class WTAIU_IP_Addresses_Panel extends WTAIU_Debug_Panel {
 	}
 
 	public function activate(){
-		$this->findPublicIP();
+		$this->find_public_ip();
 	}
 
-	public function findPublicIP(){
+	public function find_public_ip(){
 		/*
-			@todo Get an SSL cert for ip.phplug.in
 			The same script that runs ip.phplug.in is included in what-is-my-ip.php.
 			If you don't want to use my IP finding site, you can use one of these alternatives.
 				http://bot.whatismyipaddress.com/
 				http://curlmyip.com/
-				https://icanhazip.com/
+				http://icanhazip.com/
 		*/
 
 		$find_public_ip_url = apply_filters('wtaiu_find_public_ip_url', 'http://ip.phplug.in/' );
@@ -315,6 +314,18 @@ class WTAIU_IP_Addresses_Panel extends WTAIU_Debug_Panel {
 		return $response;
 	}
 
+	public function get_public_server_ip(){
+		$ip = get_site_option( 'wtaiu-server-ip', '' );
+		if( $ip != '' )
+			return $ip;
+
+		$ip = $this->find_public_ip();
+		if( ! is_wp_error( $ip ) )
+			return $ip;
+
+		return 'unknown';
+	}
+
 	public function deactivate(){
 		delete_option( 'wtaiu-server-ip' );
 	}
@@ -323,7 +334,7 @@ class WTAIU_IP_Addresses_Panel extends WTAIU_Debug_Panel {
 		$your_ip	= esc_html( $_SERVER['REMOTE_ADDR'] );
 		$server_ip	= esc_html( $_SERVER['SERVER_ADDR'] );
 		$dns_ip		= gethostbyname( $_SERVER['HTTP_HOST'] );
-		$public_server_ip = get_site_option( 'wtaiu-server-ip', 'unknown' );
+		$public_server_ip = $this->get_public_server_ip();
 
 $info=<<<INFO
 
