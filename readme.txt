@@ -31,6 +31,10 @@ Information displayed:
 
 == Changelog ==
 
+= 0.1.9 =
+* Minor bug fix on Panel activation
+* Simplified openToggle JavaScript
+
 = 0.1.8 =
 * Added Theme panel
 * Updated IP Addresses panel and Server Information panel to show if WP_DEBUG is true.
