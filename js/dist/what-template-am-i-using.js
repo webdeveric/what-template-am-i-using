@@ -1,9 +1,10 @@
 /*!	Open Toggle
 	@author WebDevEric
-	@date 2014-02-04 */
+	@date 2014-02-18 */
 jQuery.fn.openToggle = function( settings ){
 
 	settings = jQuery.extend( {
+		target: this,
 		handle: '.open-toggle-handle',
 		button: '.open-toggle-button',
 		callback: function(){}
@@ -16,29 +17,15 @@ jQuery.fn.openToggle = function( settings ){
 			item.removeClass('closed').addClass('open');
 	}
 
-	return this.each( function(){
+	function _handle_clicks( e ){
+		var item = jQuery(this).closest( settings.target );
+		_toggle_open( item );
+		settings.callback.call( self, item );
+	}
 
-		var self = this;
-		var item = jQuery(this);
-		var button = item.find( settings.button );		
-		var handle = item.find( settings.handle );
-
-		if( button.length > 0 ){
-			button.click( function(e){
-				_toggle_open( item );
-				settings.callback.call( self, item );
-			} );
-		}
-
-		if( handle.length > 0 ){
-			handle.dblclick( function(e){
-				_toggle_open( item );
-				settings.callback.call( self, item );
-			} );
-		}
-
-	} );
-
+	this.on( "click", settings.button, _handle_clicks ).on( "dblclick", settings.handle, _handle_clicks );
+	
+	return this;
 };;(function($){
 	'use strict';
 
@@ -53,6 +40,9 @@ jQuery.fn.openToggle = function( settings ){
 		data:{},
 
 		init:function(){
+
+			// console.log('wtaiu_sidebar.init()');
+
 			this.root			= $('html');
 			this.sidebar		= $('#wtaiu');
 			this.handle			= $('#wtaiu-handle');
@@ -67,6 +57,7 @@ jQuery.fn.openToggle = function( settings ){
 			this.setupOpenToggle();
 
 			this.handle.click( function(){
+				// console.log('handle clicked');
 				if( wtaiu_sidebar.isOpen() )
 					wtaiu_sidebar.close();
 				else
@@ -76,6 +67,7 @@ jQuery.fn.openToggle = function( settings ){
 			} );
 
 			this.closebutton.click( function(){
+				// console.log('closebutton clicked');
 				wtaiu_sidebar.killSidebar();
 			} );
 
@@ -93,6 +85,7 @@ jQuery.fn.openToggle = function( settings ){
 		},
 
 		setupSortable:function(){
+			// console.log('wtaiu_sidebar.setupSortable()');
 			this.panelcontainer.sortable( {
 				handle: '.label',
 				helper: 'clone',
@@ -107,7 +100,10 @@ jQuery.fn.openToggle = function( settings ){
 		},
 
 		setupOpenToggle:function(){
-			this.panelcontainer.find('> .panel').openToggle( {
+			// console.log('wtaiu_sidebar.setupOpenToggle()');
+
+			this.panelcontainer.openToggle( {
+				target: '.panel',
 				button: '.open-toggle-button',
 				handle: '.panel-header',
 				callback: function(){
@@ -115,9 +111,21 @@ jQuery.fn.openToggle = function( settings ){
 				}
 			} );
 
+			/*
+			this.panelcontainer.find('> .panel').openToggle( {
+				button: '.open-toggle-button',
+				handle: '.panel-header',
+				callback: function(){
+					wtaiu_sidebar.saveData();
+				}
+			} );
+			*/
+
 		},
 
 		setupContextMenu:function(){
+
+			// console.log('wtaiu_sidebar.setupContextMenu()');
 
 			this.panelcontainer.attr( 'contextmenu', 'wtaiu-context-menu' );
 
@@ -138,13 +146,14 @@ jQuery.fn.openToggle = function( settings ){
 		},
 
 		getData:function(){
+			// console.log('wtaiu_sidebar.getData()');
 			return this.data;
 		},
 
 		saveData:function(){
-
+			// console.log('wtaiu_sidebar.saveData()');
 			clearTimeout( this.timer );
-			this.timer = setTimeout( this.sendAjax.bind(this), 1000 );
+			this.timer = setTimeout( this.sendAjax.bind(this), 500 );
 
 			var panel_status = {};
 			this.panelcontainer.find('>.panel').each( function(){
@@ -157,6 +166,8 @@ jQuery.fn.openToggle = function( settings ){
 		},
 
 		sendAjax:function( use_async ){
+
+			// console.log('wtaiu_sidebar.sendAjax()');
 
 			if( typeof use_async == 'undefined' )
 				use_async = false;
@@ -179,18 +190,26 @@ jQuery.fn.openToggle = function( settings ){
 		},
 
 		open:function(){
+
+			// console.log('wtaiu_sidebar.open()');
+
 			this.root.removeClass('wtaiu-closed').addClass('wtaiu-open');
 			this.sidebar.addClass('open');
 			this.data.open = true;
 		},
 
 		close:function(){
+
+			// console.log('wtaiu_sidebar.close()');
+
 			this.root.removeClass('wtaiu-open').addClass('wtaiu-closed');
 			this.sidebar.removeClass('open');
 			this.data.open = false;
 		},
 
 		killSidebar:function(){
+
+			// console.log('wtaiu_sidebar.killSidebar()');
 
 			if( ! confirm("Are you sure you want to remove the sidebar?\n\nThe sidebar can be enabled again from your user profile page.") )
 				return;
@@ -218,10 +237,12 @@ jQuery.fn.openToggle = function( settings ){
 		},
 
 		isOpen:function(){
+			// console.log('wtaiu_sidebar.isOpen()');
 			return this.sidebar.hasClass('open');
 		},
 
 		addTransitions:function(){
+			// console.log('wtaiu_sidebar.addTransitions()');
 			this.sidebar.addClass('transition-right');
 			this.handle.addClass('transition-all');
 			$('#wpadminbar').addClass('transition-right');

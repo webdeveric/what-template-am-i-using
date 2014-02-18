@@ -3,7 +3,7 @@ Contributors: webdeveric
 Tags: template, theme development, debug, server information
 Requires at least: 3.8.0
 Tested up to: 3.8.1
-Stable tag: 0.1.8
+Stable tag: 0.1.9
 
 This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
 

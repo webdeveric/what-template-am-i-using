@@ -6,7 +6,7 @@ Plugin Group: Utilities
 Author: Eric King
 Author URI: http://webdeveric.com/
 Description: This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
-Version: 0.1.8
+Version: 0.1.9
 
 ----------------------------------------------------------------------------------------------------
 
@@ -110,11 +110,6 @@ class What_Template_Am_I_Using {
 		if( $user_id > 0 ){
 			update_user_option( $user_id, 'wtaiu_show_sidebar', '1', true );
 		}
-
-		foreach( self::$panels as $panel ){
-			$panel->activate();
-		}
-
 	}
 
 	public static function deactivate(){
