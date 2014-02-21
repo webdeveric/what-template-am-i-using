@@ -241,7 +241,8 @@ class What_Template_Am_I_Using {
 
 		$items = array();
 		$sorted_items = array();
-		$dashicons_class = version_compare( $wp_version, '3.8', '>=' ) ? 'has-dashicons' : 'no-dashicons';
+
+		$dashicons_class = version_compare( get_bloginfo('version'), '3.8', '>=' ) ? 'has-dashicons' : 'no-dashicons';
 
 		foreach( self::$panels as $panel ){
 
