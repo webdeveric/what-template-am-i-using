@@ -6,7 +6,7 @@ Plugin Group: Utilities
 Author: Eric King
 Author URI: http://webdeveric.com/
 Description: This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
-Version: 0.1.9
+Version: 0.1.10
 
 ----------------------------------------------------------------------------------------------------
 
@@ -39,10 +39,9 @@ include __DIR__ . '/inc/PriorityQueueInsertionOrder.php';
 include __DIR__ . '/inc/wtaiu-panel.php';
 include __DIR__ . '/inc/core-panels.php';
 
-
 class What_Template_Am_I_Using {
 
-	const VERSION = '0.1.8';
+	const VERSION = '0.1.10';
 
 	protected static $panels;
 	protected static $user_data;
@@ -104,12 +103,31 @@ class What_Template_Am_I_Using {
 	}
 
 	public static function activate(){
+
+		$wp_version = get_bloginfo('version');
+		$errors = array();
+
+		if( version_compare( $wp_version, '3.1', '<' ) ){
+			$errors[] = sprintf( 'This plugin requires WordPress <strong>3.1</strong> or higher. You are using WordPress <strong>%s</strong>', $wp_version );
+		}
+
+		if( version_compare( PHP_VERSION, '5.3' , '<' ) ){
+			$errors[] = sprintf( 'This plugin requires <strong>PHP 5.3</strong> or higher. You are using <strong>PHP %s</strong>', PHP_VERSION );
+		}
+
+		if( ! empty( $errors ) ){
+			unset( $_GET['activate'] );
+			deactivate_plugins( plugin_basename( __FILE__ ) );
+			wp_die( implode('<br /><br />', $errors ) );
+		}
+
 		// Make the sidebar shown for the person that activated the plugin.
 		// Everyone else has to visit their profile page to enable the sidebar if they want to see it.
 		$user_id = get_current_user_id();
 		if( $user_id > 0 ){
 			update_user_option( $user_id, 'wtaiu_show_sidebar', '1', true );
 		}
+
 	}
 
 	public static function deactivate(){
