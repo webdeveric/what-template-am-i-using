@@ -206,8 +206,22 @@ class What_Template_Am_I_Using {
 	}
 
 	public static function enqueue_assets(){
-		wp_enqueue_style('wtaiu', plugins_url( '/css/dist/what-template-am-i-using.min.css', __FILE__ ), array('dashicons', 'open-sans'), self::VERSION );
-		wp_enqueue_script('wtaiu', plugins_url( '/js/dist/what-template-am-i-using.min.js', __FILE__ ), array('jquery', 'jquery-ui-sortable' ), self::VERSION );
+
+		$wp_version = get_bloginfo('version');
+		$errors = array();
+
+
+		$css_reqs = array('open-sans');
+		if( version_compare( $wp_version, '3.8', '<' ) ){
+			wp_enqueue_style('open-sans', '//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,300,400,600', array(), self::VERSION );
+			wp_enqueue_style('font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css', array(), self::VERSION );			
+			$css_reqs[] = 'font-awesome';
+		} else {
+			$css_reqs[] = 'dashicons';
+		}
+		
+		wp_enqueue_style('wtaiu', plugins_url( '/css/dist/what-template-am-i-using.min.css', __FILE__ ), $css_reqs, self::VERSION );
+		wp_enqueue_script('wtaiu', plugins_url( '/js/dist/what-template-am-i-using.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable' ), self::VERSION );
 
 		self::$user_data = get_user_option( 'wtaiu_sidebar_data', get_current_user_id() );
 
@@ -227,6 +241,7 @@ class What_Template_Am_I_Using {
 
 		$items = array();
 		$sorted_items = array();
+		$dashicons_class = version_compare( $wp_version, '3.8', '>=' ) ? 'has-dashicons' : 'no-dashicons';
 
 		foreach( self::$panels as $panel ){
 
@@ -262,7 +277,7 @@ class What_Template_Am_I_Using {
 		}
 
 		?>
-		<div id="wtaiu" <?php if( $sidebar_open ) echo 'class="open"'; ?>>
+		<div id="wtaiu" class="<?php if( $sidebar_open ){echo 'open ';} echo $dashicons_class; ?>">
 			<a id="wtaiu-handle" title="Click to toggle"><span><?php echo apply_filters('wtaiu_handle_text', 'What Template Am I Using?' ); ?></span></a>
 			<a id="wtaiu-close" title="Click to remove from page"></a>
 

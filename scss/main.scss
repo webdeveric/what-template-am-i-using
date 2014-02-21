@@ -95,7 +95,6 @@ html.wtaiu-closed{
 	.info-list dd{
 		margin:0 0 20px 0;
 	}
-
 }
 
 #wtaiu.open{
@@ -161,19 +160,24 @@ a#wtaiu-close{
 	text-align:center;
 	font:20px/1 dashicons;
 	-webkit-font-smoothing:antialiased;
-
 	@include border-top-left-radius(5em 2em);
 	@include box-shadow( $tab-box-shadow );
-
 }
+
 
 a#wtaiu-close:before{
 	content:"\f335";
+	opacity:.85;
 }
 
 a#wtaiu-close:hover{
 	background:#C33;
 	color:#FFF;
+
+	&:before{
+		opacity:1;
+	}
+
 }
 
 #wtaiu-data{
@@ -443,3 +447,28 @@ a#wtaiu-close:hover{
 	overflow:scroll;
 	-webkit-overflow-scrolling:touch;
 }
+
+
+#wtaiu.no-dashicons{
+
+	a#wtaiu-close:before{
+		font:16px/1 'FontAwesome';
+		content:"\f00d";
+	}
+
+	.panel{
+		.open-toggle-button:before{
+			font-family:'FontAwesome';
+			content:"\f106"; /* up arrow */
+		}
+
+		&.closed{
+			.open-toggle-button:before{
+				font-family:'FontAwesome';
+				content:"\f107"; /* up arrow */
+			}
+		}
+	}
+
+}
+	
