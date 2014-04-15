@@ -23,7 +23,11 @@ jQuery.fn.openToggle = function( settings ){
 		settings.callback.call( self, item );
 	}
 
-	this.on( "click", settings.button, _handle_clicks ).on( "dblclick", settings.handle, _handle_clicks );
-	
+	// this.on( "click", settings.button, _handle_clicks ).on( "dblclick", settings.handle, _handle_clicks );
+	this.delegate( settings.button, "click", _handle_clicks ).delegate( settings.handle, "dblclick", _handle_clicks );
+	/*
+		@todo update this to check for old jQuery versions.
+	*/
+
 	return this;
 };

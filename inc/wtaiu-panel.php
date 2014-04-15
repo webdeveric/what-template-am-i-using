@@ -84,6 +84,10 @@ abstract class WTAIU_Panel {
 	
 	abstract public function get_content();
 
+	public function get_help(){
+		return '';
+	}
+
 }
 
 

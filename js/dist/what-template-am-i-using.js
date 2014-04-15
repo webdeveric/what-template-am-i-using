@@ -23,10 +23,14 @@ jQuery.fn.openToggle = function( settings ){
 		settings.callback.call( self, item );
 	}
 
-	this.on( "click", settings.button, _handle_clicks ).on( "dblclick", settings.handle, _handle_clicks );
-	
+	// this.on( "click", settings.button, _handle_clicks ).on( "dblclick", settings.handle, _handle_clicks );
+	this.delegate( settings.button, "click", _handle_clicks ).delegate( settings.handle, "dblclick", _handle_clicks );
+	/*
+		@todo update this to check for old jQuery versions.
+	*/
+
 	return this;
-};;(function($){
+};;(function( $, window, document ){
 	'use strict';
 
 	window.wtaiu_sidebar = {
@@ -55,6 +59,7 @@ jQuery.fn.openToggle = function( settings ){
 			this.setupContextMenu();
 			this.setupSortable();
 			this.setupOpenToggle();
+			this.setupHelpBoxes();
 
 			this.handle.click( function(){
 				// console.log('handle clicked');
@@ -120,6 +125,20 @@ jQuery.fn.openToggle = function( settings ){
 				}
 			} );
 			*/
+
+		},
+
+		setupHelpBoxes: function(){
+			var help = $('.panel:has(.help)', this.panelcontainer );
+			help.each( function(){
+				$( '.label', this ).append('<a class="help-label">?</a>');
+			} );
+
+			$('.help-label', this.panelcontainer ).click( function( e ){
+				e.preventDefault();
+				$( '.help', this.parentNode.parentNode.parentNode ).toggle();
+				return false;
+			} );
 
 		},
 
@@ -205,6 +224,7 @@ jQuery.fn.openToggle = function( settings ){
 			this.root.removeClass('wtaiu-open').addClass('wtaiu-closed');
 			this.sidebar.removeClass('open');
 			this.data.open = false;
+
 		},
 
 		killSidebar:function(){
@@ -255,7 +275,7 @@ jQuery.fn.openToggle = function( settings ){
 		wtaiu_sidebar.init();
 	} );
 
-})(jQuery);;/*! Modernizr 2.7.1 (Custom Build) | MIT & BSD
+})( jQuery, window, document );;/*! Modernizr 2.7.1 (Custom Build) | MIT & BSD
  * Build: http://modernizr.com/download/#-touch-cssclasses-teststyles-testprop-testallprops-prefixes-domprefixes
  */
 window.Modernizr = (function( window, document, undefined ) {

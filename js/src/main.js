@@ -1,4 +1,4 @@
-(function($){
+(function( $, window, document ){
 	'use strict';
 
 	window.wtaiu_sidebar = {
@@ -27,6 +27,7 @@
 			this.setupContextMenu();
 			this.setupSortable();
 			this.setupOpenToggle();
+			this.setupHelpBoxes();
 
 			this.handle.click( function(){
 				// console.log('handle clicked');
@@ -92,6 +93,20 @@
 				}
 			} );
 			*/
+
+		},
+
+		setupHelpBoxes: function(){
+			var help = $('.panel:has(.help)', this.panelcontainer );
+			help.each( function(){
+				$( '.label', this ).append('<a class="help-label">?</a>');
+			} );
+
+			$('.help-label', this.panelcontainer ).click( function( e ){
+				e.preventDefault();
+				$( '.help', this.parentNode.parentNode.parentNode ).toggle();
+				return false;
+			} );
 
 		},
 
@@ -177,6 +192,7 @@
 			this.root.removeClass('wtaiu-open').addClass('wtaiu-closed');
 			this.sidebar.removeClass('open');
 			this.data.open = false;
+
 		},
 
 		killSidebar:function(){
@@ -227,4 +243,4 @@
 		wtaiu_sidebar.init();
 	} );
 
-})(jQuery);
+})( jQuery, window, document );

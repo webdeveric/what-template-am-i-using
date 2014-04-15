@@ -59,7 +59,11 @@ class WTAIU_Template_Panel extends WTAIU_Panel {
 
 	public function get_content(){
 		global $template;
-		return str_replace( get_theme_root(), '', $template );
+		return sprintf('<p>%1$s</p>', str_replace( get_theme_root(), '', $template ) );
+	}
+
+	public function get_help(){
+		return '<p>Please see the <a href="https://codex.wordpress.org/Template_Hierarchy" target="_blank">template hierarchy</a> for more details.</p>';
 	}
 
 }
@@ -130,6 +134,7 @@ class WTAIU_Additional_Files_Panel extends WTAIU_Panel {
 		add_action( 'get_header',		array( $this, 'record_header' ), 10, 1 );
 		add_action( 'get_footer',		array( $this, 'record_footer' ), 10, 1 );
 		add_action( 'get_sidebar',		array( $this, 'record_sidebar' ), 10, 1 );
+		add_filter( 'comments_template', array( $this, 'record_comment_template' ), 10, 1 );
 	}
 
 	public function record_header( $name ){
@@ -144,6 +149,11 @@ class WTAIU_Additional_Files_Panel extends WTAIU_Panel {
 		$this->files[] = isset( $name ) ? "sidebar-{$name}.php" : 'sidebar.php';
 	}
 
+	public function record_comment_template( $theme_template ){
+		$this->files[] = str_replace( STYLESHEETPATH, '', $theme_template );
+		return $theme_template;
+	}
+
 	public function get_content(){
 		global $wp_actions;
 
@@ -153,8 +163,28 @@ class WTAIU_Additional_Files_Panel extends WTAIU_Panel {
 				$this->files[] = $matches['slug'];
 		}
 
-		if( ! empty( $this->files ) )
-			return implode(', ', $this->files );
+		if( ! empty( $this->files ) ){
+			return sprintf('<p>%1$s</p>', implode(', ', $this->files ) );
+		}
+
+		return '';
+	}
+
+	public function get_help(){
+		$references = array(
+			'get_header'		=> 'https://codex.wordpress.org/Function_Reference/get_header',
+			'get_footer'		=> 'https://codex.wordpress.org/Function_Reference/get_footer',
+			'get_sidebar'		=> 'https://codex.wordpress.org/Function_Reference/get_sidebar',
+			'get_template_part'	=> 'https://codex.wordpress.org/Function_Reference/get_template_part',
+		);
+
+		$messages = array();
+
+		foreach( $references as $func => $url ){
+			$messages[] = sprintf('<a href="%1$s" target="_blank">%2$s()</a>', $url, $func );
+		}
+
+		return sprintf('<p>References: %1$s</p>', implode(', ', $messages ) );
 	}
 
 }

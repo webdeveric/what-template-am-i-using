@@ -6,7 +6,7 @@ Plugin Group: Utilities
 Author: Eric King
 Author URI: http://webdeveric.com/
 Description: This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
-Version: 0.1.10
+Version: 0.1.11
 
 ----------------------------------------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ include __DIR__ . '/inc/core-panels.php';
 
 class What_Template_Am_I_Using {
 
-	const VERSION = '0.1.10';
+	const VERSION = '0.1.11';
 
 	protected static $panels;
 	protected static $user_data;
@@ -262,12 +262,20 @@ class What_Template_Am_I_Using {
 				$extra_class = $panel->get_default_open_state();
 			}
 
+
+			$help = $panel->get_help();
+			if( $help != '' )
+				$help ='<div class="help">' . $help . '</div>';
+
 			$items[ $id ] = sprintf('<li class="panel %4$s" id="%3$s">
 				<div class="panel-header">
 					<div class="label">%1$s</div><div class="open-toggle-button"></div>
 				</div>
-				<div class="content">%2$s</div>
-			</li>', $label, $content, $id, $extra_class );
+				<div class="panel-content">
+					<div class="content">%2$s</div>
+					%5$s
+				</div>
+			</li>', $label, $content, $id, $extra_class, $help );
 		}
 
 		foreach( $user_panels as $id => $open ){
