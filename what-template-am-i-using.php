@@ -33,6 +33,14 @@ function wtaiu_can_show( $can_show, WTAIU_Panel $panel ){
 }
 add_filter('wtaiu_panel_can_show', 'wtaiu_can_show', 10, 2 );
 
+
+@todo
+	Update panels to allow null WP_Dependencies
+	Use closure to add Panels
+	Validate panels: $data['panels'] = $_POST['panels']
+
+	Refactor this plugin for testability.
+	Don't include any files until wp_loaded action is called and after you check the user and is_admin().
 */
 
 include __DIR__ . '/inc/PriorityQueueInsertionOrder.php';
@@ -82,7 +90,6 @@ class What_Template_Am_I_Using {
 					foreach( $users as $user_id )
 						update_user_option( $user_id, 'wtaiu_show_sidebar', '1', true );
 
-
 				break;
 			}
 
@@ -96,6 +103,7 @@ class What_Template_Am_I_Using {
 		if( ! is_admin() && current_user_can( 'edit_theme_options' ) ){
 			$user = wp_get_current_user();
 			if( $user->wtaiu_show_sidebar == '1' ){
+				do_action('wtaiu_setup_panels');
 				self::enqueue_assets();
 				add_action( 'wp_footer', array( __CLASS__, 'output' ), PHP_INT_MAX );
 			}
@@ -210,7 +218,6 @@ class What_Template_Am_I_Using {
 		$wp_version = get_bloginfo('version');
 		$errors = array();
 
-
 		$css_reqs = array('open-sans');
 		if( version_compare( $wp_version, '3.8', '<' ) ){
 			wp_enqueue_style('open-sans', '//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,300,400,600', array(), self::VERSION );
@@ -318,14 +325,19 @@ class What_Template_Am_I_Using {
 	}
 
 }
-
 What_Template_Am_I_Using::init();
-What_Template_Am_I_Using::add_panel( new WTAIU_Theme_Panel( __FILE__ ), 100 );
-What_Template_Am_I_Using::add_panel( new WTAIU_Template_Panel( __FILE__ ), 100 );
-What_Template_Am_I_Using::add_panel( new WTAIU_General_Info_Panel( __FILE__ ), 100 );
-What_Template_Am_I_Using::add_panel( new WTAIU_Additional_Files_Panel( __FILE__ ), 100 );
-What_Template_Am_I_Using::add_panel( new WTAIU_Dynamic_Sidebar_Info_Panel( __FILE__ ), 100 );
-What_Template_Am_I_Using::add_panel( new WTAIU_Scripts_Panel( __FILE__ ), 100 );
-What_Template_Am_I_Using::add_panel( new WTAIU_Styles_Panel( __FILE__ ), 100 );
-What_Template_Am_I_Using::add_panel( new WTAIU_IP_Addresses_Panel( __FILE__ ), 100 );
-What_Template_Am_I_Using::add_panel( new WTAIU_Server_Info_Panel( __FILE__ ), 100 );
+
+
+function setup_wtaiu_panels()
+{
+	What_Template_Am_I_Using::add_panel( new WTAIU_Theme_Panel( __FILE__ ), 100 );
+	What_Template_Am_I_Using::add_panel( new WTAIU_Template_Panel( __FILE__ ), 100 );
+	What_Template_Am_I_Using::add_panel( new WTAIU_General_Info_Panel( __FILE__ ), 100 );
+	What_Template_Am_I_Using::add_panel( new WTAIU_Additional_Files_Panel( __FILE__ ), 100 );
+	What_Template_Am_I_Using::add_panel( new WTAIU_Dynamic_Sidebar_Info_Panel( __FILE__ ), 100 );
+	What_Template_Am_I_Using::add_panel( new WTAIU_Scripts_Panel( __FILE__ ), 100 );
+	What_Template_Am_I_Using::add_panel( new WTAIU_Styles_Panel( __FILE__ ), 100 );
+	What_Template_Am_I_Using::add_panel( new WTAIU_IP_Addresses_Panel( __FILE__ ), 100 );
+	What_Template_Am_I_Using::add_panel( new WTAIU_Server_Info_Panel( __FILE__ ), 100 );
+}
+add_action('wtaiu_setup_panels', 'setup_wtaiu_panels');

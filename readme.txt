@@ -38,6 +38,10 @@ Information displayed:
 
 == Changelog ==
 
+= 0.1.11 =
+* Updated the way I setup panels
+* Added help text feature to panels.
+
 = 0.1.10 =
 * Compatibility updates for WordPress 3.1.
 
