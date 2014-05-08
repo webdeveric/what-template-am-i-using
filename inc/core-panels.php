@@ -150,7 +150,7 @@ class WTAIU_Additional_Files_Panel extends WTAIU_Panel {
 	}
 
 	public function record_comment_template( $theme_template ){
-		$this->files[] = str_replace( STYLESHEETPATH, '', $theme_template );
+		$this->files[] = ltrim( str_replace( STYLESHEETPATH, '', $theme_template ), '/');
 		return $theme_template;
 	}
 
