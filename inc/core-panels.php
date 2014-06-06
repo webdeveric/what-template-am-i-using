@@ -416,8 +416,10 @@ class WTAIU_Server_Info_Panel extends WTAIU_Debug_Panel {
 	public function get_content(){
 		$info = array();
 		$info[] = '<dl class="info-list">';
-		foreach( $_SERVER as $key => $value )
-			$info[] = sprintf('<dt>%1$s</dt><dd>%2$s</dd>', $key, $value );
+		foreach( $_SERVER as $key => $value ) {
+			$output = is_string($value) ? $value : print_r($value, true);
+			$info[] = sprintf('<dt>%1$s</dt><dd>%2$s</dd>', $key, $output);
+		}
 		$info[] = '</dl>';
 		return implode('', $info );
 	}
