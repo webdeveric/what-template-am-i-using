@@ -6,7 +6,7 @@ Plugin Group: Utilities
 Author: Eric King
 Author URI: http://webdeveric.com/
 Description: This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
-Version: 0.1.11
+Version: 0.1.12
 
 ----------------------------------------------------------------------------------------------------
 
@@ -227,8 +227,9 @@ class What_Template_Am_I_Using {
 			$css_reqs[] = 'dashicons';
 		}
 		
-		wp_enqueue_style('wtaiu', plugins_url( '/css/dist/what-template-am-i-using.min.css', __FILE__ ), $css_reqs, self::VERSION );
-		wp_enqueue_script('wtaiu', plugins_url( '/js/dist/what-template-am-i-using.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-sortable' ), self::VERSION );
+		wp_enqueue_style('wtaiu', plugins_url('/css/dist/main.min.css', __FILE__), $css_reqs, self::VERSION );
+		wp_enqueue_script('opentoggle', plugins_url('/js/dist/jquery-opentoggle.min.js', __FILE__), array( 'jquery', 'jquery-ui-sortable' ), self::VERSION );
+		wp_enqueue_script('wtaiu', plugins_url('/js/dist/main.min.js', __FILE__), array( 'jquery', 'opentoggle' ), self::VERSION );
 
 		self::$user_data = get_user_option( 'wtaiu_sidebar_data', get_current_user_id() );
 
@@ -338,6 +339,7 @@ function setup_wtaiu_panels()
 	What_Template_Am_I_Using::add_panel( new WTAIU_Scripts_Panel( __FILE__ ), 100 );
 	What_Template_Am_I_Using::add_panel( new WTAIU_Styles_Panel( __FILE__ ), 100 );
 	What_Template_Am_I_Using::add_panel( new WTAIU_IP_Addresses_Panel( __FILE__ ), 100 );
-	What_Template_Am_I_Using::add_panel( new WTAIU_Server_Info_Panel( __FILE__ ), 100 );
+	What_Template_Am_I_Using::add_panel( new WTAIU_Server_Variables_Panel( __FILE__ ), 100 );
+	What_Template_Am_I_Using::add_panel( new WTAIU_PHPInfo_Panel( __FILE__ ), 100 );
 }
 add_action('wtaiu_setup_panels', 'setup_wtaiu_panels');

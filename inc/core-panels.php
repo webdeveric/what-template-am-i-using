@@ -397,12 +397,12 @@ INFO;
 }
 
 
-class WTAIU_Server_Info_Panel extends WTAIU_Debug_Panel {
+class WTAIU_Server_Variables_Panel extends WTAIU_Debug_Panel {
 
 	// const VERSION = '0.1';
 
 	public function __construct( $plugin_file = '' ){
-		parent::__construct( 'Server Information', 'wtaiu-server-info-panel', $plugin_file );
+		parent::__construct( '$_SERVER Variables', 'wtaiu-server-variables-panel', $plugin_file );
 		$this->default_open_state = 'closed';
 	}
 
@@ -425,3 +425,29 @@ class WTAIU_Server_Info_Panel extends WTAIU_Debug_Panel {
 	}
 
 }
+
+
+class WTAIU_PHPInfo_Panel extends WTAIU_Debug_Panel {
+
+	const VERSION = '0.1';
+
+    public function __construct($plugin_file = '')
+    {
+        parent::__construct('PHP Info', 'php-info-panel', $plugin_file);
+    }
+
+	public function setup(){
+		wp_enqueue_style('php-info-panel', plugins_url('/css/dist/php-info-panel.min.css', $this->plugin_file), array('wtaiu'), self::VERSION );
+	}
+
+    public function get_content()
+    {
+        ob_start();
+        phpinfo();
+        $info = preg_replace('%^.*<body>(.*)</body>.*$%ms', '$1', ob_get_clean() );
+        $info = str_replace('border="0" cellpadding="3" width="600"', '', $info);
+        return $info;
+    }
+
+}
+
