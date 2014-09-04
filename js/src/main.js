@@ -1,246 +1,256 @@
 (function( $, window, document ){
-	'use strict';
+    'use strict';
 
-	window.wtaiu_sidebar = {
+    window.wtaiu_sidebar = {
 
-		root:null,
-		sidebar:null,
-		handle:null,
-		closebutton:null,
-		panelcontainer:null,
-		timer:null,
-		data:{},
+        root:null,
+        sidebar:null,
+        handle:null,
+        closebutton:null,
+        panelcontainer:null,
+        timer:null,
+        data:{},
 
-		init:function(){
+        init:function(){
 
-			// console.log('wtaiu_sidebar.init()');
+            // console.log('wtaiu_sidebar.init()');
 
-			this.root			= $('html');
-			this.sidebar		= $('#wtaiu');
-			this.handle			= $('#wtaiu-handle');
-			this.closebutton	= $('#wtaiu-close');
-			this.panelcontainer	= $('#wtaiu-data');
+            this.root            = $('html');
+            this.sidebar        = $('#wtaiu');
+            this.handle            = $('#wtaiu-handle');
+            this.closebutton    = $('#wtaiu-close');
+            this.panelcontainer    = $('#wtaiu-data');
 
-			if( wtaiu.data )
-				this.data = wtaiu.data;
+            if( wtaiu.data )
+                this.data = wtaiu.data;
 
-			this.setupContextMenu();
-			this.setupSortable();
-			this.setupOpenToggle();
-			this.setupHelpBoxes();
+            this.setupContextMenu();
+            this.setupSortable();
+            this.setupOpenToggle();
+            this.setupHelpBoxes();
 
-			this.handle.click( function(){
-				// console.log('handle clicked');
-				if( wtaiu_sidebar.isOpen() )
-					wtaiu_sidebar.close();
-				else
-					wtaiu_sidebar.open();
+            this.handle.click( function(){
+                // console.log('handle clicked');
+                if( wtaiu_sidebar.isOpen() )
+                    wtaiu_sidebar.close();
+                else
+                    wtaiu_sidebar.open();
 
-				wtaiu_sidebar.saveData();
-			} );
+                wtaiu_sidebar.saveData();
+            } );
 
-			this.closebutton.click( function(){
-				// console.log('closebutton clicked');
-				wtaiu_sidebar.killSidebar();
-			} );
+            this.closebutton.click( function(){
+                // console.log('closebutton clicked');
+                wtaiu_sidebar.killSidebar();
+            } );
 
-			// $(window).on('beforeunload', function(){wtaiu_sidebar.sendAjax( false );} );
+            // $(window).on('beforeunload', function(){wtaiu_sidebar.sendAjax( false );} );
 
-			if( this.data.open )
-				this.open();
-			else
-				this.close();
+            if( this.data.open )
+                this.open();
+            else
+                this.close();
 
-			setTimeout( function(){
-				wtaiu_sidebar.addTransitions();
-			}, 500 );
+            setTimeout( function(){
+                wtaiu_sidebar.addTransitions();
+            }, 500 );
 
-		},
+        },
 
-		setupSortable:function(){
-			// console.log('wtaiu_sidebar.setupSortable()');
-			this.panelcontainer.sortable( {
-				handle: '.label',
-				helper: 'clone',
-				items: '> .panel',
-				// opacity: .66,
-				containment: 'parent',
-				placeholder: 'panel-placeholder',
-				update: function( event, ui ){
-					wtaiu_sidebar.saveData();
-				}
-			} );
-		},
+        setupSortable:function(){
+            // console.log('wtaiu_sidebar.setupSortable()');
+            this.panelcontainer.sortable( {
+                handle: '.label',
+                helper: 'clone',
+                items: '> .panel',
+                // opacity: .66,
+                containment: 'parent',
+                placeholder: 'panel-placeholder',
+                update: function( event, ui ){
+                    wtaiu_sidebar.saveData();
+                }
+            } );
+        },
 
-		setupOpenToggle:function(){
-			// console.log('wtaiu_sidebar.setupOpenToggle()');
+        setupOpenToggle:function(){
+            // console.log('wtaiu_sidebar.setupOpenToggle()');
 
-			this.panelcontainer.openToggle( {
-				target: '.panel',
-				button: '.open-toggle-button',
-				handle: '.panel-header',
-				callback: function(){
-					wtaiu_sidebar.saveData();
-				}
-			} );
+            this.panelcontainer.openToggle( {
+                target: '.panel',
+                button: '.open-toggle-button',
+                handle: '.panel-header',
+                callback: function(){
+                    wtaiu_sidebar.saveData();
+                }
+            } );
 
-			/*
-			this.panelcontainer.find('> .panel').openToggle( {
-				button: '.open-toggle-button',
-				handle: '.panel-header',
-				callback: function(){
-					wtaiu_sidebar.saveData();
-				}
-			} );
-			*/
+            /*
+            this.panelcontainer.find('> .panel').openToggle( {
+                button: '.open-toggle-button',
+                handle: '.panel-header',
+                callback: function(){
+                    wtaiu_sidebar.saveData();
+                }
+            } );
+            */
 
-		},
+        },
 
-		setupHelpBoxes: function(){
-			var help = $('.panel:has(.help)', this.panelcontainer );
-			help.each( function(){
-				$( '.label', this ).append('<a class="help-label">?</a>');
-			} );
+        setupHelpBoxes: function(){
+            var help = $('.panel:has(.help)', this.panelcontainer );
+            help.each( function(){
+                $( '.label', this ).append('<a class="help-label">?</a>');
+            } );
 
-			$('.help-label', this.panelcontainer ).click( function( e ){
-				e.preventDefault();
-				$( '.help', this.parentNode.parentNode.parentNode ).toggle();
-				return false;
-			} );
+            $('.help-label', this.panelcontainer ).click( function ( e ) {
+                e.preventDefault();
 
-		},
+                var panel = $( this ).parents('.panel'),
+                    help  = $( '.help', this.parentNode.parentNode.parentNode );
+                
+                if ( panel.hasClass('closed') ) {
+                    panel.removeClass('closed').addClass('open');
+                    help.show();
+                } else {
+                    help.toggle();
+                }
 
-		setupContextMenu:function(){
+                return false;
+            } );
 
-			// console.log('wtaiu_sidebar.setupContextMenu()');
+        },
 
-			this.panelcontainer.attr( 'contextmenu', 'wtaiu-context-menu' );
+        setupContextMenu:function(){
 
-			$('#wtaiu-context-menu .open-all').click( function(){
-				wtaiu_sidebar.panelcontainer.find('> .panel').each( function(){
-					$(this).removeClass('closed').addClass('open');
-				} );
-				wtaiu_sidebar.saveData();
-			} );
+            // console.log('wtaiu_sidebar.setupContextMenu()');
 
-			$('#wtaiu-context-menu .close-all').click( function(){
-				wtaiu_sidebar.panelcontainer.find('> .panel').each( function(){
-					$(this).removeClass('open').addClass('closed');
-				} );
-				wtaiu_sidebar.saveData();
-			} );
+            this.panelcontainer.attr( 'contextmenu', 'wtaiu-context-menu' );
 
-		},
+            $('#wtaiu-context-menu .open-all').click( function(){
+                wtaiu_sidebar.panelcontainer.find('> .panel').each( function(){
+                    $(this).removeClass('closed').addClass('open');
+                } );
+                wtaiu_sidebar.saveData();
+            } );
 
-		getData:function(){
-			// console.log('wtaiu_sidebar.getData()');
-			return this.data;
-		},
+            $('#wtaiu-context-menu .close-all').click( function(){
+                wtaiu_sidebar.panelcontainer.find('> .panel').each( function(){
+                    $(this).removeClass('open').addClass('closed');
+                } );
+                wtaiu_sidebar.saveData();
+            } );
 
-		saveData:function(){
-			// console.log('wtaiu_sidebar.saveData()');
-			clearTimeout( this.timer );
-			this.timer = setTimeout( this.sendAjax.bind(this), 500 );
+        },
 
-			var panel_status = {};
-			this.panelcontainer.find('>.panel').each( function(){
-				var panel = $(this);
-				var id = panel.attr('id');
-				var is_open = panel.hasClass('open');
-				panel_status[ id ] = is_open ? 1 : 0;
-			} );
-			this.data.panels = panel_status;
-		},
+        getData:function(){
+            // console.log('wtaiu_sidebar.getData()');
+            return this.data;
+        },
 
-		sendAjax:function( use_async ){
+        saveData:function(){
+            // console.log('wtaiu_sidebar.saveData()');
+            clearTimeout( this.timer );
+            this.timer = setTimeout( this.sendAjax.bind(this), 500 );
 
-			// console.log('wtaiu_sidebar.sendAjax()');
+            var panel_status = {};
+            this.panelcontainer.find('>.panel').each( function(){
+                var panel = $(this);
+                var id = panel.attr('id');
+                var is_open = panel.hasClass('open');
+                panel_status[ id ] = is_open ? 1 : 0;
+            } );
+            this.data.panels = panel_status;
+        },
 
-			if( typeof use_async == 'undefined' )
-				use_async = false;
+        sendAjax:function( use_async ){
 
-			var data = {
-				action: 'wtaiu_save_data',
-				open: this.data.open ? 1 : 0,
-				panels : this.data.panels
-			};
+            // console.log('wtaiu_sidebar.sendAjax()');
 
-			$.ajax( {
-				type: "POST",
-				async: use_async,
-				cache: false,
-				url: wtaiu.ajaxurl,
-				data: data,
-				dataType: 'json',
-				success: function( data, textstatus, jqxhr ){},
-			} );
-		},
+            if( typeof use_async == 'undefined' )
+                use_async = false;
 
-		open:function(){
+            var data = {
+                action: 'wtaiu_save_data',
+                open: this.data.open ? 1 : 0,
+                panels : this.data.panels
+            };
 
-			// console.log('wtaiu_sidebar.open()');
+            $.ajax( {
+                type: "POST",
+                async: use_async,
+                cache: false,
+                url: wtaiu.ajaxurl,
+                data: data,
+                dataType: 'json',
+                success: function( data, textstatus, jqxhr ){},
+            } );
+        },
 
-			this.root.removeClass('wtaiu-closed').addClass('wtaiu-open');
-			this.sidebar.addClass('open');
-			this.data.open = true;
-		},
+        open:function(){
 
-		close:function(){
+            // console.log('wtaiu_sidebar.open()');
 
-			// console.log('wtaiu_sidebar.close()');
+            this.root.removeClass('wtaiu-closed').addClass('wtaiu-open');
+            this.sidebar.addClass('open');
+            this.data.open = true;
+        },
 
-			this.root.removeClass('wtaiu-open').addClass('wtaiu-closed');
-			this.sidebar.removeClass('open');
-			this.data.open = false;
+        close:function(){
 
-		},
+            // console.log('wtaiu_sidebar.close()');
 
-		killSidebar:function(){
+            this.root.removeClass('wtaiu-open').addClass('wtaiu-closed');
+            this.sidebar.removeClass('open');
+            this.data.open = false;
 
-			// console.log('wtaiu_sidebar.killSidebar()');
+        },
 
-			if( ! confirm("Are you sure you want to remove the sidebar?\n\nThe sidebar can be enabled again from your user profile page.") )
-				return;
+        killSidebar:function(){
 
-			var data = {
-				action: 'wtaiu_save_close_sidebar',
-			};
+            // console.log('wtaiu_sidebar.killSidebar()');
 
-			$.post(
-				wtaiu.ajaxurl,
-				data,
-				function( data, textstatus, jqxhr ){
-					wtaiu_sidebar.close();
-					setTimeout( function(){
-						// Clean up after X button clicked.
-						wtaiu_sidebar.sidebar.remove();
-						wtaiu_sidebar.root.removeClass('transition-padding wtaiu-closed');
-						$('#wpadminbar').removeClass('transition-right');
-						wtaiu_sidebar = null;
-					}, 250 );
-				},
-				'json'
-			);
+            if( ! confirm("Are you sure you want to remove the sidebar?\n\nThe sidebar can be enabled again from your user profile page.") )
+                return;
 
-		},
+            var data = {
+                action: 'wtaiu_save_close_sidebar',
+            };
 
-		isOpen:function(){
-			// console.log('wtaiu_sidebar.isOpen()');
-			return this.sidebar.hasClass('open');
-		},
+            $.post(
+                wtaiu.ajaxurl,
+                data,
+                function( data, textstatus, jqxhr ){
+                    wtaiu_sidebar.close();
+                    setTimeout( function(){
+                        // Clean up after X button clicked.
+                        wtaiu_sidebar.sidebar.remove();
+                        wtaiu_sidebar.root.removeClass('transition-padding wtaiu-closed');
+                        $('#wpadminbar').removeClass('transition-right');
+                        wtaiu_sidebar = null;
+                    }, 250 );
+                },
+                'json'
+            );
 
-		addTransitions:function(){
-			// console.log('wtaiu_sidebar.addTransitions()');
-			this.sidebar.addClass('transition-right');
-			this.handle.addClass('transition-all');
-			$('#wpadminbar').addClass('transition-right');
-			$('html').addClass('transition-padding');
-		}
+        },
 
-	};
+        isOpen:function(){
+            // console.log('wtaiu_sidebar.isOpen()');
+            return this.sidebar.hasClass('open');
+        },
 
-	$( function(){
-		wtaiu_sidebar.init();
-	} );
+        addTransitions:function(){
+            // console.log('wtaiu_sidebar.addTransitions()');
+            this.sidebar.addClass('transition-right');
+            this.handle.addClass('transition-all');
+            $('#wpadminbar').addClass('transition-right');
+            $('html').addClass('transition-padding');
+        }
+
+    };
+
+    $( function(){
+        wtaiu_sidebar.init();
+    } );
 
 })( jQuery, window, document );
