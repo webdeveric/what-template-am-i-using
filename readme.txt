@@ -37,6 +37,9 @@ Information displayed:
 
 == Changelog ==
 
+= 0.1.13 =
+* Fixed PHP warning when WP_DEBUG is true.
+
 = 0.1.12 =
 * Show all core panels now. I'm not using the debug panels right now.
 * Added PHP info panel.
