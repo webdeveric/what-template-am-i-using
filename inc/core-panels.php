@@ -233,7 +233,6 @@ class WTAIU_Dynamic_Sidebar_Info_Panel extends WTAIU_Panel
                 $widgets[] = sprintf('<li>%1$s</li>', $widget_name );
             }
             $widgets[] = '</ul>';
-            $this->label .= sprintf('', count( $this->dependencies ) );
             $info[] = sprintf('<dt>%1$s<span class="counter">(%2$d)</span></dt><dd>%3$s</dd>', $sidebar_name, count( $widget_names ), implode('', $widgets ) );
         }
         $info[] = '</dl>';

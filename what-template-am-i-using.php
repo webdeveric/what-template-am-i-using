@@ -6,7 +6,7 @@ Plugin Group: Utilities
 Author: Eric King
 Author URI: http://webdeveric.com/
 Description: This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
-Version: 0.1.12
+Version: 0.1.13
 
 ----------------------------------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ include __DIR__ . '/inc/core-panels.php';
 
 class What_Template_Am_I_Using
 {
-    const VERSION = '0.1.12';
+    const VERSION = '0.1.13';
 
     protected static $panels;
     protected static $user_data;
@@ -58,15 +58,13 @@ class What_Template_Am_I_Using
     {
         self::$panels = new PriorityQueueInsertionOrder();
 
-        register_activation_hook( __FILE__, array( __CLASS__, 'activate' ) );
-        register_deactivation_hook( __FILE__, array( __CLASS__, 'deactivate' ) );
+        register_activation_hook( __FILE__,             array( __CLASS__, 'activate' ) );
+        register_deactivation_hook( __FILE__,           array( __CLASS__, 'deactivate' ) );
 
         add_action( 'init',                             array( __CLASS__, 'setup' ) );
         add_action( 'admin_init',                       array( __CLASS__, 'check_for_upgrade' ) );
-
         add_action( 'wp_ajax_wtaiu_save_data',          array( __CLASS__, 'wtaiu_save_data') );
         add_action( 'wp_ajax_wtaiu_save_close_sidebar', array( __CLASS__, 'wtaiu_save_close_sidebar') );
-
         add_action( 'personal_options',                 array( __CLASS__, 'profile_options'), 10, 1 );
         add_action( 'personal_options_update',          array( __CLASS__, 'update_profile_options'), 10, 1 );
         add_action( 'edit_user_profile_update',         array( __CLASS__, 'update_profile_options'), 10, 1 );
@@ -151,7 +149,6 @@ class What_Template_Am_I_Using
         foreach ( $meta_keys as $key ) {
             delete_metadata( 'user', 0, $key, '', true );
         }
-
     }
 
     public static function update_profile_options( $user_id )
@@ -251,24 +248,20 @@ class What_Template_Am_I_Using
     {
         self::$panels->setExtractFlags( SplPriorityQueue ::EXTR_DATA );
 
-        $sidebar_open = isset( self::$user_data, self::$user_data['open'] ) && self::$user_data['open'] == 1;
-
-        $user_panels = isset( self::$user_data, self::$user_data['panels'] ) ? self::$user_data['panels'] : array();
-
-        $items = array();
-        $sorted_items = array();
-
+        $sidebar_open    = isset( self::$user_data, self::$user_data['open'] ) && self::$user_data['open'] == 1;
+        $user_panels     = isset( self::$user_data, self::$user_data['panels'] ) ? self::$user_data['panels'] : array();
+        $items           = array();
+        $sorted_items    = array();
         $dashicons_class = version_compare( get_bloginfo('version'), '3.8', '>=' ) ? 'has-dashicons' : 'no-dashicons';
 
         foreach ( self::$panels as $panel ) {
 
-            $can_show = apply_filters('wtaiu_panel_can_show', $panel->can_show(), $panel );
-            if ( ! $can_show )
+            if ( ! apply_filters('wtaiu_panel_can_show', $panel->can_show(), $panel ) )
                 continue;
 
-            $label = $panel->get_label();
+            $label   = $panel->get_label();
             $content = $panel->get_content();
-            $id    = $panel->get_id();
+            $id      = $panel->get_id();
             
             $extra_class = '';
 
