@@ -4,107 +4,96 @@ abstract class WTAIU_Panel
 {
     const VERSION = '0.0.0';
 
-	protected $label;
-	protected $id;
-	protected $plugin_file;
+    protected $label;
+    protected $id;
 
-	protected $author;
-	protected $author_url;
+    protected $author;
+    protected $author_url;
 
-	protected $default_open_state;
+    protected $default_open_state;
 
-	public function __construct( $label = '', $id = '', $plugin_file = '' )
+    public function __construct( $label = '', $id = '' )
     {
-		$this->author		= '';
-		$this->author_url	= '';
+        $this->author             = '';
+        $this->author_url         = '';
+        $this->label              = $label;
+        $this->default_open_state = 'open';
 
-		$this->label		= $label;
-		$this->plugin_file	= $plugin_file;
+        if ( $id != '' ) {
+            $this->id = $id;
+        } else {
+            $this->id = $label != '' ? sanitize_title( 'panel-' . $label ) : uniqid('panel');
+        }
 
-		$this->default_open_state = 'open';
+        add_action('init', array( &$this, 'setup' ), 11 );
+    }
 
-		if ( $id != '' ) {
-			$this->id = $id;
-		} else {
-			$this->id = $label != '' ? sanitize_title( 'panel-' . $label ) : uniqid('panel');
-		}
-
-		if ( $this->plugin_file != '' ) {
-			register_activation_hook( $this->plugin_file, array( $this, 'activate') );
-			register_deactivation_hook( $this->plugin_file, array( $this, 'deactivate') );
-		}
-
-		add_action('init', array( &$this, 'setup' ), 11 );
-
-	}
-
-	public function activate()
+    public function activate()
     {
-		// save initial options here.
-	}
+        // save initial options here.
+    }
 
-	public function deactivate()
+    public function deactivate()
     {
-		// remove options here.
-	}
+        // remove options here.
+    }
 
-	public function can_show()
+    public function can_show()
     {
-		return true;
-	}
+        return true;
+    }
 
-	public function get_default_open_state()
+    public function get_default_open_state()
     {
-		return $this->default_open_state;
-	}
+        return $this->default_open_state;
+    }
 
-	public function setup()
+    public function setup()
     {
-		// do stuff here with actions
-	}
+        // do stuff here with actions
+    }
 
-	public function get_label()
+    public function get_label()
     {
-		return $this->label;
-	}
+        return $this->label;
+    }
 
-	public function get_id()
+    public function get_id()
     {
-		return $this->id;
-	}
+        return $this->id;
+    }
 
-	public function info()
+    public function info()
     {
-		return array(
-			'author'		=> $this->author,
-			'author_url'	=> $this->author_url,
-			'version'		=> $this->version
-		);
-	}
+        return array(
+            'author'     => $this->author,
+            'author_url' => $this->author_url,
+            'version'    => $this->version
+        );
+    }
 
-	public function render()
+    public function render()
     {
-		echo $this->get_content();
-	}
+        echo $this->get_content();
+    }
 
-	public function __toString()
+    public function __toString()
     {
-		return $this->get_content();
-	}
-	
-	abstract public function get_content();
+        return $this->get_content();
+    }
+    
+    abstract public function get_content();
 
-	public function get_help()
+    public function get_help()
     {
-		return '';
-	}
+        return '';
+    }
 }
-
 
 abstract class WTAIU_Debug_Panel extends WTAIU_Panel
 {
-	public function can_show()
+    public function can_show()
     {
-		return defined('WP_DEBUG') && constant('WP_DEBUG') == true;
-	}
+        return defined('WP_DEBUG') && constant('WP_DEBUG') == true;
+    }
 }
