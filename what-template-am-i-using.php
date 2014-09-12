@@ -6,7 +6,7 @@ Plugin Group: Utilities
 Author: Eric King
 Author URI: http://webdeveric.com/
 Description: This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
-Version: 0.1.13
+Version: 0.1.14
 
 ----------------------------------------------------------------------------------------------------
 
@@ -23,6 +23,7 @@ add_filter('wtaiu_handle_text', function( $text ) {
     return 'Your Custom Text Here';
 } );
 
+----------------------------------------------------------------------------------------------------
 
 Here is a simple example to show you how to use the wtaiu_panel_can_show filter.
 
@@ -33,10 +34,9 @@ function wtaiu_can_show( $can_show, WTAIU_Panel $panel ) {
 }
 add_filter('wtaiu_panel_can_show', 'wtaiu_can_show', 10, 2 );
 
+----------------------------------------------------------------------------------------------------
 
 @todo
-    Update panels to allow null WP_Dependencies
-    Use closure to add Panels
     Validate panels: $data['panels'] = $_POST['panels']
 
     Refactor this plugin for testability.
@@ -50,6 +50,7 @@ include __DIR__ . '/inc/core-panels.php';
 class What_Template_Am_I_Using
 {
     const VERSION = '0.1.13';
+    const FILE = __FILE__;
 
     protected static $panels;
     protected static $user_data;
@@ -112,7 +113,9 @@ class What_Template_Am_I_Using
     public static function activate()
     {
         $wp_version = get_bloginfo('version');
-        $errors = array();
+        $errors     = array();
+
+        do_action('wtaiu_setup_panels');
 
         if ( version_compare( $wp_version, '3.1', '<' ) ) {
             $errors[] = sprintf( 'This plugin requires WordPress <strong>3.1</strong> or higher. You are using WordPress <strong>%s</strong>', $wp_version );
@@ -120,6 +123,14 @@ class What_Template_Am_I_Using
 
         if ( version_compare( PHP_VERSION, '5.3' , '<' ) ) {
             $errors[] = sprintf( 'This plugin requires <strong>PHP 5.3</strong> or higher. You are using <strong>PHP %s</strong>', PHP_VERSION );
+        }
+
+        foreach (self::$panels as $panel) {
+            try {
+                $panel->activate();
+            } catch( Exception $e ) {
+                $errors[] = $e->getMessage();
+            }
         }
 
         if ( ! empty( $errors ) ) {
@@ -149,6 +160,13 @@ class What_Template_Am_I_Using
         foreach ( $meta_keys as $key ) {
             delete_metadata( 'user', 0, $key, '', true );
         }
+
+        do_action('wtaiu_setup_panels');
+
+        foreach (self::$panels as $panel) {
+            $panel->deactivate();
+        }
+
     }
 
     public static function update_profile_options( $user_id )
@@ -330,15 +348,15 @@ What_Template_Am_I_Using::init();
 
 function setup_wtaiu_panels()
 {
-    What_Template_Am_I_Using::add_panel( new WTAIU_Theme_Panel( __FILE__ ), 100 );
-    What_Template_Am_I_Using::add_panel( new WTAIU_Template_Panel( __FILE__ ), 100 );
-    What_Template_Am_I_Using::add_panel( new WTAIU_General_Info_Panel( __FILE__ ), 100 );
-    What_Template_Am_I_Using::add_panel( new WTAIU_Additional_Files_Panel( __FILE__ ), 100 );
-    What_Template_Am_I_Using::add_panel( new WTAIU_Dynamic_Sidebar_Info_Panel( __FILE__ ), 100 );
-    What_Template_Am_I_Using::add_panel( new WTAIU_Scripts_Panel( __FILE__ ), 100 );
-    What_Template_Am_I_Using::add_panel( new WTAIU_Styles_Panel( __FILE__ ), 100 );
-    What_Template_Am_I_Using::add_panel( new WTAIU_IP_Addresses_Panel( __FILE__ ), 100 );
-    What_Template_Am_I_Using::add_panel( new WTAIU_Server_Variables_Panel( __FILE__ ), 100 );
-    What_Template_Am_I_Using::add_panel( new WTAIU_PHPInfo_Panel( __FILE__ ), 100 );
+    What_Template_Am_I_Using::add_panel( new WTAIU_Theme_Panel(), 100 );
+    What_Template_Am_I_Using::add_panel( new WTAIU_Template_Panel(), 100 );
+    What_Template_Am_I_Using::add_panel( new WTAIU_General_Info_Panel(), 100 );
+    What_Template_Am_I_Using::add_panel( new WTAIU_Additional_Files_Panel(), 100 );
+    What_Template_Am_I_Using::add_panel( new WTAIU_Dynamic_Sidebar_Info_Panel(), 100 );
+    What_Template_Am_I_Using::add_panel( new WTAIU_Scripts_Panel(), 100 );
+    What_Template_Am_I_Using::add_panel( new WTAIU_Styles_Panel(), 100 );
+    What_Template_Am_I_Using::add_panel( new WTAIU_IP_Addresses_Panel(), 100 );
+    What_Template_Am_I_Using::add_panel( new WTAIU_Server_Variables_Panel(), 100 );
+    What_Template_Am_I_Using::add_panel( new WTAIU_PHPInfo_Panel(), 100 );
 }
 add_action('wtaiu_setup_panels', 'setup_wtaiu_panels');
