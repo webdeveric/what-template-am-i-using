@@ -43,6 +43,12 @@ add_filter('wtaiu_panel_can_show', 'wtaiu_can_show', 10, 2 );
     Don't include any files until wp_loaded action is called and after you check the user and is_admin().
 */
 
+// load plugin translations --------------------------------------------------------------------------------
+function wtaiu_lang() {
+		load_plugin_textdomain('wtaiu', false, dirname(plugin_basename(__FILE__)) . '/languages');
+}
+add_action('plugins_loaded', 'wtaiu_lang');
+
 include __DIR__ . '/inc/PriorityQueueInsertionOrder.php';
 include __DIR__ . '/inc/wtaiu-panel.php';
 include __DIR__ . '/inc/core-panels.php';
