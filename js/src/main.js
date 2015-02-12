@@ -209,7 +209,7 @@
 
             // console.log('wtaiu_sidebar.killSidebar()');
 
-            if( ! confirm("Are you sure you want to remove the sidebar?\n\nThe sidebar can be enabled again from your user profile page.") )
+            if( ! confirm(wtaiu.remove_sidebar_alert1+"\n\n"+wtaiu.remove_sidebar_alert2) )
                 return;
 
             var data = {

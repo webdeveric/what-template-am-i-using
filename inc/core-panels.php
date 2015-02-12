@@ -4,7 +4,7 @@ class WTAIU_Theme_Panel extends WTAIU_Panel
 {
     public function __construct()
     {
-        parent::__construct( 'Theme', 'wtaiu-theme-panel' );
+        parent::__construct( __('Theme', 'wtaiu'), 'wtaiu-theme-panel' );
         $this->default_open_state = 'closed';
     }
 
@@ -30,6 +30,9 @@ class WTAIU_Theme_Panel extends WTAIU_Panel
         $screenshot      = $theme->get_screenshot();
         $thumbnail_style = $screenshot !== false ? sprintf('style="background-image:url(%s);"', $screenshot ) : '';
         $theme_url       = network_admin_url( add_query_arg('theme', $theme->get_stylesheet(), 'themes.php') );
+        // translatable table labels
+        $version_label = __('Version:', 'wtaiu');
+        $author_label = __('By', 'wtaiu');
 
 $output=<<<OUTPUT
 
@@ -39,8 +42,8 @@ $output=<<<OUTPUT
         <h3 class="theme-info-header" title="{$name}">
             <a href="{$theme_url}" class="theme-name">{$name}</a>
         </h3>
-        <p class="theme-version">Version: {$version}</p>
-        <p class="theme-author">By {$author}</p>
+        <p class="theme-version">{$version_label} {$version}</p>
+        <p class="theme-author">{$author_label} {$author}</p>
     </div>
 </div>
 
@@ -54,7 +57,7 @@ class WTAIU_Template_Panel extends WTAIU_Panel
 {
     public function __construct()
     {
-        parent::__construct( 'Template', 'wtaiu-template-panel' );
+        parent::__construct( __('Template', 'wtaiu'), 'wtaiu-template-panel' );
     }
 
     public function get_content()
@@ -65,7 +68,7 @@ class WTAIU_Template_Panel extends WTAIU_Panel
 
     public function get_help()
     {
-        return '<p>Please see the <a href="https://codex.wordpress.org/Template_Hierarchy" target="_blank">template hierarchy</a> for more details.</p>';
+        return '<p>'.sprintf(__('Please see the %stemplate hierarchy%s for more details.', 'wtaiu'), '<a href="https://codex.wordpress.org/Template_Hierarchy" target="_blank">', '</a>').'</p>';
     }
 }
 
@@ -75,7 +78,7 @@ class WTAIU_General_Info_Panel extends WTAIU_Panel
 
     public function __construct()
     {
-        parent::__construct( 'General Information', 'wtaiu-general-info-panel' );
+        parent::__construct( __('General Information', 'wtaiu'), 'wtaiu-general-info-panel' );
         $this->author     = 'Eric King';
         $this->author_url = 'http://webdeveric.com/';
     }
@@ -83,33 +86,40 @@ class WTAIU_General_Info_Panel extends WTAIU_Panel
     public function get_content()
     {
         global $post;
-        $post_type  = isset( $post, $post->post_type ) ? $post->post_type : 'not set';
-        $front_page = is_front_page() ? 'Yes' : 'No';
-        $home_page  = is_home() ? 'Yes' : 'No';
-        $is_404     = is_404() ? 'Yes' : 'No';
-        $is_search  = is_search() ? 'Yes' : 'No';
+        $post_type  = isset( $post, $post->post_type ) ? $post->post_type : __('not set', 'wtaiu');
+        // NOTE FOR TRANSLATION: might be usefull to use a global string for 'Yes' and 'No',
+        $front_page = is_front_page() ? __('Yes', 'wtaiu') : __('No', 'wtaiu');
+        $home_page  = is_home() ? __('Yes', 'wtaiu') : __('No', 'wtaiu');
+        $is_404     = is_404() ? __('Yes', 'wtaiu') : __('No', 'wtaiu');
+        $is_search  = is_search() ? __('Yes', 'wtaiu') : __('No', 'wtaiu');
+        // translatable table labels
+        $post_type_label = __('Post Type', 'wtaiu');
+        $front_label = __('Front', 'wtaiu');
+        $home_label = __('Home', 'wtaiu');
+        $is404_label = __('404', 'wtaiu');
+        $search_label = __('Search', 'wtaiu');
 
 $info=<<<INFO
     <table class="info-table">
         <tbody>
             <tr>
-                <th scope="row">Post Type</th>
+                <th scope="row">{$post_type_label}</th>
                 <td>{$post_type}</td>
             </tr>
             <tr>
-                <th scope="row">Front</th>
+                <th scope="row">{$front_label}</th>
                 <td>{$front_page}</td>
             </tr>
             <tr>
-                <th scope="row">Home</th>
+                <th scope="row">{$home_label}</th>
                 <td>{$home_page}</td>
             </tr>
             <tr>
-                <th scope="row">404</th>
+                <th scope="row">{$is404_label}</th>
                 <td>{$is_404}</td>
             </tr>
             <tr>
-                <th scope="row">Search</th>
+                <th scope="row">{$search_label}</th>
                 <td>{$is_search}</td>
             </tr>
         </tbody>
@@ -126,7 +136,7 @@ class WTAIU_Additional_Files_Panel extends WTAIU_Panel
 
     public function __construct()
     {
-        parent::__construct( 'Additional Files Used', 'wtaiu-additional-files-panel' );
+        parent::__construct( __('Additional Files Used', 'wtaiu'), 'wtaiu-additional-files-panel' );
         $this->files = array();
     }
 
@@ -191,7 +201,7 @@ class WTAIU_Additional_Files_Panel extends WTAIU_Panel
             $messages[] = sprintf('<a href="%1$s" target="_blank">%2$s()</a>', $url, $func );
         }
 
-        return sprintf('<p>References: %1$s</p>', implode(', ', $messages ) );
+        return '<p>'.__('References', 'wtaiu').': '. implode(', ', $messages ).'</p>';
     }
 }
 
@@ -201,7 +211,7 @@ class WTAIU_Dynamic_Sidebar_Info_Panel extends WTAIU_Panel
 
     public function __construct()
     {
-        parent::__construct( 'Sidebar Information', 'wtaiu-dynamic-sidebar-info-panel' );
+        parent::__construct( __('Sidebar Information', 'wtaiu'), 'wtaiu-dynamic-sidebar-info-panel' );
         $this->sidebars = array();
     }
 
@@ -222,13 +232,13 @@ class WTAIU_Dynamic_Sidebar_Info_Panel extends WTAIU_Panel
     public function get_content()
     {
         if ( empty( $this->sidebars ) )
-            return 'No sidebar widgets found';
+            return __('No sidebar widgets found', 'wtaiu');
 
         $info = array();
         $info[] = '<dl class="info-list">';
         foreach ( $this->sidebars as $sidebar_name => $widget_names ) {
             $widgets = array();
-            $widgets[] = sprintf( '<ul title="Widgets used in %s">', $sidebar_name );
+            $widgets[] = sprintf( '<ul title="'.__('Widgets used in %s', 'wtaiu').'">', $sidebar_name );
             foreach ( $widget_names as $widget_name ) {
                 $widgets[] = sprintf('<li>%1$s</li>', $widget_name );
             }
@@ -264,7 +274,7 @@ class WTAIU_WP_Dependencies_Panel extends WTAIU_Panel
 
     public function get_content()
     {
-        return '<ul title="This lists all enqueued files, not just enqueued files from your theme.">' . implode('', $this->dependencies ) . '</ul>';
+        return '<ul title="'.__('This lists all enqueued files, not just enqueued files from your theme.', 'wtaiu').'">' . implode('', $this->dependencies ) . '</ul>';
     }
 }
 
@@ -272,7 +282,7 @@ class WTAIU_Scripts_Panel extends WTAIU_WP_Dependencies_Panel
 {
     public function __construct()
     {
-        parent::__construct( 'Enqueued Scripts', 'wtaiu-enqueued-scripts' );
+        parent::__construct( __('Enqueued Scripts', 'wtaiu'), 'wtaiu-enqueued-scripts' );
     }
 
     public function setup()
@@ -291,7 +301,7 @@ class WTAIU_Styles_Panel extends WTAIU_WP_Dependencies_Panel
 {
     public function __construct()
     {
-        parent::__construct('Enqueued Styles', 'wtaiu-enqueued-styles' );
+        parent::__construct( __('Enqueued Styles', 'wtaiu'), 'wtaiu-enqueued-styles' );
     }
 
     public function setup()
@@ -310,7 +320,7 @@ class WTAIU_IP_Addresses_Panel extends WTAIU_Panel
 {
     public function __construct()
     {
-        parent::__construct( 'IP Addresses', 'wtaiu-ip-addresses-panel' );
+        parent::__construct( __('IP Addresses', 'wtaiu'), 'wtaiu-ip-addresses-panel' );
         $this->default_open_state = 'closed';
     }
 
@@ -378,25 +388,35 @@ class WTAIU_IP_Addresses_Panel extends WTAIU_Panel
         $server_ip        = esc_html( $_SERVER['SERVER_ADDR'] );
         $dns_ip           = gethostbyname( $_SERVER['HTTP_HOST'] );
         $public_server_ip = $this->get_public_server_ip();
+        // translatable table labels
+        $your_ip_label = __('Your IP', 'wtaiu');
+        $server_ip_label = __('Server IP', 'wtaiu');
+        $public_server_ip_label = __('Server Public IP', 'wtaiu');
+        $dns_ip_label = __('Domain IP (DNS)', 'wtaiu');
+        // translatable table titles
+        $your_ip_title = sprintf(__('This is %s', 'wtaiu'), '$_SERVER[\'REMOTE_ADDR\']') ;
+        $server_ip_title = sprintf(__('This is %s', 'wtaiu'), '$_SERVER[\'SERVER_ADDR\']') ;
+        $public_server_ip_title = sprintf(__('This is the IP that you connect to when visiting %s', 'wtaiu'), $_SERVER['HTTP_HOST']) ;
+        $dns_ip_title = sprintf(__('DNS lookup for %s', 'wtaiu'), $_SERVER['HTTP_HOST']) ;
 
 $info=<<<INFO
 
     <table class="info-table">
         <tbody>
             <tr>
-                <th scope="row" title="This is \$_SERVER['REMOTE_ADDR']">Your IP</th>
+                <th scope="row" title="{$your_ip_title}">{$your_ip_label}</th>
                 <td>{$your_ip}</td>
             </tr>
             <tr>
-                <th scope="row" title="This is \$_SERVER['SERVER_ADDR']">Server IP</th>
+                <th scope="row" title="{$server_ip_title}">{$server_ip_label}</th>
                 <td>{$server_ip}</td>
             </tr>
             <tr>
-                <th scope="row" title="This is the IP that you connect to when visiting {$_SERVER['HTTP_HOST']}">Server Public IP</th>
+                <th scope="row" title="{$public_server_ip_title}">{$public_server_ip_label}</th>
                 <td>{$public_server_ip}</td>
             </tr>
             <tr>
-                <th scope="row" title="DNS lookup for {$_SERVER['HTTP_HOST']}">Domain IP (DNS)</th>
+                <th scope="row" title="{$dns_ip_title}">{$dns_ip_label}</th>
                 <td>{$dns_ip}</td>
             </tr>
         </tbody>
@@ -412,7 +432,7 @@ class WTAIU_Server_Variables_Panel extends WTAIU_Panel
 {
     public function __construct()
     {
-        parent::__construct( '$_SERVER Variables', 'wtaiu-server-variables-panel' );
+        parent::__construct( __('$_SERVER Variables', 'wtaiu'), 'wtaiu-server-variables-panel' );
         $this->default_open_state = 'closed';
     }
 
@@ -443,7 +463,7 @@ class WTAIU_PHPInfo_Panel extends WTAIU_Panel
 
     public function __construct()
     {
-        parent::__construct( 'PHP Info', 'php-info-panel' );
+        parent::__construct( __('PHP Info', 'wtaiu'), 'php-info-panel' );
         $this->default_open_state = 'closed';
     }
 
