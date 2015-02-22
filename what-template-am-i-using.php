@@ -43,6 +43,12 @@ add_filter('wtaiu_panel_can_show', 'wtaiu_can_show', 10, 2 );
     Don't include any files until wp_loaded action is called and after you check the user and is_admin().
 */
 
+// load plugin translations --------------------------------------------------------------------------------
+function wtaiu_lang() {
+		load_plugin_textdomain('wtaiu', false, dirname(plugin_basename(__FILE__)) . '/languages');
+}
+add_action('plugins_loaded', 'wtaiu_lang');
+
 include __DIR__ . '/inc/PriorityQueueInsertionOrder.php';
 include __DIR__ . '/inc/wtaiu-panel.php';
 include __DIR__ . '/inc/core-panels.php';
@@ -181,11 +187,11 @@ class What_Template_Am_I_Using
             return;
     ?>
         <tr>
-            <th scope="row"><?php _e('<abbr title="What Template Am I Using?">WTAIU</abbr> Sidebar')?></th>
+            <th scope="row"><?php _e('<abbr title="What Template Am I Using?">WTAIU</abbr> Sidebar', 'wtaiu')?></th>
             <td>
                 <fieldset>
                     <legend class="screen-reader-text">Sidebar</legend>
-                    <label for="wtaiu_show_sidebar"><input type="checkbox" name="wtaiu_show_sidebar" id="wtaiu_show_sidebar" value="1" <?php checked('1', $user->wtaiu_show_sidebar ); ?> /> <?php _e('Show the sidebar when viewing site'); ?></label>
+                    <label for="wtaiu_show_sidebar"><input type="checkbox" name="wtaiu_show_sidebar" id="wtaiu_show_sidebar" value="1" <?php checked('1', $user->wtaiu_show_sidebar ); ?> /> <?php _e('Show the sidebar when viewing site', 'wtaiu'); ?></label>
                 </fieldset>
             </td>
         </tr>
@@ -258,7 +264,9 @@ class What_Template_Am_I_Using
 
         wp_localize_script( 'wtaiu', 'wtaiu', array(
             'ajaxurl' => admin_url( 'admin-ajax.php' ),
-            'data' => self::$user_data
+            'data' => self::$user_data,
+            'remove_sidebar_alert1' => __('Are you sure you want to remove the sidebar?', 'wtaiu'),
+            'remove_sidebar_alert2' => __('The sidebar can be enabled again from your user profile page.', 'wtaiu')
         ) );
     }
 
@@ -314,8 +322,8 @@ class What_Template_Am_I_Using
 
         ?>
         <div id="wtaiu" class="<?php if ( $sidebar_open ) {echo 'open ';} echo $dashicons_class; ?>">
-            <a id="wtaiu-handle" title="Click to toggle"><span><?php echo apply_filters('wtaiu_handle_text', 'What Template Am I Using?' ); ?></span></a>
-            <a id="wtaiu-close" title="Click to remove from page"></a>
+            <a id="wtaiu-handle" title="<?php _e('Click to toggle', 'wtaiu'); ?>"><span><?php echo apply_filters('wtaiu_handle_text', __('What Template Am I Using?', 'wtaiu') ); ?></span></a>
+            <a id="wtaiu-close" title="<?php _e('Click to remove from page', 'wtaiu'); ?>"></a>
 
             <menu type="context" id="wtaiu-context-menu">
                 <menuitem

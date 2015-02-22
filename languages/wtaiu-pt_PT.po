@@ -1,0 +1,183 @@
+# Copyright (C) 2015 What Template Am I Using
+# This file is distributed under the same license as the What Template Am I Using package.
+msgid ""
+msgstr ""
+"Project-Id-Version: What Template Am I Using\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/plugins/what-template-am-i-using/\n"
+"POT-Creation-Date: 2015-02-12 14:51-0000\n"
+"PO-Revision-Date: 2015-02-12 14:53-0000\n"
+"Last-Translator: Pedro Mendonça <ped.gaspar@gmail.com>\n"
+"Language-Team: What Template Am I Using Team\n"
+"Language: pt_PT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.4\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;_ex:1,2c;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: inc/core-panels.php:7
+msgid "Theme"
+msgstr "Tema"
+
+#: inc/core-panels.php:34
+msgid "Version:"
+msgstr "Versão:"
+
+#: inc/core-panels.php:35
+msgid "By"
+msgstr "Por"
+
+#: inc/core-panels.php:60
+msgid "Template"
+msgstr "Modelo"
+
+#: inc/core-panels.php:71
+#, php-format
+msgid "Please see the %stemplate hierarchy%s for more details."
+msgstr "Por favor veja a %shierarquia de modelos%s para mais detalhes."
+
+#: inc/core-panels.php:81
+msgid "General Information"
+msgstr "Informações gerais"
+
+#: inc/core-panels.php:89
+msgid "not set"
+msgstr "não definido"
+
+#: inc/core-panels.php:91 inc/core-panels.php:92 inc/core-panels.php:93
+#: inc/core-panels.php:94
+msgid "Yes"
+msgstr "Sim"
+
+#: inc/core-panels.php:91 inc/core-panels.php:92 inc/core-panels.php:93
+#: inc/core-panels.php:94
+msgid "No"
+msgstr "Não"
+
+#: inc/core-panels.php:96
+msgid "Post Type"
+msgstr "Tipo de artigo"
+
+#: inc/core-panels.php:97
+msgid "Front"
+msgstr "Frente"
+
+#: inc/core-panels.php:98
+msgid "Home"
+msgstr "Início"
+
+#: inc/core-panels.php:99
+msgid "404"
+msgstr "404"
+
+#: inc/core-panels.php:100
+msgid "Search"
+msgstr "Pesquisa"
+
+#: inc/core-panels.php:139
+msgid "Additional Files Used"
+msgstr "Ficheiros adicionais utilizados"
+
+#: inc/core-panels.php:204
+msgid "References"
+msgstr "Referências"
+
+#: inc/core-panels.php:214
+msgid "Sidebar Information"
+msgstr "Informação da barra lateral"
+
+#: inc/core-panels.php:235
+msgid "No sidebar widgets found"
+msgstr "Nenhum widget encontrado na barra lateral"
+
+#: inc/core-panels.php:241
+#, php-format
+msgid "Widgets used in %s"
+msgstr "Widgets utilizados em %s"
+
+#: inc/core-panels.php:277
+msgid "This lists all enqueued files, not just enqueued files from your theme."
+msgstr "Isto mostra todos os ficheiros carregados, não apenas os ficheiros carregados pelo seu tema."
+
+#: inc/core-panels.php:285
+msgid "Enqueued Scripts"
+msgstr "Scripts carregados"
+
+#: inc/core-panels.php:304
+msgid "Enqueued Styles"
+msgstr "Estilos carregados"
+
+#: inc/core-panels.php:323
+msgid "IP Addresses"
+msgstr "Endereços IP"
+
+#: inc/core-panels.php:392
+msgid "Your IP"
+msgstr "O seu IP"
+
+#: inc/core-panels.php:393
+msgid "Server IP"
+msgstr "IP do servidor"
+
+#: inc/core-panels.php:394
+msgid "Server Public IP"
+msgstr "IP público do servidor"
+
+#: inc/core-panels.php:395
+msgid "Domain IP (DNS)"
+msgstr "IP do domínio (DNS)"
+
+#: inc/core-panels.php:397 inc/core-panels.php:398
+#, php-format
+msgid "This is %s"
+msgstr "Isto é o %s"
+
+#: inc/core-panels.php:399
+#, php-format
+msgid "This is the IP that you connect to when visiting %s"
+msgstr "Este é o IP a que se conecta ao visitar %s"
+
+#: inc/core-panels.php:400
+#, php-format
+msgid "DNS lookup for %s"
+msgstr "Pesquisa de DNS por %s"
+
+#: inc/core-panels.php:435
+msgid "$_SERVER Variables"
+msgstr "Variáveis de $_SERVER"
+
+#: inc/core-panels.php:466
+msgid "PHP Info"
+msgstr "Informação de PHP"
+
+#: what-template-am-i-using.php:190
+msgid "<abbr title=\"What Template Am I Using?\">WTAIU</abbr> Sidebar"
+msgstr "Barra lateral do <abbr title=\"What Template Am I Using?\">WTAIU</abbr>"
+
+#: what-template-am-i-using.php:194
+msgid "Show the sidebar when viewing site"
+msgstr "Mostrar a barra lateral ao ver o site"
+
+#: what-template-am-i-using.php:268
+msgid "Are you sure you want to remove the sidebar?"
+msgstr "Tem certeza que deseja remover a barra lateral?"
+
+#: what-template-am-i-using.php:269
+msgid "The sidebar can be enabled again from your user profile page."
+msgstr "A barra lateral pode ser activada novamente na página do seu perfil de utilizador."
+
+#: what-template-am-i-using.php:325
+msgid "Click to toggle"
+msgstr "Clique para alternar"
+
+#: what-template-am-i-using.php:325
+msgid "What Template Am I Using?"
+msgstr "Que template estou a utilizar?"
+
+#: what-template-am-i-using.php:326
+msgid "Click to remove from page"
+msgstr "Clique para remover da página"
