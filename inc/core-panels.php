@@ -11,10 +11,10 @@ class WTAIU_Theme_Panel extends WTAIU_Panel
     public function get_content()
     {
         $theme =  wp_get_theme();
-        $info = array();
+        $info  = array();
         do{
             $info[] = $this->get_theme_info_html( $theme );
-            $theme = $theme->parent();
+            $theme  = $theme->parent();
         } while( $theme !== false );
         // WP currently only supports child themes, not grandchild themes. This loop should run at most two times.
         return implode( '', $info );
@@ -30,9 +30,8 @@ class WTAIU_Theme_Panel extends WTAIU_Panel
         $screenshot      = $theme->get_screenshot();
         $thumbnail_style = $screenshot !== false ? sprintf('style="background-image:url(%s);"', $screenshot ) : '';
         $theme_url       = network_admin_url( add_query_arg('theme', $theme->get_stylesheet(), 'themes.php') );
-        // translatable table labels
-        $version_label = __('Version:', 'wtaiu');
-        $author_label = __('By', 'wtaiu');
+        $version_label   = __('Version:', 'wtaiu');
+        $author_label    = __('By', 'wtaiu');
 
 $output=<<<OUTPUT
 
@@ -86,18 +85,21 @@ class WTAIU_General_Info_Panel extends WTAIU_Panel
     public function get_content()
     {
         global $post;
+
+        $yes =  __('Yes', 'wtaiu');
+        $no  =  __('No', 'wtaiu');
+
         $post_type  = isset( $post, $post->post_type ) ? $post->post_type : __('not set', 'wtaiu');
-        // NOTE FOR TRANSLATION: might be usefull to use a global string for 'Yes' and 'No',
-        $front_page = is_front_page() ? __('Yes', 'wtaiu') : __('No', 'wtaiu');
-        $home_page  = is_home() ? __('Yes', 'wtaiu') : __('No', 'wtaiu');
-        $is_404     = is_404() ? __('Yes', 'wtaiu') : __('No', 'wtaiu');
-        $is_search  = is_search() ? __('Yes', 'wtaiu') : __('No', 'wtaiu');
-        // translatable table labels
+        $front_page = is_front_page() ? $yes : $no;
+        $home_page  = is_home()       ? $yes : $no;
+        $is_404     = is_404()        ? $yes : $no;
+        $is_search  = is_search()     ? $yes : $no;
+
         $post_type_label = __('Post Type', 'wtaiu');
-        $front_label = __('Front', 'wtaiu');
-        $home_label = __('Home', 'wtaiu');
-        $is404_label = __('404', 'wtaiu');
-        $search_label = __('Search', 'wtaiu');
+        $front_label     = __('Front', 'wtaiu');
+        $home_label      = __('Home', 'wtaiu');
+        $is404_label     = __('404', 'wtaiu');
+        $search_label    = __('Search', 'wtaiu');
 
 $info=<<<INFO
     <table class="info-table">
@@ -388,16 +390,16 @@ class WTAIU_IP_Addresses_Panel extends WTAIU_Panel
         $server_ip        = esc_html( $_SERVER['SERVER_ADDR'] );
         $dns_ip           = gethostbyname( $_SERVER['HTTP_HOST'] );
         $public_server_ip = $this->get_public_server_ip();
-        // translatable table labels
-        $your_ip_label = __('Your IP', 'wtaiu');
-        $server_ip_label = __('Server IP', 'wtaiu');
+
+        $your_ip_label          = __('Your IP', 'wtaiu');
+        $server_ip_label        = __('Server IP', 'wtaiu');
         $public_server_ip_label = __('Server Public IP', 'wtaiu');
-        $dns_ip_label = __('Domain IP (DNS)', 'wtaiu');
-        // translatable table titles
-        $your_ip_title = sprintf(__('This is %s', 'wtaiu'), '$_SERVER[\'REMOTE_ADDR\']') ;
-        $server_ip_title = sprintf(__('This is %s', 'wtaiu'), '$_SERVER[\'SERVER_ADDR\']') ;
+        $dns_ip_label           = __('Domain IP (DNS)', 'wtaiu');
+
+        $your_ip_title          = sprintf(__('This is %s', 'wtaiu'), '$_SERVER[\'REMOTE_ADDR\']') ;
+        $server_ip_title        = sprintf(__('This is %s', 'wtaiu'), '$_SERVER[\'SERVER_ADDR\']') ;
         $public_server_ip_title = sprintf(__('This is the IP that you connect to when visiting %s', 'wtaiu'), $_SERVER['HTTP_HOST']) ;
-        $dns_ip_title = sprintf(__('DNS lookup for %s', 'wtaiu'), $_SERVER['HTTP_HOST']) ;
+        $dns_ip_title           = sprintf(__('DNS lookup for %s', 'wtaiu'), $_SERVER['HTTP_HOST']) ;
 
 $info=<<<INFO
 

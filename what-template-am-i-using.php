@@ -6,7 +6,7 @@ Plugin Group: Utilities
 Author: Eric King
 Author URI: http://webdeveric.com/
 Description: This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
-Version: 0.1.13
+Version: 0.2.0
 
 ----------------------------------------------------------------------------------------------------
 
@@ -41,13 +41,8 @@ add_filter('wtaiu_panel_can_show', 'wtaiu_can_show', 10, 2 );
 
     Refactor this plugin for testability.
     Don't include any files until wp_loaded action is called and after you check the user and is_admin().
-*/
 
-// load plugin translations --------------------------------------------------------------------------------
-function wtaiu_lang() {
-		load_plugin_textdomain('wtaiu', false, dirname(plugin_basename(__FILE__)) . '/languages');
-}
-add_action('plugins_loaded', 'wtaiu_lang');
+*/
 
 include __DIR__ . '/inc/PriorityQueueInsertionOrder.php';
 include __DIR__ . '/inc/wtaiu-panel.php';
@@ -55,7 +50,7 @@ include __DIR__ . '/inc/core-panels.php';
 
 class What_Template_Am_I_Using
 {
-    const VERSION = '0.1.13';
+    const VERSION = '0.2.0';
     const FILE = __FILE__;
 
     protected static $panels;
@@ -106,6 +101,8 @@ class What_Template_Am_I_Using
 
     public static function setup()
     {
+        load_plugin_textdomain( 'wtaiu', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+
         if ( ! is_admin() && current_user_can( 'edit_theme_options' ) ) {
             $user = wp_get_current_user();
             if ( $user->wtaiu_show_sidebar == '1' ) {
