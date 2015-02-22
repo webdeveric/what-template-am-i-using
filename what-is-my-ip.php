@@ -4,7 +4,8 @@
 @url http://phplug.in/
 @date 2014-02-06
 */
-if( ! filter_has_var( INPUT_GET | INPUT_POST , 'output' ) ) {
+
+if ( ! filter_has_var( INPUT_GET | INPUT_POST , 'output' ) ) {
     $_REQUEST['output'] = '';
 }
 
