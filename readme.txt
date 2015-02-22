@@ -2,8 +2,8 @@
 Contributors: webdeveric
 Tags: template, theme development, debug, server information
 Requires at least: 3.1.0
-Tested up to: 4.0.1
-Stable tag: 0.1.13
+Tested up to: 4.1.1
+Stable tag: 0.2.0
 
 This plugin is intended for theme developers to use. It shows the current template being used to render the page, current post type, and much more.
 
@@ -36,6 +36,10 @@ Information displayed:
 3. You can click the X button to remove the sidebar from the page and to not show it in the future. You can turn it back on with a checkbox on your profile page.
 
 == Changelog ==
+
+= 0.2.0 =
+* Added Portuguese translation from [Pedro Mendonça](https://github.com/pedro-mendonca).
+* Updated Grunt workflow.
 
 = 0.1.13 =
 * Updated panel activation/deactivation handling.
