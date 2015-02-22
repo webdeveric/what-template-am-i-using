@@ -139,7 +139,15 @@ module.exports = function( grunt ) {
                         "./assets/js/dist/**/*",
                     ]
                 }
-            }
+            },
+
+            wp_readme_to_markdown: {
+                readme: {
+                    files: {
+                        "readme.md": "readme.txt"
+                    }
+                }
+            },
         };
 
     grunt.config.init( config );
