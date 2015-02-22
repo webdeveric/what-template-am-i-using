@@ -1,6 +1,14 @@
 module.exports = function( grunt ) {
     "use strict";
 
+    var openCommand = "open";
+
+    /* jshint ignore:start */
+    if ( process.platform === "linux" ) {
+        openCommand = "xdg-open";
+    }
+    /* jshint ignore:end */
+
     var jsFiles = [ "Gruntfile.js", "./assets/js/**/*.js", "!./assets/js/**/*.min.js" ],
         config = {
 
@@ -34,6 +42,12 @@ module.exports = function( grunt ) {
                     files: {
                         "reports/plato": jsFiles
                     }
+                }
+            },
+
+            shell: {
+                platoreports: {
+                    command: openCommand + " ./reports/plato/index.html"
                 }
             },
 
@@ -163,8 +177,7 @@ module.exports = function( grunt ) {
 
     grunt.registerTask(
         "reports",
-        [ "jshint", "jscs", "plato" ]
-        /* , "shell:platoreports" */
+        [ "jshint", "jscs", "plato", "shell:platoreports" ]
     );
 
 };
