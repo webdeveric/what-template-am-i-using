@@ -247,15 +247,14 @@ class What_Template_Am_I_Using
         $css_reqs = array('open-sans');
         if ( version_compare( $wp_version, '3.8', '<' ) ) {
             wp_enqueue_style( 'open-sans', '//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,300,400,600', array(), self::VERSION );
-            wp_enqueue_style( 'font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css', array(), self::VERSION );            
+            wp_enqueue_style( 'font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css', array(), self::VERSION );
             $css_reqs[] = 'font-awesome';
         } else {
             $css_reqs[] = 'dashicons';
         }
-        
-        wp_enqueue_style( 'wtaiu', plugins_url('/css/dist/main.min.css', __FILE__), $css_reqs, self::VERSION );
-        wp_enqueue_script( 'opentoggle', plugins_url('/js/dist/jquery-opentoggle.min.js', __FILE__), array( 'jquery', 'jquery-ui-sortable' ), self::VERSION );
-        wp_enqueue_script( 'wtaiu', plugins_url('/js/dist/main.min.js', __FILE__), array( 'jquery', 'opentoggle' ), self::VERSION );
+
+        wp_enqueue_style( 'wtaiu', plugins_url('/assets/css/main.css', __FILE__), $css_reqs, self::VERSION );
+        wp_enqueue_script( 'wtaiu', plugins_url('/assets/js/main.min.js', __FILE__), array( 'jquery', 'jquery-ui-sortable' ), self::VERSION );
 
         self::$user_data = get_user_option( 'wtaiu_sidebar_data', get_current_user_id() );
 
@@ -285,7 +284,7 @@ class What_Template_Am_I_Using
             $label   = $panel->get_label();
             $content = $panel->get_content();
             $id      = $panel->get_id();
-            
+
             $extra_class = '';
 
             if ( isset( $user_panels[ $id ] ) ) {

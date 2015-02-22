@@ -349,7 +349,7 @@ class WTAIU_IP_Addresses_Panel extends WTAIU_Panel
                 What_Template_Am_I_Using::VERSION,
                 get_bloginfo( 'url' )
             )
-        ); 
+        );
 
         $response = wp_remote_get( $find_public_ip_url, $args );
 
@@ -438,14 +438,6 @@ class WTAIU_Server_Variables_Panel extends WTAIU_Panel
         $this->default_open_state = 'closed';
     }
 
-    /*
-    // If you need to add your own assets, do it here.
-    public function setup()
-    {
-        wp_enqueue_style('server-info-panel', plugins_url( '/css/server-info-panel.css', __FILE__ ), array('wtaiu'), self::VERSION );
-    }
-    */
-
     public function get_content()
     {
         $info = array();
@@ -471,7 +463,7 @@ class WTAIU_PHPInfo_Panel extends WTAIU_Panel
 
     public function setup()
     {
-        wp_enqueue_style('php-info-panel', plugins_url('/css/dist/php-info-panel.min.css', What_Template_Am_I_Using::FILE), array('wtaiu'), self::VERSION );
+        wp_enqueue_style('php-info-panel', plugins_url('/assets/css/php-info-panel.css', What_Template_Am_I_Using::FILE), array('wtaiu'), self::VERSION );
     }
 
     public function get_content()
