@@ -6,7 +6,7 @@ I've already provided several panels that I think provide lots of useful informa
 But, if you don't see what you're looking for, its easy to add your own panels.
 
 1. Create a class that extends `WTAIU_Panel`. Take a look at [inc/core-panels.php](inc/core-panels.php) for examples.
-1. Add it to the sidebar with the `wtaiu_setup_panels` action. See [`setup_wtaiu_panels()`](what-template-am-i-using.php#L353) for example.
+1. Add it to the sidebar with the `wtaiu_setup_panels` action. See [`setup_wtaiu_panels()`](what-template-am-i-using.php#L327) for example.
 
 ## Filters ##
 
