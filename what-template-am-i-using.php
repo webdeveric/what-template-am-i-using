@@ -10,32 +10,6 @@ Version: 0.2.0
 
 ----------------------------------------------------------------------------------------------------
 
-If you want to add your own information to the sidebar panel, you just need to create a class that
-extends WTAIU_Panel.
-
-Take a look at inc/core-panels.php for examples.
-
-----------------------------------------------------------------------------------------------------
-
-Here is how you can filter the handle text.
-
-add_filter('wtaiu_handle_text', function( $text ) {
-    return 'Your Custom Text Here';
-} );
-
-----------------------------------------------------------------------------------------------------
-
-Here is a simple example to show you how to use the wtaiu_panel_can_show filter.
-
-function wtaiu_can_show( $can_show, WTAIU_Panel $panel ) {
-    if ( is_a( $panel, 'WTAIU_Theme_Panel') )
-        return false;
-    return $can_show;
-}
-add_filter('wtaiu_panel_can_show', 'wtaiu_can_show', 10, 2 );
-
-----------------------------------------------------------------------------------------------------
-
 @todo
     Validate panels: $data['panels'] = $_POST['panels']
 
