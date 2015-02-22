@@ -1,9 +1,25 @@
 # What Template Am I Using #
 
+This WordPress plugin is intended for theme developers to use.
+It shows the current template being used to render the page, current post type, and much more.
+
+## Installation ##
+
+### WP Admin ###
+
+Since this plugin is in the [WordPress plugin directory](https://wordpress.org/plugins/what-template-am-i-using/), it can be installed through the plugin search in the WP admin.
+
+WordPress Admin > Plugins > Add New > Search: What Template Am I Using
+
+### WP CLI ###
+
+This will install the version that is in the WordPress plugin directory.
+
+`wp plugin install what-template-am-i-using --activate`
+
 ## Add your own panels ##
 
-I've already provided several panels that I think provide lots of useful information.
-But, if you don't see what you're looking for, its easy to add your own panels.
+If you don't see what you're looking for in the panels I've provided, its easy to add your own.
 
 1. Create a class that extends `WTAIU_Panel`. Take a look at [inc/core-panels.php](inc/core-panels.php) for examples.
 1. Add it to the sidebar with the `wtaiu_setup_panels` action. See [`setup_wtaiu_panels()`](what-template-am-i-using.php#L327) for example.
@@ -32,8 +48,8 @@ add_filter('wtaiu_panel_can_show', 'wtaiu_can_show', 10, 2 );
 ### Public IP address ###
 
 To find the public IP address of your server, a request is made to an external website that echos back the IP.
-
-The default IP finding site is [ip.phplug.in](http://ip.phplug.in/). If you don't want to use my IP finding site, you can easily change the URL that is used.
+The default IP finding site is [ip.phplug.in](http://ip.phplug.in/).
+If you don't want to use my IP finding site, you can easily change the URL that is used.
 
 ```php
 add_filter('wtaiu_find_public_ip_url', function( $url ) {
