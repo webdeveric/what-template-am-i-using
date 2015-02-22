@@ -298,14 +298,14 @@ class What_Template_Am_I_Using
             <menu type="context" id="wtaiu-context-menu">
                 <menuitem
                     type="command"
-                    icon="<?php echo plugins_url( '/imgs/up-arrow.png', __FILE__ ); ?>"
-                    label="Close all panels"
+                    icon="<?php echo plugins_url( '/assets/imgs/up-arrow.png', __FILE__ ); ?>"
+                    label="<?php _e('Close all panels', 'wtaiu'); ?>"
                     class="close-all"
                 ></menuitem>
                 <menuitem
                     type="command"
-                    icon="<?php echo plugins_url( '/imgs/down-arrow.png', __FILE__ ); ?>"
-                    label="Open all panels"
+                    icon="<?php echo plugins_url( '/assets/imgs/down-arrow.png', __FILE__ ); ?>"
+                    label="<?php _e('Open all panels', 'wtaiu'); ?>"
                     class="open-all"
                 ></menuitem>
             </menu>
