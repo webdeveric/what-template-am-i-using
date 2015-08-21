@@ -1,7 +1,7 @@
 (function( $, window, document, wtaiu ) {
     "use strict";
 
-    $.fn. openToggle = function( settings )
+    $.fn.openToggle = function( settings )
     {
         settings = $.extend( {
             target: this,
