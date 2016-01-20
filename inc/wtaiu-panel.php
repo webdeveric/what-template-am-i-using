@@ -6,36 +6,43 @@ abstract class WTAIU_Panel
 
     protected $label;
     protected $id;
-
     protected $author;
     protected $author_url;
-
     protected $default_open_state;
 
-    public function __construct( $label = '', $id = '' )
+    public function __construct($label = '', $id = '')
     {
         $this->author             = '';
         $this->author_url         = '';
         $this->label              = $label;
         $this->default_open_state = 'open';
 
-        if ( $id != '' ) {
+        if ($id != '') {
             $this->id = $id;
         } else {
-            $this->id = $label != '' ? sanitize_title( 'panel-' . $label ) : uniqid('panel');
+            $this->id = $label != '' ? sanitize_title('panel-' . $label) : uniqid('panel');
         }
 
-        add_action('init', array( &$this, 'setup' ), 11 );
+        add_action('init', array( &$this, 'setup' ), 11);
     }
 
+    /**
+     * Activation tasks go here.
+     *
+     * @throws Exception
+     * @return void
+     */
     public function activate()
     {
-        // save initial options here.
     }
 
+    /**
+     * Deactivation tasks go here.
+     *
+     * @return void
+     */
     public function deactivate()
     {
-        // remove options here.
     }
 
     public function can_show()
@@ -48,9 +55,13 @@ abstract class WTAIU_Panel
         return $this->default_open_state;
     }
 
+    /**
+     * Initialization tasks go here.
+     *
+     * @return void
+     */
     public function setup()
     {
-        // do stuff here with actions
     }
 
     public function get_label()
@@ -77,11 +88,19 @@ abstract class WTAIU_Panel
         echo $this->get_content();
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->get_content();
     }
-    
+
+    /**
+     * Get the contents of the Panel.
+     *
+     * @return string
+     */
     abstract public function get_content();
 
     public function get_help()
